@@ -1,6 +1,6 @@
 # Institution logo sources
 
-These compact assets are used only to identify institutional guideline personas in the VizGuide interface. Most PNGs are locally cached versions of the favicon served by the institution's official website (retrieved at up to 128 px through Google's favicon service on 2026-08-05). They are not endorsements and remain subject to their owners' trademark policies.
+These compact assets are used only to identify institutional guideline personas in the VisPrism interface. Most PNGs are locally cached versions of the favicon served by the institution's official website (retrieved at up to 128 px through Google's favicon service on 2026-08-05). They are not endorsements and remain subject to their owners' trademark policies.
 
 | Asset | Institution | Official source |
 | --- | --- | --- |

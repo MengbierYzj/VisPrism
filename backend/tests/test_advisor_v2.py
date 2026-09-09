@@ -11,10 +11,13 @@ from app.advisor_v2.runner import (
     V2RunState,
     V2RunStore,
     _agent_task,
+    _attach_bundle_contract,
     _component_changes,
     _evidence_for,
     _evidence_index,
     _proposal,
+    _scopes_for_diff_path,
+    _scopes_for_path,
     wait_run_v2,
 )
 from app.advisor_v2.service import (
@@ -24,6 +27,7 @@ from app.advisor_v2.service import (
     _l2_contract,
     _layout_risks,
     _new_layout_risks,
+    _path_owner,
     _merge_text_changes,
     _render_integrity_error,
     _repair_datum_value_confusion,
@@ -180,6 +184,11 @@ def test_commitment_manifest_is_rebuilt_when_beat3_returns_no_commitments():
             if "Beat 3" in system:
                 result = await super().chat_json(system, user)
                 result["commitments"] = []
+                result["text_changes"] = [{
+                    "before": "Original title.",
+                    "after": "A clearer title",
+                    "reason": "Replace the generic heading with a message-led headline.",
+                }]
                 result["candidate_spec"] = {
                     **result["candidate_spec"], "title": "A clearer title",
                     "config": {"title": {"font": "BBC Reith"}},
@@ -222,12 +231,17 @@ def test_v2_proposal_does_not_copy_one_full_spec_to_every_commitment():
     assert all(set(op["bundle"]["change_ids"]) == {change["id"] for change in proposal["changes"]} for change in proposal["changes"] for op in change["ops"])
 
 
-def test_v2_structural_candidate_never_invents_a_whole_chart_structure_card():
+def test_v2_structural_candidate_exposes_verified_structure_contract_for_llm_composer():
     persona = Persona(id="bbc", name="BBC")
     source = {"mark": "bar", "data": {"values": [{"a": "A", "v": 1}]}, "encoding": {"x": {"field": "a"}, "y": {"field": "v"}}}
     candidate = {"vconcat": [{**source}, {"mark": "text", "data": {"values": [{"label": "Note"}]}, "encoding": {"text": {"field": "label"}}}]}
     rows = _component_changes(persona, source, candidate, [])
-    assert rows == []
+    assert len(rows) == 1
+    row = rows[0]
+    assert row["scope"] == "structure"
+    assert row["contract"]["verified"] is True
+    assert row["contract"]["actual_paths"]
+    assert row["ops"][0]["candidate_spec"]["vconcat"]
 
 
 def test_vconcat_color_diff_is_carded_even_without_a_color_commitment():
@@ -264,6 +278,221 @@ def test_vconcat_color_diff_is_carded_even_without_a_color_commitment():
     assert color["ops"][0]["spec_paths"]
 
 
+def test_color_contract_accepts_cross_component_paths_and_records_removals():
+    persona = Persona(id="bbc", name="BBC")
+    source = {
+        "title": {"text": "Fuel prices", "color": "#292929", "subtitleColor": "#555555"},
+        "config": {"axis": {"labelColor": "#555555", "titleColor": "#555555"}},
+        "mark": "line",
+        "encoding": {
+            "x": {"field": "Date"},
+            "y": {"field": "Price", "axis": {"gridColor": "#e2e2e2"}},
+            "strokeDash": {"field": "basis"},
+        },
+    }
+    candidate = {
+        **source,
+        "title": {**source["title"], "color": "#333333", "subtitleColor": "#333333"},
+        "config": {"axis": {"labelColor": "#333333", "titleColor": "#333333"}},
+        "encoding": {
+            "x": source["encoding"]["x"],
+            "y": {"field": "Price", "axis": {"gridColor": "#cbcbcb"}},
+        },
+    }
+    paths = [
+        "/title/color", "/title/subtitleColor", "/config/axis/labelColor",
+        "/config/axis/titleColor", "/encoding/y/axis/gridColor", "/encoding/strokeDash",
+    ]
+    rows = _component_changes(persona, source, candidate, [{
+        "id": "palette", "component": "color", "claim": "Use BBC neutrals and restrained line styling.",
+        "spec_paths": paths,
+    }])
+    change = next(row for row in rows if row["id"] == "bbc:v2:component:palette")
+    assert change["contract"]["verified"] is True
+    assert change["contract"]["verification_errors"] == []
+    assert change["contract"]["removed_paths"] == ["/encoding/strokeDash"]
+    assert "/encoding/strokeDash" not in change["ops"][0]["spec_paths"]
+    assert change["ops"][0]["removed_paths"] == ["/encoding/strokeDash"]
+    assert _scopes_for_path("/title/subtitleColor") == {"title", "color"}
+    assert _scopes_for_path("/config/axis/gridColor") == {"axes", "color"}
+    bundled = _attach_bundle_contract(source, candidate, rows)
+    bundle = next(op["bundle"] for row in bundled for op in row["ops"] if op.get("bundle"))
+    assert bundle["self_composition_verified"] is True
+
+
+def test_stroke_dash_scale_is_appearance_not_an_axis_just_because_it_has_a_scale():
+    persona = Persona(id="bbc", name="BBC")
+    path = "/vconcat/0/layer/1/encoding/strokeDash/scale/range"
+    source = {
+        "vconcat": [{"layer": [
+            {"mark": "line", "encoding": {"x": {"field": "Date"}, "y": {"field": "Price"}}},
+            {"mark": "line", "encoding": {"strokeDash": {"field": "basis", "scale": {"range": [[5, 4], [1, 0]]}}}},
+        ]}]
+    }
+    candidate = json.loads(json.dumps(source))
+    candidate["vconcat"][0]["layer"][1]["encoding"]["strokeDash"]["scale"]["range"] = [[3, 3], [1, 0]]
+
+    rows = _component_changes(persona, source, candidate, [{
+        "id": "dash-style",
+        "component": "color",
+        "claim": "Tightened the supporting series dash pattern.",
+        "spec_paths": [path],
+    }])
+
+    change = next(row for row in rows if row["id"] == "bbc:v2:component:dash-style")
+    assert change["contract"]["verified"] is True
+    assert change["contract"]["compatible_scopes"][path] == ["color"]
+    assert _scopes_for_path("/encoding/color/scale/range") == {"color"}
+    assert _scopes_for_path("/encoding/y/scale/domain") == {"axes"}
+
+
+def test_manifest_and_proposal_use_one_scope_taxonomy_for_all_components():
+    candidate = {
+        "title": {"text": "Headline", "color": "#111111", "fontSize": 20},
+        "padding": {"top": 12},
+        "autosize": {"type": "fit"},
+        "config": {"range": {"category": ["#111111", "#eeeeee"]}},
+        "layer": [
+            {
+                "mark": {"type": "line"},
+                "encoding": {
+                    "x": {"field": "Date", "scale": {"domain": [0, 1]}},
+                    "strokeDash": {"field": "basis", "scale": {"domain": ["a", "b"]}},
+                    "shape": {"field": "kind"},
+                },
+            },
+            {
+                "mark": {"type": "text", "dx": 6, "fontSize": 11, "color": "#333333"},
+                "transform": [{"calculate": "datum.Price + 'p'", "as": "label"}],
+                "encoding": {"text": {"field": "label"}, "y": {"value": 20}},
+            },
+        ],
+    }
+    expected = {
+        "/title/text": "title",
+        "/title/color": "color",
+        "/title/fontSize": "typography",
+        "/padding/top": "layout",
+        "/autosize/type": "layout",
+        "/config/range/category": "color",
+        "/layer/0/encoding/x/scale/domain": "axes",
+        "/layer/0/encoding/strokeDash/scale/domain": "color",
+        "/layer/0/encoding/shape/field": "structure",
+        "/layer/1/mark/type": "labels",
+        "/layer/1/mark/dx": "labels",
+        "/layer/1/transform/0/calculate": "labels",
+        "/layer/1/encoding/y/value": "labels",
+        "/layer/1/mark/fontSize": "typography",
+        "/layer/1/mark/color": "color",
+    }
+
+    for path, owner in expected.items():
+        assert _path_owner(candidate, path) == owner, path
+        assert owner in _scopes_for_diff_path(path, {}, candidate), path
+
+
+def test_text_annotation_construction_and_offsets_verify_as_labels():
+    persona = Persona(id="economist", name="The Economist")
+    source = {"layer": [{"mark": "line", "encoding": {"x": {"field": "Date"}, "y": {"field": "Price"}}}]}
+    candidate = json.loads(json.dumps(source))
+    candidate["layer"].append({
+        "mark": {"type": "text", "dx": 5, "dy": -8},
+        "transform": [{"calculate": "datum.Price + 'p'", "as": "label"}],
+        "encoding": {"text": {"field": "label"}, "x": {"field": "Date"}, "y": {"field": "Price"}},
+    })
+    paths = [
+        "/layer/1/mark/type", "/layer/1/mark/dx", "/layer/1/mark/dy",
+        "/layer/1/transform/0/calculate",
+    ]
+
+    rows = _component_changes(persona, source, candidate, [{
+        "id": "annotation", "component": "labels",
+        "claim": "Added and positioned a direct value annotation.", "spec_paths": paths,
+    }])
+
+    change = next(row for row in rows if row["id"] == "economist:v2:component:annotation")
+    assert change["contract"]["verified"] is True
+    assert change["contract"]["verification_errors"] == []
+    assert change["ops"][0]["requires_llm_reconstruction"] is True
+
+
+def test_color_contract_binds_exact_evidence_inside_new_layer_without_leaf_projection():
+    persona = Persona(id="bbc", name="BBC")
+    source = {"vconcat": [{"mark": "line", "encoding": {"x": {"field": "Date"}, "y": {"field": "Price"}}}]}
+    candidate = {"vconcat": [{
+        "encoding": source["vconcat"][0]["encoding"],
+        "layer": [
+            {"mark": {"type": "line", "color": "#1380A1"}},
+            {"mark": {"type": "line", "color": "#E87500"}},
+        ],
+    }]}
+    orange_path = "/vconcat/0/layer/1/mark/color"
+    rows = _component_changes(persona, source, candidate, [{
+        "id": "highlight", "component": "color", "claim": "Use BBC Orange on the focus segment.",
+        "spec_paths": [orange_path],
+    }])
+    change = next(row for row in rows if row["id"] == "bbc:v2:component:highlight")
+    assert change["contract"]["verified"] is True
+    assert orange_path in change["contract"]["actual_paths"]
+    assert orange_path in change["contract"]["set_paths"]
+    assert orange_path not in change["ops"][0]["spec_paths"]
+    assert change["ops"][0]["requires_llm_reconstruction"] is True
+
+
+def test_text_mark_position_is_valid_label_evidence_not_only_an_axis_path():
+    persona = Persona(id="bbc", name="BBC")
+    source = {
+        "vconcat": [
+            {"mark": "line", "encoding": {"x": {"field": "Date"}, "y": {"field": "Price"}}},
+            {"mark": "text", "encoding": {"text": {"value": "Source"}, "y": {"value": 14}}},
+        ]
+    }
+    candidate = json.loads(json.dumps(source))
+    candidate["vconcat"][1]["encoding"]["y"]["value"] = 18
+    path = "/vconcat/1/encoding/y/value"
+
+    rows = _component_changes(persona, source, candidate, [{
+        "id": "caption-position",
+        "component": "labels",
+        "claim": "Moved the source caption to a clearer baseline.",
+        "spec_paths": [path],
+    }])
+
+    change = next(row for row in rows if row["id"] == "bbc:v2:component:caption-position")
+    assert change["contract"]["verified"] is True
+    assert change["contract"]["compatible_scopes"][path] == ["axes", "labels"]
+
+
+def test_structure_contract_proves_claimed_mark_types_inside_atomic_new_layer():
+    persona = Persona(id="economist", name="The Economist")
+    source = {
+        "vconcat": [{"mark": "line", "encoding": {"x": {"field": "Date"}, "y": {"field": "Price"}}}]
+    }
+    candidate = {
+        "vconcat": [{
+            "layer": [
+                {"mark": {"type": "rect", "color": "#E9EBEB"}},
+                {"mark": {"type": "line"}, "encoding": source["vconcat"][0]["encoding"]},
+            ]
+        }]
+    }
+    paths = ["/vconcat/0/layer/0/mark/type", "/vconcat/0/layer/1/mark/type"]
+
+    rows = _component_changes(persona, source, candidate, [{
+        "id": "layer-topology",
+        "component": "structure",
+        "claim": "Separated the focus band and base line into dedicated layers.",
+        "spec_paths": paths,
+    }])
+
+    change = next(row for row in rows if row["id"] == "economist:v2:component:layer-topology")
+    assert change["contract"]["verified"] is True
+    assert change["contract"]["set_paths"] == paths
+    assert change["ops"][0]["spec_paths"] == []
+    assert change["ops"][0]["evidence_paths"] == paths
+    assert change["ops"][0]["requires_llm_reconstruction"] is True
+
+
 def test_v2_structural_candidate_keeps_llm_component_manifest():
     persona = Persona(id="bbc", name="BBC")
     source = {"mark": "bar", "data": {"values": [{"a": "A", "v": 1}]}, "encoding": {"x": {"field": "a"}, "y": {"field": "v"}}}
@@ -273,8 +502,9 @@ def test_v2_structural_candidate_keeps_llm_component_manifest():
         {"id": "caption", "evidence_id": "L2-source", "component": "labels", "claim": "Moved the source into a dedicated caption region below the plot.", "before": "overlaid source", "after": "separate caption", "spec_paths": ["/vconcat/1"]},
     ]
     rows = _component_changes(persona, source, candidate, commitments)
-    assert [row["scope"] for row in rows] == ["title", "labels"]
+    assert [row["scope"] for row in rows] == ["title", "labels", "structure"]
     assert all(row["ops"][0]["action"] == "compose_component" for row in rows)
+    assert rows[2]["contract"]["verified"] is True
 
 
 def test_invalid_visual_revision_keeps_the_safe_beat3_candidate():
@@ -292,7 +522,7 @@ def test_invalid_visual_revision_keeps_the_safe_beat3_candidate():
     assert review["revision_accepted"] is False and review["revision_rejected_errors"]
 
 
-def test_visual_acceptance_failure_keeps_the_last_safe_generated_candidate():
+def test_visual_acceptance_failure_remains_advisory_and_delivers_best_candidate():
     class RejectedVisionLLM(_LLM):
         async def chat_json_vision(self, system, user, images, **kwargs):
             candidate = json.loads(user).get("candidate_spec", {})
@@ -307,9 +537,17 @@ def test_visual_acceptance_failure_keeps_the_last_safe_generated_candidate():
     persona = Persona(id="p", name="P")
     spec = {"data": {"values": [{"city": "A", "period": "now", "v": 3}]}, "mark": "bar", "encoding": {"x": {"field": "city", "type": "nominal"}, "y": {"field": "v", "type": "quantitative"}}}
     result = asyncio.run(AdvisorV2(RejectedVisionLLM()).advise(persona, spec))
+    assert result["spec"] != spec
     assert result["spec"]["background"] == "#111111"
-    assert result["beats"]["beat4"]["visual_review"]["delivered_despite_visual_rejection"] is True
+    assert result["beats"]["beat4"]["delivery_state"] == "ready"
     assert result["beats"]["beat4"]["visual_review"]["acceptance"]["accepted"] is False
+    assert result["beats"]["beat4"]["visual_review"]["delivered_despite_visual_rejection"] is True
+
+    proposal = _proposal(persona, spec, result, 1)
+    assert proposal["modified_spec"] != spec
+    assert proposal["changes"]
+    assert proposal["delivery_state"] == "ready"
+    assert proposal["delivery_reason"] is None
 
 
 def test_failed_acceptance_is_reworked_and_rechecked_before_shipping():

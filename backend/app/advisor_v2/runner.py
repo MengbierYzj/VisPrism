@@ -24,6 +24,8 @@ from ..core.semantic_composer import compact_primary_data, compose_component_slo
 from ..core.specfacts import extract_facts
 from ..llm import LLMClient
 from ..llm_log import LLMRunLog, bind_llm_persona, bind_llm_run_log, ensure_log_and_record, reset_llm_persona, reset_llm_run_log
+from .change_scope import SCOPE_PRIORITY as _SCOPE_PRIORITY
+from .change_scope import scopes_for_path as _shared_scopes_for_path
 from .service import AdvisorV2
 
 
@@ -104,21 +106,113 @@ def _is_new_structural_branch(original: object, path: str) -> bool:
     return False
 
 
+def _value_at_pointer(document: Any, pointer: str) -> tuple[bool, Any]:
+    if not isinstance(pointer, str) or not pointer.startswith("/"):
+        return False, None
+    current = document
+    for raw in pointer.lstrip("/").split("/"):
+        key = raw.replace("~1", "/").replace("~0", "~")
+        if isinstance(current, dict) and key in current:
+            current = current[key]
+        elif isinstance(current, list) and key.isdigit() and int(key) < len(current):
+            current = current[int(key)]
+        else:
+            return False, None
+    return True, current
+
+
+def _scopes_for_path(path: str) -> set[str]:
+    """Compatibility wrapper for callers using the previous location."""
+    return _shared_scopes_for_path(path)
+
+
 def _scope_for_path(path: str) -> str:
-    lower = path.lower()
-    if any(token in lower for token in ("/color", "/background", "/fill", "/stroke", "/palette")):
-        return "color"
-    if any(token in lower for token in ("font", "fontsize", "fontweight", "lineheight")):
-        return "typography"
-    if "/title" in lower or "/subtitle" in lower:
-        return "title"
-    if any(token in lower for token in ("/axis", "/scale", "/grid", "/tick", "/encoding/x", "/encoding/y")):
-        return "axes"
-    if any(token in lower for token in ("/legend", "/text", "/caption", "/source", "/annotation")):
-        return "labels"
-    if any(token in lower for token in ("/padding", "/width", "/height", "/autosize")):
-        return "layout"
-    return "structure"
+    scopes = _scopes_for_path(path)
+    return next(scope for scope in _SCOPE_PRIORITY if scope in scopes)
+
+
+def _scopes_for_diff_path(path: str, original: dict, candidate: dict) -> set[str]:
+    """Add semantic ownership knowable only from source/candidate context."""
+    return _shared_scopes_for_path(path, original, candidate)
+
+
+def _materialize_claimed_descendant_patches(
+    original: dict, candidate: dict, patches: list[dict], rows: list[dict]
+) -> None:
+    """Prove exact claimed leaves covered by an atomic structural diff.
+
+    A newly added layer stays atomic for safe composition, but Beat 3 may
+    truthfully cite ``/layer/0/mark/type``. If that leaf exists only because an
+    ancestor layer was added, record it as evidence-only instead of rejecting
+    the claim for not being a top-level diff atom.
+    """
+    known = {str(patch.get("path") or "") for patch in patches}
+    atomic = [
+        patch for patch in patches
+        if not patch.get("evidence_only") and patch.get("op") in {"set", "remove"}
+    ]
+    claimed = {
+        path
+        for row in rows
+        for path in ((row.get("component_detail") or {}).get("spec_paths") or [])
+        if isinstance(path, str) and path.startswith("/")
+    }
+    for path in sorted(claimed):
+        if path in known:
+            continue
+        covering = [
+            patch for patch in atomic
+            if path.startswith(str(patch.get("path") or "").rstrip("/") + "/")
+        ]
+        if not covering:
+            continue
+        parent = max(covering, key=lambda patch: len(str(patch.get("path") or "")))
+        op = str(parent.get("op") or "")
+        source_exists, source_value = _value_at_pointer(original, path)
+        candidate_exists, candidate_value = _value_at_pointer(candidate, path)
+        if op == "set" and candidate_exists and (not source_exists or source_value != candidate_value):
+            patches.append({"op": "set", "path": path, "value": copy.deepcopy(candidate_value), "evidence_only": True})
+            known.add(path)
+        elif op == "remove" and source_exists and not candidate_exists:
+            patches.append({"op": "remove", "path": path, "evidence_only": True})
+            known.add(path)
+
+
+def _presentation_descendant_patches(patch: dict) -> list[dict]:
+    """Inventory visual leaves inside an atomically added structural branch.
+
+    The topology itself remains one structural patch for safe fallback, while
+    component contracts gain exact evidence paths inside a new layer. These
+    evidence-only atoms are never projected independently onto a foreign tree.
+    """
+    if patch.get("op") != "set" or not isinstance(patch.get("value"), (dict, list)):
+        return []
+    base = str(patch.get("path") or "")
+    rows: list[dict] = []
+
+    def walk(node: Any, parts: list[str]) -> None:
+        pointer = base + "".join("/" + part.replace("~", "~0").replace("/", "~1") for part in parts)
+        if isinstance(node, dict):
+            for key, value in node.items():
+                if str(key).lower() in {"data", "transform"}:
+                    continue
+                walk(value, parts + [str(key)])
+            return
+        if isinstance(node, list):
+            # Only style leaves are safe evidence inside a wholly new branch.
+            # Axis/label fields may merely be the unchanged source view moved
+            # under vconcat/layer and would create fictitious extra changes.
+            if "color" in _scopes_for_path(pointer):
+                rows.append({"op": "set", "path": pointer, "value": copy.deepcopy(node), "evidence_only": True})
+                return
+            for index, value in enumerate(node):
+                walk(value, parts + [str(index)])
+            return
+        if "color" in _scopes_for_path(pointer):
+            rows.append({"op": "set", "path": pointer, "value": copy.deepcopy(node), "evidence_only": True})
+
+    walk(patch.get("value"), [])
+    return rows
 
 
 _COMPONENT_LABELS = {
@@ -659,25 +753,51 @@ def _component_changes(
     visual_review: dict | None = None,
     layer_implementation: dict | None = None,
 ) -> list[dict]:
-    """Expose composable component contracts, never a whole-spec board action."""
+    """Expose truthful component contracts, including non-portable structure.
+
+    Portable presentation leaves retain a deterministic fallback op. New
+    topology is represented as a first-class structure decision whose complete
+    candidate is evidence for the LLM composer, not a whole-spec copy command.
+    """
     patches = _spec_patches(original, candidate)
+    # Keep structural container patches for topology, and add exact visual
+    # leaves as evidence so a Color/Labels/Axes card can truthfully point into
+    # a newly introduced layer without making that leaf independently portable.
+    known_paths = {str(patch.get("path") or "") for patch in patches}
+    for patch in list(patches):
+        for evidence_patch in _presentation_descendant_patches(patch):
+            evidence_path = str(evidence_patch.get("path") or "")
+            if evidence_path and evidence_path not in known_paths:
+                patches.append(evidence_patch)
+                known_paths.add(evidence_path)
     # 卡片里携带的候选图只作取值证据，主数据由组装时按源图还原，避免同一张
     # 数据表在一个 persona 的十几条卡片里被重复序列化。diff 仍用完整候选图。
     transport = compact_primary_data(original, candidate)
     groups: dict[str, list[dict]] = {}
+    structural_patches: list[dict] = []
     for patch in patches:
         path = str(patch.get("path") or "")
         scope = _scope_for_path(path)
-        # Nested colour/type/axis leaves under vconcat/layer are still portable.
-        # New concat/layer branches and topology/data patches are not auto-carded.
-        if scope == "structure" or _is_new_structural_branch(original, path):
-            continue
-        groups.setdefault(scope, []).append(patch)
+        # Nested colour/type/axis leaves under vconcat/layer are portable enough
+        # for the deterministic fallback. Structural changes are not portable,
+        # but they are first-class design decisions for the LLM composer and
+        # must not disappear from the Review Board.
+        if patch.get("evidence_only"):
+            groups.setdefault(scope, []).append(patch)
+        elif scope == "structure" or _is_new_structural_branch(original, path):
+            structural_patches.append(patch)
+        else:
+            groups.setdefault(scope, []).append(patch)
 
     rows = _manifest_rows(
         persona, commitments, transport,
         _evidence_index(visual_review), _implementation_index(layer_implementation),
     )
+    # A structural diff deliberately keeps a newly created/removed layer as
+    # one atomic patch.  When the advisor explicitly claims an exact leaf
+    # inside that branch, materialize the leaf as evidence so the claim can be
+    # checked without making it independently portable.
+    _materialize_claimed_descendant_patches(original, candidate, patches, rows)
     covered_paths: set[str] = set()
     first_by_scope: dict[str, dict] = {}
     for row in rows:
@@ -701,6 +821,7 @@ def _component_changes(
     identity = _persona_identity(persona)
     tokens = _token_names(persona)
     implementation = _implementation_index(layer_implementation)
+
     for scope, scoped_patches in groups.items():
         leftover = [patch for patch in scoped_patches if patch.get("path") not in covered_paths]
         if not leftover:
@@ -713,10 +834,7 @@ def _component_changes(
                 detail = {}
                 host["component_detail"] = detail
             existing = [path for path in (detail.get("spec_paths") or []) if isinstance(path, str)]
-            detail["spec_paths"] = existing + leftover_paths
-            for op in host.get("ops") or []:
-                if isinstance(op, dict) and op.get("action") == "compose_component":
-                    op["spec_paths"] = detail["spec_paths"]
+            detail["spec_paths"] = list(dict.fromkeys(existing + leftover_paths))
             continue
         samples = []
         for patch in leftover:
@@ -741,9 +859,129 @@ def _component_changes(
                 "execution": "semantic_component_composition",
             },
             "ops": [{"action": "compose_component", "component": scope, "candidate_spec": transport, "spec_paths": leftover_paths}],
+            "contract": {
+                "verified": True,
+                "source": "programmatic_diff_inventory",
+                "scope": scope,
+                "actual_paths": leftover_paths,
+                "removed_paths": [],
+            },
         }
         _attach_knowledge(persona, row, knowledge, implementation, identity, tokens)
         rows.append(row)
+
+    # Structural topology is intentionally not projected leaf-by-leaf, but it
+    # must remain selectable and visible. The LLM composer receives the whole
+    # candidate plus these exact added/changed/removed paths and reconstructs a
+    # coherent final tree; mock/failure fallback applies only surviving paths.
+    structural_leftover = [
+        patch for patch in structural_patches
+        if str(patch.get("path") or "") not in covered_paths
+    ]
+    if structural_leftover:
+        set_paths = [
+            str(patch["path"]) for patch in structural_leftover
+            if patch.get("op") == "set" and isinstance(patch.get("path"), str)
+        ]
+        removed_paths = [
+            str(patch["path"]) for patch in structural_leftover
+            if patch.get("op") == "remove" and isinstance(patch.get("path"), str)
+        ]
+        structure_reason = (
+            f"Rebuild the chart composition and mark structure using {persona.name}'s complete design, "
+            "including the containers, transforms and annotation branches required by that approach."
+        )
+        row = {
+            "id": f"{persona.id}:v2:structure",
+            "rule_id": "v2-structure",
+            "scope": "structure",
+            "label": _COMPONENT_LABELS["structure"],
+            "reason": structure_reason,
+            "prompt": structure_reason,
+            "layer": "L3-derived",
+            "strength": "should",
+            "confidence": "high",
+            "status": "applied",
+            "warrant": {
+                "src": ["advisor-v2-diff"],
+                "story_id": "advisor-v2-structure",
+                "story": structure_reason,
+                "quote": "",
+                "source_file": "source→candidate diff inventory",
+                "derived": True,
+            },
+            "component_detail": {
+                "before": "Original chart topology",
+                "after": f"{persona.name} chart topology",
+                "spec_paths": set_paths,
+                "execution": "llm_full_spec_reconstruction",
+            },
+            "ops": [{
+                "action": "compose_component",
+                "component": "structure",
+                "candidate_spec": transport,
+                "spec_paths": set_paths,
+            }],
+            "contract": {
+                "verified": True,
+                "source": "programmatic_diff_inventory",
+                "scope": "structure",
+                "actual_paths": [str(patch.get("path") or "") for patch in structural_leftover],
+                "removed_paths": removed_paths,
+            },
+        }
+        _attach_knowledge(persona, row, knowledge, implementation, identity, tokens)
+        rows.append(row)
+
+    # Attach a machine-verifiable source→candidate contract after fallback
+    # diff paths have been merged into manifest rows. A Beat-3 sentence is not
+    # trusted merely because it sounds right: every displayed component must
+    # point to real diff atoms owned by that component.
+    patch_by_path = {str(patch.get("path") or ""): patch for patch in patches}
+    for row in rows:
+        detail = row.get("component_detail") if isinstance(row.get("component_detail"), dict) else {}
+        claimed = [path for path in (detail.get("spec_paths") or []) if isinstance(path, str) and path.startswith("/")]
+        scope = str(row.get("scope") or "structure")
+        existing = row.get("contract") if isinstance(row.get("contract"), dict) else {}
+        actual_paths = list(dict.fromkeys(existing.get("actual_paths") or claimed))
+        set_paths = [path for path in actual_paths if patch_by_path.get(path, {}).get("op") == "set"]
+        removed_paths = [path for path in actual_paths if patch_by_path.get(path, {}).get("op") == "remove"]
+        portable_set_paths = [path for path in set_paths if not patch_by_path[path].get("evidence_only")]
+        portable_removed_paths = [path for path in removed_paths if not patch_by_path[path].get("evidence_only")]
+        verification_errors: list[str] = []
+        if not actual_paths:
+            verification_errors.append("no_actual_diff_paths")
+        for path in actual_paths:
+            patch = patch_by_path.get(path)
+            if patch is None:
+                verification_errors.append(f"path_not_in_source_candidate_diff:{path}")
+                continue
+            compatible = _scopes_for_diff_path(path, original, candidate)
+            if scope != "structure" and scope not in compatible:
+                verification_errors.append(
+                    f"scope_mismatch:{path}:expected={scope}:compatible={','.join(sorted(compatible))}"
+                )
+        verified = not verification_errors
+        for op in row.get("ops") or []:
+            if isinstance(op, dict) and op.get("action") == "compose_component":
+                op["spec_paths"] = portable_set_paths
+                op["removed_paths"] = portable_removed_paths
+                op["evidence_paths"] = actual_paths
+                if actual_paths and not (portable_set_paths or portable_removed_paths):
+                    op["requires_llm_reconstruction"] = True
+        row["contract"] = {
+            "verified": verified,
+            "source": str(existing.get("source") or "source_candidate_diff"),
+            "scope": scope,
+            "actual_paths": actual_paths,
+            "set_paths": set_paths,
+            "removed_paths": removed_paths,
+            "compatible_scopes": {
+                path: sorted(_scopes_for_diff_path(path, original, candidate))
+                for path in actual_paths if path in patch_by_path
+            },
+            "verification_errors": verification_errors,
+        }
     return rows
 
 
@@ -764,7 +1002,7 @@ def _attach_bundle_contract(original: dict, candidate: dict, rows: list[dict]) -
     bundle_id = f"advisor-bundle:{fingerprint}"
     selections = [
         {"id": str(row.get("id")), "component": op.get("component") or row.get("scope"), "candidate_spec": candidate,
-         "spec_paths": (row.get("component_detail") or {}).get("spec_paths", []) if isinstance(row.get("component_detail"), dict) else []}
+         "spec_paths": list(op.get("spec_paths") or []), "removed_paths": list(op.get("removed_paths") or [])}
         for row in executable for op in (row.get("ops") or []) if isinstance(op, dict) and op.get("action") == "compose_component"
     ]
     projected, _applied, _conflicts, _notes = compose_component_slots(original, selections)
@@ -922,10 +1160,9 @@ def _proposal(persona: Persona, original_spec: dict, result: dict, elapsed_ms: f
             if isinstance(commitment, dict) and str(commitment.get("id") or "") in applied_ids:
                 rejected.append({"rule_id": str(commitment.get("evidence_id") or "advisor-v2"), "layer": "L3-derived" if str(commitment.get("evidence_id", "")).startswith("L3") else "L2", "label": str(commitment.get("claim") or "Persona design commitment"), "reason": "The candidate contained no executable visual delta, so this commitment was not presented as an applied change.", "src": [str(commitment.get("evidence_id") or "advisor-v2")]})
     if delivery_state == "needs_vega_lite_repair":
-        # The candidate and its component explanations remain visible, but a
-        # Review Board selection cannot execute malformed Vega-Lite code.
-        # Surface the compiler failure as its own actionable item instead of
-        # hiding the whole advisor result behind a source-spec rollback.
+        # Preserve the old permissive workflow: the proposal and its component
+        # explanations stay visible. Mark its operations as repair-required so
+        # users can inspect the design without treating the code as validated.
         for change in changes:
             change["status"] = "suggested"
             detail = change.setdefault("component_detail", {})
@@ -982,6 +1219,8 @@ def _proposal(persona: Persona, original_spec: dict, result: dict, elapsed_ms: f
         "elapsed_ms": round(elapsed_ms, 1),
         "engine": "advisor-v2",
         "llm_errors": result.get("llm_errors") or [],
+        "delivery_state": delivery_state,
+        "delivery_reason": None,
     }
 
 

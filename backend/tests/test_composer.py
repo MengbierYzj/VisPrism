@@ -1,7 +1,9 @@
 """Composer 冲突检测与消解。"""
 import asyncio
+import json
 
 from app.core.composer import apply_design, resolve_change_conflicts
+from app.core.semantic_composer import compose_component_slots
 from app.llm import LLMClient
 
 
@@ -48,6 +50,25 @@ def test_no_conflict_different_nodes():
     resolved, conflicts = resolve_change_conflicts(changes)
     assert conflicts == []
     assert all(ch.get("ops") for ch in resolved)
+
+
+def test_semantic_component_composer_executes_declared_path_removal():
+    source = {
+        "mark": "line",
+        "encoding": {"x": {"field": "Date"}, "y": {"field": "Price"}, "strokeDash": {"field": "basis"}},
+    }
+    candidate = {"mark": "line", "encoding": {"x": {"field": "Date"}, "y": {"field": "Price"}}}
+    final, applied, conflicts, notes = compose_component_slots(source, [{
+        "id": "bbc:v2:line-style",
+        "component": "color",
+        "candidate_spec": candidate,
+        "spec_paths": [],
+        "removed_paths": ["/encoding/strokeDash"],
+    }])
+    assert "strokeDash" not in final["encoding"]
+    assert applied == ["bbc:v2:line-style"]
+    assert conflicts == []
+    assert notes == []
 
 
 def test_conflict_winner_by_more_adoptions():
@@ -114,3 +135,118 @@ def test_conflict_apply_uses_winner_color():
     assert result["conflicts"]
     assert result["final_spec"]["mark"]["color"] == "#1380A1"
     assert "economist:e1" in [s["id"] for s in result["skipped"]]
+
+
+class _LiveComposerLLM:
+    mode = "live"
+
+    def __init__(self, responses):
+        self.responses = list(responses)
+        self.calls = []
+
+    async def chat_json(self, system, user):
+        self.calls.append((system, json.loads(user)))
+        return self.responses.pop(0)
+
+
+def _v2_change(cid: str, scope: str, candidate: dict, paths: list[str]) -> dict:
+    return {
+        "id": cid,
+        "scope": scope,
+        "label": scope.title(),
+        "reason": f"Apply {scope}",
+        "component_detail": {"before": "old", "after": "new", "spec_paths": paths},
+        "contract": {"verified": True, "source": "programmatic_diff_inventory", "scope": scope, "actual_paths": paths},
+        "ops": [{"action": "compose_component", "component": scope, "candidate_spec": candidate, "spec_paths": paths}],
+    }
+
+
+def test_live_v2_composer_reconstructs_full_spec_without_free_text(monkeypatch):
+    monkeypatch.setenv("VIZGUIDE_VISION_MODE", "off")
+    source = {
+        "data": {"values": [{"a": "A", "v": 1}, {"a": "B", "v": 2}]},
+        "mark": "bar",
+        "encoding": {"x": {"field": "a", "type": "nominal"}, "y": {"field": "v", "type": "quantitative"}},
+    }
+    bbc = {**source, "mark": {"type": "bar", "color": "#1380A1"}}
+    change = _v2_change("bbc:v2:color", "color", bbc, ["/mark/color"])
+    response = {
+        "final_spec": {
+            "data": {"$ref": "__vizguide_primary_data__"},
+            "mark": {"type": "bar", "color": "#1380A1"},
+            "encoding": source["encoding"],
+        },
+        "implementation": [{"change_id": change["id"], "realized_paths": ["/mark/color"], "note": "BBC blue"}],
+        "conflicts": [],
+    }
+    llm = _LiveComposerLLM([response])
+
+    result = asyncio.run(apply_design(source, [change], "", llm, {"communication_goal": "Compare A and B"}))
+
+    assert len(llm.calls) == 1
+    assert llm.calls[0][1]["communication_goal"] == "Compare A and B"
+    assert result["composition"]["mode"] == "llm_reconstruction"
+    assert result["final_spec"]["data"] == source["data"]
+    assert result["final_spec"]["mark"]["color"] == "#1380A1"
+    assert result["applied"] == [change["id"]]
+
+
+def test_unverified_change_is_blocked_before_composition():
+    source = {"mark": "bar", "encoding": {"x": {"field": "a"}, "y": {"field": "v"}}}
+    candidate = {**source, "background": "#111111"}
+    change = _v2_change("bbc:v2:unverified", "color", candidate, ["/background"])
+    change["contract"]["verified"] = False
+    llm = _LiveComposerLLM([])
+
+    result = asyncio.run(apply_design(source, [change], "", llm))
+
+    assert llm.calls == []
+    assert result["final_spec"] == source
+    assert result["applied"] == []
+    assert result["skipped"] == [{
+        "id": change["id"],
+        "reason": "Advisor change failed source-to-candidate contract verification and cannot be composed",
+    }]
+
+
+def test_live_v2_composer_repairs_missing_decision_implementation(monkeypatch):
+    monkeypatch.setenv("VIZGUIDE_VISION_MODE", "off")
+    source = {
+        "data": {"values": [{"a": "A", "v": 1}]},
+        "mark": "bar",
+        "encoding": {"x": {"field": "a", "type": "nominal"}, "y": {"field": "v", "type": "quantitative"}},
+    }
+    candidate = {**source, "background": "#111111"}
+    change = _v2_change("economist:v2:color", "color", candidate, ["/background"])
+    draft = {
+        "final_spec": {"data": {"$ref": "__vizguide_primary_data__"}, "mark": "bar", "encoding": source["encoding"], "background": "#111111"},
+        "implementation": [],
+        "conflicts": [],
+    }
+    repaired = {
+        **draft,
+        "implementation": [{"change_id": change["id"], "realized_paths": ["/background"]}],
+    }
+    llm = _LiveComposerLLM([draft, repaired])
+
+    result = asyncio.run(apply_design(source, [change], "", llm))
+
+    assert len(llm.calls) == 2
+    assert "validation_errors" in llm.calls[1][1]
+    assert result["composition"]["mode"] == "llm_reconstruction"
+    assert result["applied"] == [change["id"]]
+
+
+def test_live_v2_composer_falls_back_when_repair_is_not_verifiable(monkeypatch):
+    monkeypatch.setenv("VIZGUIDE_VISION_MODE", "off")
+    source = {"mark": "bar", "encoding": {"x": {"field": "a"}, "y": {"field": "v"}}}
+    candidate = {**source, "background": "#111111"}
+    change = _v2_change("economist:v2:color", "color", candidate, ["/background"])
+    bad = {"final_spec": {"mark": "bar"}, "implementation": [], "conflicts": []}
+    llm = _LiveComposerLLM([bad, bad])
+
+    result = asyncio.run(apply_design(source, [change], "", llm))
+
+    assert result["composition"]["mode"] == "deterministic_fallback"
+    assert result["final_spec"]["background"] == "#111111"
+    assert any("回退确定性组合" in note for note in result["notes"])

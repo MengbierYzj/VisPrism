@@ -93,11 +93,6 @@ def _runs_dir() -> Path:
     return Path(settings.storage_dir) / "runs"
 
 
-def _replay_runs_dir() -> Path:
-    """Read-only experimental replay records; never written by live runs."""
-    return Path(settings.storage_dir) / "replay_runs"
-
-
 def _read_record(path: Path) -> dict[str, Any] | None:
     """快照首行可能是紧凑元数据行，正文才是完整 JSON；两种都接受。"""
     try:
@@ -116,29 +111,20 @@ def _read_record(path: Path) -> dict[str, Any] | None:
 
 def list_records() -> list[dict[str, Any]]:
     """列出可回放的历史 run（按时间倒序），供前端或脚本挑选。"""
+    directory = _runs_dir()
+    if not directory.is_dir():
+        return []
     records: list[dict[str, Any]] = []
-    # A normal run wins when a duplicate id exists; experimental files are
-    # intentionally kept in replay_runs so they cannot be mistaken for live
-    # advisor output or overwritten by a snapshot.
-    paths: list[Path] = []
-    for directory in (_runs_dir(), _replay_runs_dir()):
-        if directory.is_dir():
-            paths.extend(directory.glob("*.json"))
-    seen: set[str] = set()
-    for path in sorted(paths, key=lambda item: item.stat().st_mtime, reverse=True):
+    for path in sorted(directory.glob("*.json"), key=lambda item: item.stat().st_mtime, reverse=True):
         document = _read_record(path)
         if document is None:
             continue
-        record_id = str(document.get("run_id") or path.stem)
-        if record_id in seen:
-            continue
-        seen.add(record_id)
         agents = [agent for agent in document["agents"] if isinstance(agent, dict)]
         request = document.get("request") if isinstance(document.get("request"), dict) else {}
         spec = request.get("spec") if isinstance(request.get("spec"), dict) else {}
         title = spec.get("title")
         records.append({
-            "run_id": record_id,
+            "run_id": str(document.get("run_id") or path.stem),
             "engine": str(document.get("engine") or "advisor-v1"),
             "status": str(document.get("status") or "unknown"),
             "created_at": document.get("created_at"),
@@ -159,13 +145,7 @@ def load_record(run_id: str) -> tuple[dict[str, Any] | None, str]:
     name = str(run_id or "").strip()
     if not name or "/" in name or "\\" in name or name.startswith("."):
         return None, f"非法 run_id: {run_id!r}"
-    # A manually authored replay is an intentional override of a same-named
-    # live snapshot (users often copy an early draft into `runs` while testing).
-    # Prefer the isolated replay directory so the newest manifest is the one
-    # actually replayed.
-    path = _replay_runs_dir() / f"{name}.json"
-    if not path.is_file():
-        path = _runs_dir() / f"{name}.json"
+    path = _runs_dir() / f"{name}.json"
     if not path.is_file():
         return None, f"未找到 run 记录: {name}"
     document = _read_record(path)

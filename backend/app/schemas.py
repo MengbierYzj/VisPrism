@@ -8,7 +8,6 @@ class RunRequest(BaseModel):
     spec: dict
     persona_ids: list[str] = Field(min_length=1)
     context: dict = Field(default_factory=dict)
-    generation_method: str = "advisor"
 
 
 class ReplayRequest(BaseModel):
@@ -23,6 +22,7 @@ class ApplyRequest(BaseModel):
     spec: dict
     changes: list[dict] = Field(default_factory=list)
     instructions: str = ""
+    context: dict = Field(default_factory=dict)
 
 
 class DiscussRequest(BaseModel):

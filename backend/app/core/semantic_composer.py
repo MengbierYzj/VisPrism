@@ -323,6 +323,29 @@ def _set_pointer(document: dict, pointer: str, value: Any) -> bool:
     return False
 
 
+def _remove_pointer(document: dict, pointer: str) -> bool:
+    """Remove one existing RFC-6901 path without creating containers."""
+    if not pointer.startswith("/"):
+        return False
+    parts = [part.replace("~1", "/").replace("~0", "~") for part in pointer.lstrip("/").split("/")]
+    current: Any = document
+    for key in parts[:-1]:
+        if isinstance(current, dict) and key in current:
+            current = current[key]
+        elif isinstance(current, list) and key.isdigit() and int(key) < len(current):
+            current = current[int(key)]
+        else:
+            return False
+    leaf = parts[-1]
+    if isinstance(current, dict) and leaf in current:
+        del current[leaf]
+        return True
+    if isinstance(current, list) and leaf.isdigit() and int(leaf) < len(current):
+        current.pop(int(leaf))
+        return True
+    return False
+
+
 def _set_pointer_with_candidate_context(target: dict, candidate: dict, pointer: str, value: Any) -> bool:
     """Write a declared leaf while retaining the smallest required VL context.
 
@@ -362,7 +385,8 @@ def compose_component_slots(source: dict, selections: list[dict]) -> tuple[dict,
 
     for selection in selections:
         paths = [path for path in (selection.get("spec_paths") or []) if isinstance(path, str) and path.startswith("/")]
-        if not paths:
+        removed_paths = [path for path in (selection.get("removed_paths") or []) if isinstance(path, str) and path.startswith("/")]
+        if not paths and not removed_paths:
             notes.append(f"{selection['id']} 缺少可执行的精确 spec_paths，未组装")
             continue
         candidate = restore_primary_data(source, selection.get("candidate_spec"))
@@ -381,106 +405,31 @@ def compose_component_slots(source: dict, selections: list[dict]) -> tuple[dict,
                     "winner_change_id": selection["id"], "loser_change_id": previous["id"],
                     "reason": f"同一精确 spec 路径 {path} 被重复选择；按 Review Board 最后选择项确定为 {selection['id']}。",
                 })
-            claims[path] = {"id": selection["id"], "value": value, "candidate": candidate}
+            claims[path] = {"id": selection["id"], "action": "set", "value": value, "candidate": candidate}
+        for path in removed_paths:
+            previous = claims.get(path)
+            if previous is not None:
+                conflicts.append({
+                    "node": f"spec{path.replace('/', '.')}",
+                    "winner_change_id": selection["id"], "loser_change_id": previous["id"],
+                    "reason": f"同一精确 spec 路径 {path} 被重复选择；按 Review Board 最后选择项确定为 {selection['id']}。",
+                })
+            claims[path] = {"id": selection["id"], "action": "remove", "candidate": candidate}
 
     applied_paths: dict[str, int] = {}
-    for path, claim in claims.items():
+    for path, claim in ((path, claim) for path, claim in claims.items() if claim.get("action") == "set"):
         if _set_pointer_with_candidate_context(final_spec, claim["candidate"], path, claim["value"]):
+            applied_paths[claim["id"]] = applied_paths.get(claim["id"], 0) + 1
+    # Deepest removals first; descending list indices avoid index shifts.
+    removals = [(path, claim) for path, claim in claims.items() if claim.get("action") == "remove"]
+    removals.sort(key=lambda item: (item[0].count("/"), item[0]), reverse=True)
+    for path, claim in removals:
+        removed = _remove_pointer(final_spec, path)
+        still_exists, _ = _pointer_value(final_spec, path)
+        if removed or not still_exists:
             applied_paths[claim["id"]] = applied_paths.get(claim["id"], 0) + 1
     applied = list(applied_paths)
     for selection in selections:
         if selection["id"] not in applied_paths and not any(conflict.get("loser_change_id") == selection["id"] for conflict in conflicts):
             notes.append(f"{selection['id']} 没有可写入当前图的声明路径")
     return final_spec, applied, conflicts, notes
-
-
-def _atomic_pointer_parts(pointer: str) -> list[str]:
-    if not isinstance(pointer, str) or not pointer.startswith("/"):
-        return []
-    return [part.replace("~1", "/").replace("~0", "~") for part in pointer.lstrip("/").split("/")]
-
-
-def _atomic_remove(document: Any, pointer: str) -> bool:
-    """Remove an RFC-6901 location. Missing paths are harmless no-ops."""
-    parts = _atomic_pointer_parts(pointer)
-    if not parts:
-        return False
-    current = document
-    for part in parts[:-1]:
-        if isinstance(current, dict) and part in current:
-            current = current[part]
-        elif isinstance(current, list) and part.isdigit() and int(part) < len(current):
-            current = current[int(part)]
-        else:
-            return False
-    last = parts[-1]
-    if isinstance(current, dict):
-        return current.pop(last, None) is not None
-    if isinstance(current, list) and last.isdigit() and int(last) < len(current):
-        current.pop(int(last))
-        return True
-    return False
-
-
-def _compact_absent_layer_slots(node: Any) -> None:
-    """Do not leave `{}` in a partial layer selection (Vega-Lite rejects it)."""
-    if isinstance(node, dict):
-        for key, value in list(node.items()):
-            if key == "layer" and isinstance(value, list):
-                node[key] = [item for item in value if item not in ({}, None)]
-                for item in node[key]:
-                    _compact_absent_layer_slots(item)
-            else:
-                _compact_absent_layer_slots(value)
-    elif isinstance(node, list):
-        for value in node:
-            _compact_absent_layer_slots(value)
-
-
-def compose_atomic_component_patches(source: dict, changes: list[dict]) -> tuple[dict, list[str], list[str]]:
-    """Replay experimental atomic manifests without falling back to candidates.
-
-    Each selected card owns exact JSON-Pointer `set`/`remove` patches.  Any
-    invisible structural dependencies are embedded with the card as
-    `dependency_patches`, so the API may still receive only the cards selected
-    by the frontend.  This path is intentionally isolated from the legacy
-    `compose_component` contract.
-    """
-    final_spec = copy.deepcopy(source)
-    patch_sets: list[tuple[str, list[dict]]] = []
-    notes: list[str] = []
-    for change in changes:
-        cid = str(change.get("id") or change.get("rule_id") or "change")
-        atomic = next((op for op in (change.get("ops") or []) if isinstance(op, dict) and op.get("action") == "apply_component_patch"), None)
-        if atomic is None:
-            continue
-        dependency_patches = atomic.get("dependency_patches") if isinstance(atomic.get("dependency_patches"), list) else []
-        for dependency in dependency_patches:
-            if isinstance(dependency, dict) and isinstance(dependency.get("patches"), list):
-                patch_sets.append((str(dependency.get("id") or "dependency"), dependency["patches"]))
-        patches = atomic.get("patches") if isinstance(atomic.get("patches"), list) else []
-        if not patches:
-            notes.append(f"{cid} 缺少原子 patches，未组装")
-            continue
-        patch_sets.append((cid, patches))
-
-    # Remove before set: a unit → layer migration must not retain root mark,
-    # encoding, or transform properties beside its new layer container.
-    for _owner, patches in patch_sets:
-        for patch in patches:
-            if isinstance(patch, dict) and patch.get("op") == "remove":
-                _atomic_remove(final_spec, str(patch.get("path") or ""))
-    wrote: dict[str, int] = {}
-    for owner, patches in patch_sets:
-        for patch in patches:
-            if not isinstance(patch, dict) or patch.get("op") != "set":
-                continue
-            if _set_pointer(final_spec, str(patch.get("path") or ""), patch.get("value")):
-                wrote[owner] = wrote.get(owner, 0) + 1
-    _compact_absent_layer_slots(final_spec)
-    selected_ids = [str(change.get("id") or change.get("rule_id") or "change") for change in changes]
-    applied = [cid for cid in selected_ids if wrote.get(cid)]
-    for cid in selected_ids:
-        if cid not in applied:
-            notes.append(f"{cid} 的原子 patches 未写入当前 spec")
-    return final_spec, applied, notes

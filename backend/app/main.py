@@ -17,12 +17,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from .advisor_v2.runner import V2RunStore
-from .ablation_runner import AblationRunStore
 from .config import settings
 from .core.persona import PersonaRegistry
 from .core.runner import RunStore
 from .llm import LLMClient
-from .routers import ablation, advisor, advisor_v2, design, health, personas, upload
+from .routers import advisor, advisor_v2, design, health, personas, upload
 
 
 @asynccontextmanager
@@ -33,7 +32,6 @@ async def lifespan(app: FastAPI):
     app.state.llm = LLMClient()
     app.state.runs = RunStore()
     app.state.v2_runs = V2RunStore()
-    app.state.ablation_runs = AblationRunStore()
     loaded = [p.id for p in app.state.registry.list()]
     print(f"[vizguide] personas: {loaded} | llm_mode: {settings.llm_mode}")
     yield
@@ -67,5 +65,5 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
     )
 
 
-for r in (health, personas, upload, advisor, advisor_v2, design, ablation):
+for r in (health, personas, upload, advisor, advisor_v2, design):
     app.include_router(r.router)

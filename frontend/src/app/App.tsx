@@ -6,12 +6,10 @@ import {
   type DesignChange,
   type Proposal,
   type AgentStatus,
-  type HealthPayload,
   type ApplyResult,
   type DiscussReply,
   type DiscussHistoryItem,
   type AgendaPayload,
-  type GenerationMethod,
 } from "./api";
 import { VegaLiteChart, type VegaViewHandle } from "./components/VegaLiteChart";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "./components/ui/resizable";
@@ -100,9 +98,6 @@ const PERSONA_TAGLINES: Record<string, string> = {
   ebay: "Exacting copy · semantic color roles",
   shopify: "One-color bars · threshold-based charts",
 };
-const BASELINES: PersonaMeta[] = [
-  ["bbc","BBC","BBC Visual Journalism","#BB1919"],["economist","The Economist","The Economist Editorial","#E3120B"],["who","WHO","World Health Organization","#007EB4"],["ibm","IBM","IBM Design Language","#0F62FE"],["cfpb","CFPB","Consumer Financial Protection Bureau","#005E5D"],
-].map(([id,name,full_name,brand_color]) => ({id,name,full_name,brand_color,domain:"ablation baseline",category:"Other",kind:"builtin" as const,source:"built-in guideline",palette:[],abbr:name.slice(0,4).toUpperCase(),layers:{l1_rules:0,l2_adaptations:0,l3_philosophy:0,l3_stories:0}}));
 
 const LAYER_BADGE: Record<string, { text: string; cls: string }> = {
   L1: { text: "L1 Traits", cls: "bg-slate-100 text-slate-700 border-slate-200" },
@@ -121,7 +116,6 @@ const DESIGN_OBJECTS = [
   { key: "axes", label: "Axes & scales", short: "Axes" },
   { key: "layout", label: "Layout & hierarchy", short: "Layout" },
   { key: "typography", label: "Typography", short: "Typography" },
-  { key: "structure", label: "Chart composition & marks", short: "Composition" },
   { key: "other", label: "Overall approach", short: "Overall" },
 ];
 
@@ -141,7 +135,6 @@ const CATEGORY_ANCHOR: Record<string, { left: string; top: string }> = {
   axes: { left: "10%", top: "44%" },
   layout: { left: "88%", top: "16%" },
   typography: { left: "28%", top: "10%" },
-  structure: { left: "50%", top: "32%" },
   other: { left: "50%", top: "32%" },
 };
 
@@ -226,7 +219,6 @@ function measureAnchorPositions(wrapper: HTMLElement): Record<string, AnchorPos>
       : xAxis
         ? { left: xAxis.cx, top: xAxis.cy }
         : { left: plot.cx, top: plot.bottom + 14 }),
-    structure: clamp({ left: plot.cx, top: plot.top + 14 }),
     other: clamp({ left: plot.cx, top: plot.top + 14 }),
   };
 
@@ -246,7 +238,8 @@ function measureAnchorPositions(wrapper: HTMLElement): Record<string, AnchorPos>
 
 function classifyChange(change: DesignChange) {
   const scope = String(change.scope || "").toLowerCase();
-  if (scope === "structure" || scope === "title" || scope === "color" || scope === "labels" || scope === "axes" || scope === "layout" || scope === "typography") {
+  if (scope === "structure") return "other";
+  if (scope === "title" || scope === "color" || scope === "labels" || scope === "axes" || scope === "layout" || scope === "typography") {
     return scope;
   }
   // v1 fallback: label first, then prose. Do not treat "story" as title —
@@ -268,44 +261,6 @@ function classifyChange(change: DesignChange) {
   if (/(layout|spacing|position|align|margin|padding|size|hierarchy)/.test(text)) return "layout";
   if (/(font|typeface|typography|weight|text size)/.test(text)) return "typography";
   return "other";
-}
-
-const COMPONENT_FEATURE_LABELS: Record<string, string> = {
-  rect: "Context band or highlighted region",
-  rule: "Reference rules",
-  point: "Point emphasis",
-  text: "Text annotation",
-  line: "Additional line treatment",
-  area: "Area overlay",
-  bar: "Bar component",
-  tick: "Tick component",
-};
-
-function reviewFeature(change: DesignChange): { key: string; label: string; category: string } {
-  const detail = change.component_detail;
-  const role = detail?.semantic_role ?? "";
-  if (detail?.component_is_new && role && !role.startsWith("chart_")) {
-    const kind = role.split("_", 1)[0].toLowerCase();
-    return {
-      key: `component:${kind}`,
-      label: COMPONENT_FEATURE_LABELS[kind] ?? `Added ${kind} component`,
-      category: classifyChange(change),
-    };
-  }
-  const category = classifyChange(change);
-  // A structural patch is never one generic "overall" choice: choosing all
-  // of them would splice unrelated layers from different personas together.
-  // Atomic replay manifests identify their component explicitly, so expose one
-  // card per component instead.
-  if (category === "structure" && change.component_id) {
-    return {
-      key: `structure:${change.component_id}`,
-      label: `Composition — ${change.component_id.replaceAll("-", " ")}`,
-      category,
-    };
-  }
-  const label = DESIGN_OBJECTS.find(item => item.key === category)?.short ?? change.label ?? "Other changes";
-  return { key: category, label, category };
 }
 
 // ops action → 受影响 spec 节点（与后端 composer 的冲突粒度对齐，见接口文档 §7）
@@ -361,18 +316,6 @@ function changeNodes(change: DesignChange): string[] {
       }
       return;
     }
-    if (action === "apply_component_patch") {
-      const patches = Array.isArray(op.patches) ? op.patches : [];
-      patches.forEach(patch => {
-        if (patch && typeof patch === "object" && typeof (patch as { path?: unknown }).path === "string") {
-          nodes.add(`spec${String((patch as { path: string }).path).replaceAll("/", ".")}`);
-        }
-      });
-      // Candidate layer indexes differ after a reconstruction; the semantic
-      // component id catches conflicts that raw JSON Pointer paths cannot.
-      if (change.component_id) nodes.add(`component.${change.component_id}`);
-      return;
-    }
     const node = ACTION_NODE[action];
     if (node) nodes.add(node);
   });
@@ -395,21 +338,9 @@ const APPLIED_PREFIX = /^(applied|proposed|suggested|change)\s*[:：—–]\s*/i
 const ENGINE_JARGON = /l1 signature|fast[- ]lane|re-verified|violated the institution|title\s*=\s*null|orient\s*=|r\s*==\s*1|defaults applied|no explicit/i;
 
 function isDesignerFacing(change: DesignChange): boolean {
-  if (change.selectable === false) return false;
-  // Every executable delta is part of the candidate reconstruction contract.
-  // Never hide one merely because its truthful before-value contains an
-  // engine-looking token such as `title = null`: doing so makes "adopt all"
-  // submit an incomplete bundle and forces the Composer into lossy partial
-  // projection.  The jargon filter is only for non-executable narrative rows.
-  const executable = change.ops.some(op => {
-    if (op.action !== "compose_component") return Boolean(op.action);
-    const paths = Array.isArray(op.spec_paths)
-      ? op.spec_paths
-      : change.component_detail?.spec_paths ?? [];
-    return paths.some(path => typeof path === "string" && path.startsWith("/"));
-  });
-  if (executable) return true;
-  return !ENGINE_JARGON.test(`${change.label} ${change.reason} ${change.prompt ?? ""}`);
+  const after = change.component_detail?.after ?? "";
+  const before = change.component_detail?.before ?? "";
+  return !ENGINE_JARGON.test(`${change.reason} ${before} ${after}`);
 }
 
 function cleanSentence(text?: string | null): string {
@@ -584,20 +515,18 @@ function issueHeadline(short: string, _solutions: IssueSolution[]): string {
 
 function deriveIssues(runPersonas: PersonaMeta[], proposals: Record<string, Proposal>): DerivedIssue[] {
   const byKey = new Map<string, IssueSolution[]>();
-  const featureByKey = new Map<string, { label: string; category: string }>();
   runPersonas.forEach(persona => {
     proposals[persona.id]?.changes.forEach(change => {
       if (!isDesignerFacing(change)) return;
-      const feature = reviewFeature(change);
-      const list = byKey.get(feature.key) ?? [];
+      const key = classifyChange(change);
+      const list = byKey.get(key) ?? [];
       list.push({ personaId: persona.id, change, nodes: changeNodes(change) });
-      byKey.set(feature.key, list);
-      featureByKey.set(feature.key, { label: feature.label, category: feature.category });
+      byKey.set(key, list);
     });
   });
 
-  const issues = [...byKey.entries()].map(([key, solutions]) => {
-    const feature = featureByKey.get(key) ?? { label: "Other changes", category: "other" };
+  const issues = DESIGN_OBJECTS.filter(obj => byKey.has(obj.key)).map(obj => {
+    const solutions = byKey.get(obj.key) ?? [];
     const personaIds = runPersonas.map(p => p.id).filter(id => solutions.some(s => s.personaId === id));
     const nodeOwners = new Map<string, Set<string>>();
     solutions.forEach(s =>
@@ -608,7 +537,7 @@ function deriveIssues(runPersonas: PersonaMeta[], proposals: Record<string, Prop
       }),
     );
     const conflictNodes = [...nodeOwners.entries()].filter(([, owners]) => owners.size >= 2).map(([node]) => node);
-    return { key, label: issueHeadline(feature.label, solutions), short: feature.label, category: feature.category, personaIds, solutions, conflictNodes, n: 0 };
+    return { key: obj.key, label: issueHeadline(obj.short, solutions), short: obj.short, category: obj.key, personaIds, solutions, conflictNodes, n: 0 };
   });
 
   issues.sort((a, b) => b.personaIds.length - a.personaIds.length || b.solutions.length - a.solutions.length);
@@ -807,34 +736,28 @@ function LayerMark({ layer }: { layer: string }) {
   );
 }
 
-function AdoptButton({ accepted, onClick }: { accepted: boolean; onClick: () => void }) {
+function AdoptButton({ accepted, onClick, disabled = false, title }: { accepted: boolean; onClick: () => void; disabled?: boolean; title?: string }) {
   return (
     <button
       onClick={onClick}
-      className={`shrink-0 px-2 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 border transition-colors ${accepted ? "bg-[#EAF7F0] text-[#21875A] border-[#B7E2CB]" : "bg-white text-[#52525B] border-[#D4D4D8] hover:bg-[#F4F4F5]"}`}
+      disabled={disabled}
+      title={title}
+      className={`shrink-0 px-2 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 border transition-colors disabled:cursor-not-allowed ${disabled ? "bg-amber-50 text-amber-700 border-amber-200 opacity-80" : accepted ? "bg-[#EAF7F0] text-[#21875A] border-[#B7E2CB]" : "bg-white text-[#52525B] border-[#D4D4D8] hover:bg-[#F4F4F5]"}`}
     >
       <CheckCircle2 size={11} />
-      {accepted ? "Adopted" : "Adopt"}
+      {disabled ? "Unverified" : accepted ? "Adopted" : "Adopt"}
     </button>
   );
 }
 
 // ─── Top Bar ──────────────────────────────────────────────────────────────────
 
-function TopBar({ health }: { health: HealthPayload | null }) {
+function TopBar() {
   return (
     <div className="viz-topbar h-11 flex items-center px-5 border-b border-border bg-card shrink-0">
       <div className="flex items-baseline gap-2.5">
-        <span className="text-sm font-semibold tracking-tight">VizGuide</span>
+        <span className="text-sm font-semibold tracking-tight">VisPrism</span>
         <span className="text-xs text-muted-foreground">Institutional design persona agents</span>
-      </div>
-      <div className="ml-auto flex items-center gap-2">
-        {health && (
-          <span className={`text-[9px] font-medium rounded-full px-2 py-0.5 border ${health.llm_mode === "live" ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-amber-50 text-amber-700 border-amber-200"}`}
-            title="Slow-lane reasoning mode; the fast lane remains deterministic">
-            slow lane: {health.llm_mode}{health.model ? ` · ${health.model}` : ""}
-          </span>
-        )}
       </div>
     </div>
   );
@@ -855,15 +778,13 @@ interface InputPanelProps {
   onCommunicationGoalChange: (text: string) => void;
   parsingAgents: ParsingAgent[];
   onAddPersonaFile: (file: File) => void;
-  generationMethod: GenerationMethod;
-  onGenerationMethodChange: (method: GenerationMethod) => void;
   error: string | null;
 }
 
 function InputPanel({
   personas, selected, onToggle, agents, stage, onGenerate,
   specText, onSpecChange, communicationGoal, onCommunicationGoalChange,
-  parsingAgents, onAddPersonaFile, generationMethod, onGenerationMethodChange, error,
+  parsingAgents, onAddPersonaFile, error,
 }: InputPanelProps) {
   const [specTab, setSpecTab] = useState<"code" | "file">("code");
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
@@ -879,7 +800,6 @@ function InputPanel({
 
   const allSelected = personas.length > 0 && personas.every(p => selected.has(p.id));
   const someSelected = selected.size > 0;
-  const fixedBaseline = false;
   const specLines = specText.split("\n");
 
   // 机构库筛选：taxonomy 分类 chips + 名称搜索（Government/Education/Non-profit/News/Profit）
@@ -993,17 +913,9 @@ function InputPanel({
             className="mt-1.5 w-full resize-none rounded-lg border border-[#E4E4E7] bg-[#FAFAFB] px-2.5 py-2 text-[11px] leading-relaxed text-foreground placeholder:text-[#A1A1AA] focus:outline-none focus:border-[#7569E8] focus:ring-2 focus:ring-[#F0EEFF]"
           />
         </div>
-        <div className="px-3 py-2 border-b border-border">
-          <label className="block text-[11px] font-semibold text-muted-foreground">Generation method</label>
-          <select value={generationMethod} onChange={e => onGenerationMethodChange(e.target.value as GenerationMethod)} className="mt-1.5 w-full rounded-lg border border-[#E4E4E7] bg-[#FAFAFB] px-2.5 py-2 text-[11px]">
-            <option value="advisor">Full advisor pipeline</option><option value="persona_direct">Persona without reasoning</option><option value="prompt_only">Prompt-only baseline</option><option value="rag">Classic-RAG guideline baseline</option>
-          </select>
-          {generationMethod === "prompt_only" && <p className="mt-1.5 text-[10px] text-muted-foreground">Choose one or more institutions; each receives only “{`{institution name}`} style”.</p>}
-          {generationMethod === "rag" && <p className="mt-1.5 text-[10px] text-muted-foreground">Choose one or more personas; each retrieves passages from its own Markdown guide.</p>}
-        </div>
 
         {/* Advisor selector */}
-        {!fixedBaseline && <div className="px-4 pt-3 pb-2">
+        <div className="px-4 pt-3 pb-2">
           <div className="flex items-center justify-between mb-2">
             <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wide">Agents</p>
             <button
@@ -1099,7 +1011,7 @@ function InputPanel({
           {isAgentDragOver && (
             <p className="text-[9px] text-primary text-center mt-1.5">Drop Markdown guideline to parse a new agent</p>
           )}
-        </div>}
+        </div>
       </div>
 
       {/* Pinned bottom */}
@@ -1107,7 +1019,7 @@ function InputPanel({
         {error && (
           <p className="text-[10px] text-red-600 mb-2 flex items-start gap-1"><CircleAlert size={11} className="shrink-0 mt-0.5" />{error}</p>
         )}
-        <button onClick={onGenerate} disabled={stage === "generating" || (!fixedBaseline && !someSelected) || !parsedSpec}
+        <button onClick={onGenerate} disabled={stage === "generating" || !someSelected || !parsedSpec}
           className={`w-full py-2 rounded-lg text-xs font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed ${stage === "generated" ? "bg-white text-[#52525B] border border-[#D4D4D8] hover:bg-[#F4F4F5]" : "bg-primary text-primary-foreground hover:bg-[#5146C7]"}`}>
           {stage === "generating" ? "Generating proposals…" : "Generate Proposals"}
         </button>
@@ -1531,12 +1443,6 @@ function IssueCard({ issue, personas, expanded, onToggleExpand, onOpenDiscussion
           {issue.blurb && (
             <p className="text-[11px] text-muted-foreground leading-relaxed">{issue.blurb}</p>
           )}
-          {issue.conflictNodes.length > 0 && (
-            <p className="text-[10px] text-amber-700 bg-amber-50 border border-amber-200 rounded-md px-2 py-1 leading-relaxed">
-              Different picks on <span className="font-mono">{issue.conflictNodes.join(", ")}</span> — adopting one replaces the other's.
-            </p>
-          )}
-
           {/* 每个机构一张处理卡：问题是什么 / 怎么处理的 / 依据哪条指南 */}
           {issue.personaIds.map(pid => {
             const persona = personas.find(p => p.id === pid);
@@ -1549,6 +1455,7 @@ function IssueCard({ issue, personas, expanded, onToggleExpand, onOpenDiscussion
             if (!primary) return null;
             const changes = bundle.map(s => s.change);
             const adopted = changes.every(ch => acceptedChanges.some(c => c.id === ch.id));
+            const adoptable = changes.every(ch => ch.contract?.verified !== false);
             const summary = treatmentSummary(bundle, issue.treatmentLines?.[pid]);
             return (
               <div key={pid} className="rounded-lg border border-border bg-[#FAFAFB] p-2.5 flex items-start gap-2">
@@ -1579,7 +1486,12 @@ function IssueCard({ issue, personas, expanded, onToggleExpand, onOpenDiscussion
                     )}
                   </div>
                 </div>
-                <AdoptButton accepted={adopted} onClick={() => onToggleBundle(changes)} />
+                <AdoptButton
+                  accepted={adopted}
+                  disabled={!adoptable}
+                  title={!adoptable ? "This change does not match a verified source-to-candidate diff and cannot be composed." : undefined}
+                  onClick={() => onToggleBundle(changes)}
+                />
               </div>
             );
           })}
@@ -1676,6 +1588,7 @@ function DiscussionView({ issue, personas, acceptedChanges, onToggleBundle, onBa
         if (!primary) return null;
         const changes = bundle.map(s => s.change);
         const adopted = changes.every(ch => acceptedChanges.some(c => c.id === ch.id));
+        const adoptable = changes.every(ch => ch.contract?.verified !== false);
         const summary = treatmentSummary(bundle, issue.treatmentLines?.[pid]);
         return (
           <div key={pid} className="flex items-start gap-2">
@@ -1683,7 +1596,14 @@ function DiscussionView({ issue, personas, acceptedChanges, onToggleBundle, onBa
             <div className="flex-1 min-w-0 rounded-xl border border-border bg-white px-3 py-2">
               <div className="flex items-center gap-1.5 flex-wrap mb-1">
                 <span className="text-[10px] font-bold" style={{ color: persona?.brand_color }}>{persona?.name ?? pid}</span>
-                <span className="ml-auto"><AdoptButton accepted={adopted} onClick={() => onToggleBundle(changes)} /></span>
+                <span className="ml-auto">
+                  <AdoptButton
+                    accepted={adopted}
+                    disabled={!adoptable}
+                    title={!adoptable ? "This change does not match a verified source-to-candidate diff and cannot be composed." : undefined}
+                    onClick={() => onToggleBundle(changes)}
+                  />
+                </span>
               </div>
               <p className="text-[11px] leading-relaxed"><ColorCopy text={summary.treatment} /></p>
               {summary.knowledge.length > 0 && (
@@ -1846,7 +1766,7 @@ function ReviewBoardPanel({
 
   const exportResult = useCallback(async (format: "png" | "svg" | "json") => {
     if (!composeResult) return;
-    const filename = "vizguide-composed";
+    const filename = "visprism-composed";
     setExporting(format);
     setExportError(null);
     try {
@@ -1990,7 +1910,7 @@ function ReviewBoardPanel({
             value={instructions}
             onChange={e => onInstructionsChange(e.target.value)}
             rows={2}
-            placeholder="Optional free-text instruction for the composer (live mode only)…"
+            placeholder="Optional additional instruction for the final LLM composition…"
             className="w-full resize-none rounded-lg border border-[#E4E4E7] bg-[#FAFAFB] px-2.5 py-2 text-[11px] leading-relaxed text-foreground placeholder:text-[#A1A1AA] focus:outline-none focus:border-[#7569E8] focus:ring-2 focus:ring-[#F0EEFF]"
           />
         )}
@@ -2013,9 +1933,6 @@ function ReviewBoardPanel({
                   </p>
                 </div>
               ))}
-              {composeResult.notes.length > 0 && (
-                <p className="text-[9px] text-muted-foreground leading-relaxed">{composeResult.notes.join("；")}</p>
-              )}
               {composeResult.skipped.length > 0 && (
                 <div>
                   <button onClick={() => setSkippedOpen(v => !v)} className="text-[9px] font-semibold text-muted-foreground hover:text-foreground flex items-center gap-1">
@@ -2075,12 +1992,10 @@ function ReviewBoardPanel({
 
 export default function App() {
   const [personas, setPersonas] = useState<PersonaMeta[]>([]);
-  const [health, setHealth] = useState<HealthPayload | null>(null);
   const [stage, setStage] = useState<Stage>("idle");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [specText, setSpecText] = useState(DEFAULT_SPEC);
   const [communicationGoal, setCommunicationGoal] = useState("");
-  const [generationMethod, setGenerationMethod] = useState<GenerationMethod>("advisor");
   const [agents, setAgents] = useState<Record<string, AgentView>>({});
   const [proposals, setProposals] = useState<Record<string, Proposal>>({});
   const [agenda, setAgenda] = useState<AgendaPayload | null>(null);
@@ -2101,9 +2016,8 @@ export default function App() {
   }, []);
   useEffect(() => () => stopPolling(), [stopPolling]);
 
-  // 启动时拉取后端健康状态与 persona 列表
+  // 启动时拉取 persona 列表
   useEffect(() => {
-    api.health().then(setHealth).catch(() => setHealth(null));
     api.personas()
       .then(r => setPersonas(r.personas))
       .catch(e => setApiError((e as Error).message));
@@ -2113,10 +2027,10 @@ export default function App() {
     try { return JSON.parse(specText) as object; } catch { return null; }
   }, [specText]);
 
-  const displayPersonas = useMemo(() => {
-    const all = new Map(personas.map(p => [p.id, p])); BASELINES.forEach(p => { if (!all.has(p.id)) all.set(p.id, p); }); return [...all.values()];
-  }, [personas]);
-  const runPersonas = useMemo(() => runPersonaIds.map(id => displayPersonas.find(p => p.id === id)).filter((p): p is PersonaMeta => Boolean(p)), [runPersonaIds, displayPersonas]);
+  const runPersonas = useMemo(
+    () => runPersonaIds.map(id => personas.find(p => p.id === id)).filter((p): p is PersonaMeta => Boolean(p)),
+    [runPersonaIds, personas],
+  );
 
   // 议题：优先用后端主持人议程（live 的自然叙事）；缺席/为空回落本地确定性派生
   const issues = useMemo(() => {
@@ -2128,8 +2042,8 @@ export default function App() {
   }, [agenda, runPersonas, proposals]);
 
   const personasById = useCallback(
-    (id: string) => displayPersonas.find(p => p.id === id),
-    [displayPersonas],
+    (id: string) => personas.find(p => p.id === id),
+    [personas],
   );
 
   const handleToggle = useCallback((id: string) => {
@@ -2138,10 +2052,10 @@ export default function App() {
 
   // 轮询一个已经启动的 run，直到它跑完。真实咨询与历史复现走的是同一个端点，
   // 因此也共用这一段：复现之所以能在界面上"重演"，靠的就是它。
-  const followRun = useCallback(async (runId: string, ablation = false) => {
+  const followRun = useCallback(async (runId: string) => {
     const poll = async () => {
       try {
-        const r = await api.getRun(runId, ablation);
+        const r = await api.getRun(runId);
         setAgents(Object.fromEntries(r.agents.map(a => [a.persona_id, { status: a.status, progress: a.progress }])));
         setProposals(prev => {
           const next = { ...prev };
@@ -2186,12 +2100,11 @@ export default function App() {
         const ids = run.agents.map(a => a.persona_id);
         if (run.spec) setSpecText(JSON.stringify(run.spec, null, 2));
         setCommunicationGoal(run.context?.communication_goal ?? "");
-        if (run.generation_method) setGenerationMethod(run.generation_method);
         setSelected(new Set(ids));
         setRunPersonaIds(ids);
         setAgents(Object.fromEntries(ids.map(id => [id, { status: "pending" as AgentStatus, progress: 0.05 }])));
         setStage("generating");
-        await followRun(run.run_id, run.generation_method !== undefined && run.generation_method !== "advisor");
+        await followRun(run.run_id);
       } catch (e) {
         setApiError((e as Error).message);
       }
@@ -2211,9 +2124,7 @@ export default function App() {
       setApiError("Chart Spec is not valid JSON");
       return;
     }
-    const fixedBaseline = false;
-    const selectablePersonas = generationMethod === "prompt_only" || generationMethod === "rag" ? displayPersonas : personas;
-    const ids = selectablePersonas.filter(p => selected.has(p.id)).map(p => p.id);
+    const ids = personas.filter(p => selected.has(p.id)).map(p => p.id);
     if (!ids.length) return;
 
     stopPolling();
@@ -2233,13 +2144,13 @@ export default function App() {
       const context = communicationGoal.trim()
         ? { communication_goal: communicationGoal.trim() }
         : {};
-      const run = await api.runAdvisor(spec, ids, context, generationMethod);
-      await followRun(run.run_id, generationMethod !== "advisor");
+      const run = await api.runAdvisor(spec, ids, context);
+      await followRun(run.run_id);
     } catch (e) {
       setStage("idle");
       setApiError((e as Error).message);
     }
-  }, [personas, displayPersonas, selected, specText, communicationGoal, generationMethod, stopPolling, stage, acceptedChanges.length, followRun]);
+  }, [personas, selected, specText, communicationGoal, stopPolling, stage, acceptedChanges.length, followRun]);
 
   const handleAddPersonaFile = useCallback(async (file: File) => {
     const tempId = `parsing-${Date.now()}`;
@@ -2266,19 +2177,12 @@ export default function App() {
 
   const handleRemoveAccepted = useCallback((id: string | string[]) => {
     const ids = new Set(Array.isArray(id) ? id : [id]);
-    setComposeResult(null);
-    setApiError(null);
     setAcceptedChanges(prev => prev.filter(c => !ids.has(c.id)));
   }, []);
 
   // 议程行的打包采纳：一次采纳/撤销某机构在该议题下的全部修改，冲突节点仍二选一
   const handleToggleBundle = useCallback((changes: DesignChange[]) => {
-    if (!changes.length) return;
-    // A previous Compose result belongs to a different selection. Keeping it
-    // on screen makes a stale Vega render error look like the newly selected
-    // agenda combination failed.
-    setComposeResult(null);
-    setApiError(null);
+    if (!changes.length || changes.some(change => change.contract?.verified === false)) return;
     setAcceptedChanges(prev => {
       const allIn = changes.every(ch => prev.some(c => c.id === ch.id));
       if (allIn) {
@@ -2358,19 +2262,21 @@ export default function App() {
     setApplying(true);
     setApiError(null);
     try {
-      const uniqueChanges = [...new Map(acceptedChanges.map(change => [change.id, change])).values()];
-      const res = await api.applyDesign(spec, uniqueChanges, instructions.trim(), generationMethod !== "advisor");
+      const context = communicationGoal.trim()
+        ? { communication_goal: communicationGoal.trim() }
+        : {};
+      const res = await api.applyDesign(spec, acceptedChanges, instructions.trim(), context);
       setComposeResult(res);
     } catch (e) {
       setApiError((e as Error).message);
     } finally {
       setApplying(false);
     }
-  }, [acceptedChanges, applying, specText, instructions, generationMethod]);
+  }, [acceptedChanges, applying, specText, instructions, communicationGoal]);
 
   return (
     <div className="viz-app h-screen flex flex-col bg-background overflow-hidden" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-      <TopBar health={health} />
+      <TopBar />
       <ResizablePanelGroup direction="horizontal" className="flex-1 min-h-0">
         <ResizablePanel defaultSize={24} minSize={18} maxSize={38}>
           <InputPanel
@@ -2384,8 +2290,6 @@ export default function App() {
             onSpecChange={setSpecText}
             communicationGoal={communicationGoal}
             onCommunicationGoalChange={setCommunicationGoal}
-            generationMethod={generationMethod}
-            onGenerationMethodChange={setGenerationMethod}
             parsingAgents={parsingAgents}
             onAddPersonaFile={handleAddPersonaFile}
             error={apiError}
@@ -2394,7 +2298,7 @@ export default function App() {
         <ResizableHandle withHandle className="hover:bg-primary/40" />
         <ResizablePanel defaultSize={44} minSize={25}>
           <GalleryPanel
-            personas={displayPersonas}
+            personas={personas}
             runPersonaIds={runPersonaIds}
             agents={agents}
             proposals={proposals}

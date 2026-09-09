@@ -39,10 +39,6 @@ export interface DesignChange {
   ops: Record<string, unknown>[];
   /** v2：这条改动所属的设计部件（title/color/labels/axes/layout/typography/structure） */
   scope?: string;
-  /** Internal reconstruction prerequisite: present in the manifest but never a Review Board choice. */
-  selectable?: boolean;
-  /** Stable semantic component identity used by atomic replay manifests. */
-  component_id?: string;
   /** v2 语义组装：该条改动落到 spec 的哪些节点，改前改后各是什么 */
   component_detail?: ComponentDetail;
   /** v2：这条改动回应的视觉审阅问题（引用不到具体 finding 时缺省） */
@@ -53,6 +49,19 @@ export interface DesignChange {
   knowledge?: ChangeKnowledge;
   /** v2：同一改动兑现的各层知识（L1 Traits / L2 Adaptations / L3 Identity） */
   knowledge_layers?: ChangeKnowledge[];
+  /** Advisor change 与真实 source→candidate diff 的程序核验结果。 */
+  contract?: ChangeContract;
+}
+
+export interface ChangeContract {
+  verified: boolean;
+  source: string;
+  scope: string;
+  actual_paths?: string[];
+  set_paths?: string[];
+  removed_paths?: string[];
+  compatible_scopes?: Record<string, string[]>;
+  verification_errors?: string[];
 }
 
 export interface ChangeKnowledge {
@@ -78,10 +87,6 @@ export interface ComponentDetail {
   after?: string;
   spec_paths?: string[];
   execution?: string;
-  semantic_role?: string;
-  semantic_component_path?: string | null;
-  component_is_new?: boolean;
-  requires?: string[];
 }
 
 export interface RejectedItem {
@@ -113,6 +118,9 @@ export interface Proposal {
   trace: TraceBeat[];
   summary: string;
   elapsed_ms: number;
+  /** v2 delivery gate; rejected proposals keep audit metadata but expose no executable changes. */
+  delivery_state?: "ready" | "needs_vega_lite_repair" | "rejected_by_visual_gate";
+  delivery_reason?: string | null;
 }
 
 export type AgentStatus =
@@ -157,7 +165,6 @@ export interface RunPayload {
   replay_of?: string;
   spec?: object;
   context?: AdvisorContext;
-  generation_method?: GenerationMethod;
 }
 
 export interface AdvisorContext {
@@ -165,7 +172,6 @@ export interface AdvisorContext {
   viewport_px?: number;
   communication_goal?: string;
 }
-export type GenerationMethod = "advisor" | "persona_direct" | "prompt_only" | "rag";
 
 export interface ApplyConflict {
   node: string;
@@ -186,6 +192,16 @@ export interface ApplyResult {
   skipped: { id: string; reason: string }[];
   conflicts: ApplyConflict[];
   notes: string[];
+  composition?: {
+    mode: "llm_reconstruction" | "deterministic_projection" | "deterministic_ops" | "deterministic_fallback";
+    llm_called: boolean;
+    decision_count: number;
+    realized_count: number;
+    implementation?: { change_id: string; realized_paths: string[]; note?: string }[];
+    render?: Record<string, unknown>;
+    visual_review?: Record<string, unknown> | null;
+    fallback_reason?: string;
+  };
 }
 
 export interface HealthPayload {
@@ -269,33 +285,31 @@ export const api = {
     );
   },
 
-  runAdvisor: (spec: object, personaIds: string[], context: AdvisorContext = {}, generationMethod: GenerationMethod = "advisor") =>
-    request<RunPayload>(generationMethod === "advisor" ? "/api/advisor/run" : "/api/ablation/run", {
+  runAdvisor: (spec: object, personaIds: string[], context: AdvisorContext = {}) =>
+    request<RunPayload>("/api/advisor/run", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ spec, persona_ids: personaIds, context, generation_method: generationMethod }),
+      body: JSON.stringify({ spec, persona_ids: personaIds, context }),
     }),
 
-  getRun: (runId: string, ablation = false) => request<RunPayload>(ablation ? `/api/ablation/run/${runId}` : `/api/advisor/run/${runId}`),
+  getRun: (runId: string) => request<RunPayload>(`/api/advisor/run/${runId}`),
 
   /** 复现一次已保存的历史运行：只读重放，不调用 LLM，也不改写原记录。 */
-  replayRun: async (runId: string, beatDelayMs?: number) => {
-    const record = await request<{ engine?: string }>(`/api/v2/advisor/runs/${encodeURIComponent(runId)}`);
-    return request<RunPayload>(record.engine === "ablation" ? "/api/ablation/replay" : "/api/v2/advisor/replay", {
+  replayRun: (runId: string, beatDelayMs?: number) =>
+    request<RunPayload>("/api/v2/advisor/replay", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         run_id: runId,
         ...(beatDelayMs === undefined ? {} : { beat_delay_ms: beatDelayMs }),
       }),
-    });
-  },
+    }),
 
-  applyDesign: (spec: object, changes: DesignChange[], instructions = "", ablation = false) =>
-    request<ApplyResult>(ablation ? "/api/ablation/apply" : "/api/design/apply", {
+  applyDesign: (spec: object, changes: DesignChange[], instructions = "", context: AdvisorContext = {}) =>
+    request<ApplyResult>("/api/design/apply", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ spec, changes, instructions }),
+      body: JSON.stringify({ spec, changes, instructions, context }),
     }),
 
   discuss: (

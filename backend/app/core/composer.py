@@ -1,7 +1,10 @@
-"""Composer：用户跨机构选择性采纳 → 确定性合成终稿（+ 可选对话式微调）。
+"""Composer：用户跨机构选择性采纳 → 完整终稿。
 
-被采纳修改自带 ops（快道编译期产出的令牌直注记录），按采纳顺序确定性重放，
-不经 LLM；自由文本指令仅在 live 模式交 LLM 微调，且校验输出仍是合法 spec。
+v2 的机构候选图可能拥有完全不同的 Vega-Lite 树。live 模式下，Review Board
+选择被视为设计契约，由 LLM 重构一份完整 spec，再做数据、决策路径、渲染与
+视觉验收；既有语义槽位投影只作为 mock/LLM 失败时的确定性降级。
+
+v1 被采纳修改仍按 ops 确定性重放；自由文本指令在 live 模式交 LLM 微调。
 
 合成前检测跨机构对同一 spec 节点的冲突修改：采纳项更多的 agent 胜出。
 """
@@ -13,7 +16,8 @@ from typing import Any
 
 from ..llm import LLMClient, LLMError
 from .actions import apply_ops_with_effect
-from .semantic_composer import compose_atomic_component_patches, compose_component_slots
+from .llm_composer import compose_with_llm
+from .semantic_composer import compose_component_slots
 from .specfacts import validate_spec
 
 
@@ -136,6 +140,8 @@ def _op_effects(op: dict) -> list[tuple[str, str]]:
         # Path-level nodes — never the whole candidate spec, or every v2
         # adoption would collide on a single fake "op.compose_component" node.
         paths = [p for p in (op.get("spec_paths") or []) if isinstance(p, str) and p.startswith("/")]
+        removed_paths = [p for p in (op.get("removed_paths") or []) if isinstance(p, str) and p.startswith("/")]
+        paths = list(dict.fromkeys(paths + removed_paths))
         if paths:
             cand = op.get("candidate_spec")
             blob = json.dumps(cand, sort_keys=True, ensure_ascii=False) if cand is not None else str(op.get("component") or "component")
@@ -153,22 +159,16 @@ def _compose_ops(change: dict) -> list[dict]:
     ]
 
 
-def _atomic_patch_ops(change: dict) -> list[dict]:
-    """Experimental replay manifest: exact set/remove component patches."""
-    return [
-        op for op in (change.get("ops") or [])
-        if isinstance(op, dict) and op.get("action") == "apply_component_patch"
-    ]
-
-
 def _compose_selection(change: dict, op: dict) -> dict:
     detail = change.get("component_detail") if isinstance(change.get("component_detail"), dict) else {}
-    paths = [p for p in (op.get("spec_paths") or detail.get("spec_paths") or []) if isinstance(p, str) and p.startswith("/")]
+    raw_paths = op.get("spec_paths") if "spec_paths" in op else detail.get("spec_paths")
+    paths = [p for p in (raw_paths or []) if isinstance(p, str) and p.startswith("/")]
     return {
         "id": str(change.get("id") or change.get("rule_id") or "change"),
         "component": op.get("component") or change.get("scope") or "component",
         "candidate_spec": op.get("candidate_spec"),
         "spec_paths": paths,
+        "removed_paths": [p for p in (op.get("removed_paths") or []) if isinstance(p, str) and p.startswith("/")],
     }
 
 
@@ -310,17 +310,33 @@ def resolve_change_conflicts(changes: list[dict]) -> tuple[list[dict], list[dict
 
 
 async def apply_design(
-    spec: dict, changes: list[dict], instructions: str, llm: LLMClient
+    spec: dict,
+    changes: list[dict],
+    instructions: str,
+    llm: LLMClient,
+    context: dict | None = None,
 ) -> dict:
     final_spec = spec
     applied: list[str] = []
-    skipped: list[dict] = []
+    skipped: list[dict] = [
+        {
+            "id": str(ch.get("id") or ch.get("rule_id") or "change"),
+            "reason": "Advisor change failed source-to-candidate contract verification and cannot be composed",
+        }
+        for ch in changes
+        if isinstance(ch.get("contract"), dict) and ch["contract"].get("verified") is False
+    ]
+    changes = [
+        ch
+        for ch in changes
+        if not (isinstance(ch.get("contract"), dict) and ch["contract"].get("verified") is False)
+    ]
+    blocked_skipped = list(skipped)
     notes: list[str] = []
     conflicts: list[dict] = []
 
     compose_changes = [ch for ch in changes if _compose_ops(ch)]
-    atomic_changes = [ch for ch in changes if _atomic_patch_ops(ch)]
-    legacy_changes = [ch for ch in changes if not _compose_ops(ch) and not _atomic_patch_ops(ch)]
+    legacy_changes = [ch for ch in changes if not _compose_ops(ch)]
 
     if compose_changes:
         by_id = {str(ch.get("id") or ch.get("rule_id") or ""): ch for ch in compose_changes}
@@ -345,11 +361,6 @@ async def apply_design(
                 skipped.append({"id": cid, "reason": reason})
             else:
                 skipped.append({"id": cid, "reason": "无可写入当前图的声明路径"})
-
-    if atomic_changes:
-        final_spec, atomic_applied, atomic_notes = compose_atomic_component_patches(final_spec, atomic_changes)
-        applied.extend(atomic_applied)
-        notes.extend(atomic_notes)
 
     resolved_changes, legacy_conflicts = resolve_change_conflicts(legacy_changes)
     if legacy_conflicts:
@@ -390,6 +401,42 @@ async def apply_design(
             skipped.append({"id": cid, "reason": f"ops 重放失败: {exc}"})
 
     instructions = (instructions or "").strip()
+
+    # v2 selections are design contracts, not portable JSON leaves.  The
+    # deterministic result above remains a safe fallback and a useful hint,
+    # while live composition reconstructs one coherent program from scratch.
+    if compose_changes and llm.mode == "live":
+        legacy_applied = [cid for cid in applied if cid not in {str(ch.get("id") or ch.get("rule_id") or "change") for ch in compose_changes}]
+        outcome = await compose_with_llm(
+            source=spec,
+            changes=changes,
+            instructions=instructions,
+            context=context or {},
+            deterministic_fallback=final_spec,
+            llm=llm,
+        )
+        notes.extend(outcome.get("notes") or [])
+        if outcome.get("ok"):
+            final_spec = outcome["final_spec"]
+            realized = list(outcome.get("realized_ids") or [])
+            applied = legacy_applied + [cid for cid in realized if cid not in legacy_applied]
+            realized_set = set(realized)
+            skipped = blocked_skipped + [
+                {"id": str(ch.get("id") or ch.get("rule_id") or "change"), "reason": "LLM 终稿未返回可核验的实现路径"}
+                for ch in changes
+                if str(ch.get("id") or ch.get("rule_id") or "change") not in realized_set
+                and str(ch.get("id") or ch.get("rule_id") or "change") not in legacy_applied
+            ]
+            conflicts = list(outcome.get("conflicts") or [])
+        return {
+            "final_spec": final_spec,
+            "applied": applied,
+            "skipped": skipped,
+            "conflicts": conflicts,
+            "notes": notes,
+            "composition": outcome.get("composition") or {},
+        }
+
     if instructions:
         if llm.mode == "live":
             system = (
@@ -415,4 +462,10 @@ async def apply_design(
         "skipped": skipped,
         "conflicts": conflicts,
         "notes": notes,
+        "composition": {
+            "mode": "deterministic_projection" if compose_changes else "deterministic_ops",
+            "llm_called": False,
+            "decision_count": len(changes),
+            "realized_count": len(applied),
+        },
     }

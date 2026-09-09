@@ -23,6 +23,7 @@ from ..core.detectors import detect_rule, run_invariants
 from ..core.persona import Persona
 from ..core.spec_render import render_vl_to_png_data_url
 from ..core.specfacts import extract_facts, validate_spec
+from .change_scope import primary_scope
 
 
 def _walk(node: Any):
@@ -571,23 +572,6 @@ def _is_preservation_claim(text: str) -> bool:
     )
 
 
-def _is_text_layer_path(candidate: dict, pointer: str) -> bool:
-    """Whether a pointer is inside a candidate text-mark layer."""
-    parts = pointer.lstrip("/").split("/")
-    for index, part in enumerate(parts):
-        if part not in {"layer", "hconcat", "vconcat", "concat"} or index + 1 >= len(parts):
-            continue
-        prefix = "/" + "/".join(parts[:index + 2])
-        exists, node = _pointer_value(candidate, prefix)
-        if not exists or not isinstance(node, dict):
-            continue
-        mark = node.get("mark")
-        mark_type = str(mark.get("type") or "") if isinstance(mark, dict) else str(mark or "")
-        if mark_type.lower() == "text":
-            return True
-    return False
-
-
 def _path_owner(candidate: dict, pointer: str) -> str:
     """Assign exactly one visual-property leaf to one advisor component.
 
@@ -595,24 +579,7 @@ def _path_owner(candidate: dict, pointer: str) -> str:
     classes. A label can move or change words, but it cannot also claim its
     font/colour; those belong to their respective commitments.
     """
-    lower = pointer.lower()
-    leaf = lower.rsplit("/", 1)[-1]
-    # Inspect the full path, not just its final token.  For example the
-    # payload leaf of ``encoding.color.datum`` is named ``datum``, but it is
-    # still a colour assignment rather than a label property.
-    if lower == "/background" or "/encoding/color/" in lower or "/encoding/colour/" in lower or any(token in leaf for token in ("color", "colour", "fill", "stroke", "range")):
-        return "color"
-    if any(token in leaf for token in ("font", "fontsize", "fontweight", "fontstyle", "lineheight")):
-        return "typography"
-    if lower.startswith("/title") or lower.startswith("/config/title"):
-        return "title"
-    if "/axis/" in lower or "/scale/" in lower or lower.startswith("/config/axis/"):
-        return "axes"
-    if leaf in {"width", "height", "padding", "spacing", "autosize", "bounds", "align", "columns"}:
-        return "layout"
-    if _is_text_layer_path(candidate, pointer) or "/legend/" in lower or lower.startswith("/config/legend/"):
-        return "labels"
-    return "structure"
+    return primary_scope(pointer, candidate=candidate)
 
 
 def _is_commitment_atom(candidate: dict, pointer: str, value: Any) -> bool:
@@ -1234,11 +1201,10 @@ JSON only: {{\"story\":str,\"commitments\":[{{\"id\":str,\"evidence_id\":str,\"c
         # Establish the safe Beat 3 baseline before visual review. A later visual
         # revision must never be allowed to erase this valid reconstruction.
         base_spec, base_safety = _safe_candidate(spec, b3.get("candidate_spec"), b3.get("text_changes"))
-        # Keep a failed draft observable.  It remains non-executable until the
-        # LLM fixes it, but losing it here made an advisor appear to have made
-        # no decisions at all.
+        # Keep a failed draft observable. It is marked as requiring repair, but
+        # the advisor's proposal is still shown instead of being replaced by
+        # the source chart merely because a downstream gate rejected it.
         draft_spec = _restore_primary_data(spec, b3.get("candidate_spec"))
-
         # Still Beat 3: inspect real pixels, rather than attempting to infer
         # whitespace and collisions from code. The first image is the original;
         # the second is the persona's candidate.
@@ -1261,7 +1227,7 @@ Check specifically for: abnormal empty canvas regions; a plot area disproportion
 
 `layout_risks` lists structural hazards a program found in the candidate's own code. They are places to look, not verdicts: confirm each one against the image and either report it as a finding or repair it. Entries marked `inherited_from_original` also exist in IMAGE 1, so judge whether the candidate made them worse rather than treating them as new damage.
 
-Return a COMPLETE revised Vega-Lite spec even if you judge it acceptable. Preserve the primary analytic data and protected text rules. Do not merely describe changes. List every independently visible change that is actually present in revised_spec; do not count mere preservation as a change. The commitments are a detailed, non-overlapping component manifest: one changed leaf path may occur in only one entry. Use leaf JSON-pointer paths, never whole objects/layers. Ownership is strict: color only palette/color/fill/stroke/background; typography only font/size/weight/style; title only title wording/placement; axes only axis/scale/grid/tick/domain; labels only text/legend wording/binding/placement; layout only canvas/composition spacing and dimensions; structure only marks, analytic encodings/data and transforms. Do not make one commitment describe another component's result.
+Return a COMPLETE revised Vega-Lite spec even if you judge it acceptable. Preserve the primary analytic data and protected text rules. Do not merely describe changes. List every independently visible change that is actually present in revised_spec; do not count mere preservation as a change. The commitments are a detailed, non-overlapping component manifest: one changed leaf path may occur in only one entry. Use leaf JSON-pointer paths, never whole objects/layers. Ownership is strict: color owns palette/color/fill/stroke/background and scales inside appearance channels such as color or strokeDash; typography owns font/size/weight/style; title owns editorial title wording/placement; axes own axis/grid/tick/domain and positional x/y scales; labels own text/legend wording/binding/placement plus construction and placement inside a text mark; layout owns canvas/composition spacing and dimensions; structure owns non-text marks, analytic encodings/data and transforms. Do not make one commitment describe another component's result.
 
 Keep any `data: {{"$ref":"__vizguide_primary_data__", ...}}` object unchanged: it denotes the immutable complete analytic table, not a Vega-Lite field you may redesign.
 
@@ -1475,6 +1441,12 @@ You are the final acceptance gate. IMAGE 1 is the original and IMAGE 2 is the re
                             current_png = repaired_png
                             attempt_record["selected_for_delivery"] = True
                         if accepted:
+                            # The top-level acceptance must describe the exact
+                            # repaired candidate selected for delivery.
+                            visual_review["acceptance"] = {
+                                **attempt_record["acceptance"],
+                                "repair_route": repair_route,
+                            }
                             break
                     b3 = best_b3
                     visual_review["return_rework"] = {"attempted": True, "max_attempts": 1, "initial_repair_route": repair_route, "attempts": retries}
@@ -1501,6 +1473,8 @@ You are the final acceptance gate. IMAGE 1 is the original and IMAGE 2 is the re
         # user-facing account of what that artifact changed.
         await stage("compiling")
         checked_spec, safety = _safe_candidate(spec, b3.get("candidate_spec"), b3.get("text_changes"))
+        acceptance = visual_review.get("acceptance") if isinstance(visual_review, dict) else None
+        visual_rejected = isinstance(acceptance, dict) and acceptance.get("accepted") is False
         # The generated chart is only trusted once the unconditional layer has
         # been verified against it. Enforcement runs before the manifest audit
         # so the change record describes the chart that is actually delivered.
@@ -1515,10 +1489,10 @@ You are the final acceptance gate. IMAGE 1 is the original and IMAGE 2 is the re
             )
         else:
             enforcement_commitments = []
-        # Safety is a delivery-state report, not an eraser.  Preserve a
-        # syntactically shaped failed draft so its independent changes and the
-        # compiler diagnosis remain visible to the user and repairable by the
-        # next LLM pass.  A later composer must not execute it automatically.
+        # Visual review is advisory telemetry: after its one repair attempt the
+        # best candidate remains deliverable. A syntactically shaped failed
+        # draft is also retained for inspection, with its repair state exposed
+        # separately so it is not mistaken for validated Vega-Lite.
         final_spec = checked_spec if safety["accepted"] else draft_spec if isinstance(draft_spec, dict) else spec
         changed = final_spec != spec
         proposed_commitments = b3.get("commitments") if isinstance(b3.get("commitments"), list) else []
@@ -1557,11 +1531,11 @@ You are the final acceptance gate. IMAGE 1 is the original and IMAGE 2 is the re
 This manifest is the Review Board's only explanation of the candidate. It must account for every listed visual-design difference (except primary-data preservation) using detailed, non-overlapping commitments. Never collapse multiple categories into a generic "whole-chart reconstruction" or a generic structure scaffold. If the inventory includes colour, typography, axes, labels, title, or layout paths, make separately scoped commitments for those paths—even if the chart topology also changed. Structure is permitted only for mark type, analytic encoding/data binding, transforms, sort/order, and non-text analytic layers; it must never cite or describe palette, font, title, axis, label, legend, canvas, or spacing changes.
 
 Return a corrected commitment for every valid input id when it still corresponds to a real final difference; you may split it using `<id>-2`, `<id>-3`. You must also ADD commitments when the inventory shows a changed component absent from the input. Each commitment must have exactly one component from title|color|axes|labels|typography|layout|structure, and must cite one or more exact leaf JSON-pointer paths in `candidate_spec` (paths begin at `/`, never `/candidate_spec`). Paths cannot overlap between entries. Every path must identify a real source→candidate difference. Its explanation must concern only its component:
-- color: background/palette/color/fill/stroke/range only;
+- color: background/palette/color/fill/stroke and scales inside appearance channels such as color/strokeDash;
 - typography: font/size/weight/style/line-height only;
 - title: title/subtitle wording or non-typographic title placement only;
-- axes: axis/scale/grid/tick/domain only, excluding font/color;
-- labels: text/legend wording, binding or placement only, excluding font/color;
+- axes: axis/grid/tick/domain and positional x/y scales only, excluding font/color;
+- labels: text/legend wording, binding or placement, including construction/placement inside a text mark, excluding font/color;
 - layout: width/height/padding/spacing/autosize/bounds/alignment/composition placement only;
 - structure: mark type, analytic data/encoding binding, transforms, sort/order and non-text layers only.
 

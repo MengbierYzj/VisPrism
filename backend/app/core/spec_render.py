@@ -17,6 +17,41 @@ from ..config import settings
 _DEFAULT_SCHEMA = "https://vega.github.io/schema/vega-lite/v5.json"
 _RENDER_ATTEMPTS = 3
 _RENDER_RETRY_DELAY_S = 0.2
+_RENDER_DIMENSION_FLOOR_RATIO = 0.5
+
+
+def _largest_explicit_view_dimensions(spec: dict) -> tuple[float | None, float | None]:
+    """Return conservative canvas floors from numeric view dimensions.
+
+    ``vl-convert`` can log a Vega runtime error yet return a partial PNG. A
+    composition root often has no height of its own, so inspect all children
+    and use the largest declared view rather than trusting PNG bytes alone.
+    """
+    widths: list[float] = []
+    heights: list[float] = []
+
+    def walk(node: Any) -> None:
+        if isinstance(node, dict):
+            width = node.get("width")
+            height = node.get("height")
+            if isinstance(width, (int, float)) and not isinstance(width, bool) and width > 0:
+                widths.append(float(width))
+            if isinstance(height, (int, float)) and not isinstance(height, bool) and height > 0:
+                heights.append(float(height))
+            # Follow only Vega-Lite view composition. Traversing arbitrary
+            # dictionaries would mistake data rows named width/height for
+            # canvas declarations.
+            for key in ("layer", "vconcat", "hconcat", "concat"):
+                children = node.get(key)
+                if isinstance(children, list):
+                    for child in children:
+                        walk(child)
+            child_spec = node.get("spec")
+            if isinstance(child_spec, dict):
+                walk(child_spec)
+
+    walk(spec)
+    return (max(widths) if widths else None, max(heights) if heights else None)
 
 
 def _prepare_spec(spec: dict) -> dict:
@@ -238,7 +273,7 @@ def render_vl_to_png_data_url(
         meta["bytes"] = len(png)
         return None, meta
 
-    meta.update({"ok": True, "bytes": len(png), "chars": len(data_url)})
+    meta.update({"bytes": len(png), "chars": len(data_url)})
     # 画布实际尺寸是判断「版式是否失控」的直接证据（例如像素坐标被误当数据值，
     # 会把画布横向拽出几倍宽），因此随渲染结果一起返回。
     try:
@@ -248,4 +283,26 @@ def render_vl_to_png_data_url(
             meta["width"], meta["height"] = image.width, image.height
     except Exception:  # noqa: BLE001 — 取不到尺寸不影响渲染结果本身
         pass
+
+    declared_width, declared_height = _largest_explicit_view_dimensions(prepared)
+    actual_width = meta.get("width")
+    actual_height = meta.get("height")
+    underflow: list[str] = []
+    if (
+        declared_width is not None
+        and isinstance(actual_width, (int, float))
+        and actual_width < declared_width * use_scale * _RENDER_DIMENSION_FLOOR_RATIO
+    ):
+        underflow.append(f"width {actual_width} < declared floor {declared_width:g}")
+    if (
+        declared_height is not None
+        and isinstance(actual_height, (int, float))
+        and actual_height < declared_height * use_scale * _RENDER_DIMENSION_FLOOR_RATIO
+    ):
+        underflow.append(f"height {actual_height} < declared floor {declared_height:g}")
+    if underflow:
+        meta["error"] = "rendered_canvas_underflow: " + "; ".join(underflow)
+        return None, meta
+
+    meta["ok"] = True
     return data_url, meta

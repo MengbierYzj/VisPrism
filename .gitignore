@@ -53,7 +53,7 @@ Thumbs.db
 docs/backend-local/
 
 # 后端运行时产物（不提交）
-backend/storage/
+# backend/storage/
 backend/.env
 backend/.env.*
 !backend/.env.example

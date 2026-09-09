@@ -13,4 +13,10 @@ async def design_apply(request: Request, body: ApplyRequest):
     errors = validate_spec(body.spec)
     if errors:
         raise HTTPException(status_code=400, detail="; ".join(errors))
-    return await apply_design(body.spec, body.changes, body.instructions, request.app.state.llm)
+    return await apply_design(
+        body.spec,
+        body.changes,
+        body.instructions,
+        request.app.state.llm,
+        body.context,
+    )
