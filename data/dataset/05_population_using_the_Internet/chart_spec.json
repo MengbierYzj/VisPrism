@@ -1,0 +1,626 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 850,
+  "height": 500,
+  "background": "#ffffff",
+  "padding": {"top": 40, "right": 200, "bottom": 160, "left": 40},
+  "title": {
+    "text": "Share of the population using the Internet",
+    "subtitle": "Share of the population who used the Internet¹ in the last three months.",
+    "anchor": "start",
+    "fontSize": 28,
+    "font": "Georgia, serif",
+    "color": "#222222",
+    "subtitleFont": "sans-serif",
+    "subtitleFontSize": 15,
+    "subtitleColor": "#555555",
+    "subtitlePadding": 10,
+    "offset": 25
+  },
+  "data": {
+    "values": [
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2005,
+        "Share": 14.7
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2006,
+        "Share": 16.6
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2007,
+        "Share": 20.8
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2008,
+        "Share": 25.2
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2009,
+        "Share": 29.5
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2010,
+        "Share": 34.2
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2011,
+        "Share": 37.3
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2012,
+        "Share": 40.4
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2013,
+        "Share": 43.2
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2014,
+        "Share": 45.5
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2015,
+        "Share": 48.3
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2016,
+        "Share": 53.9
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2017,
+        "Share": 57.8
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2018,
+        "Share": 62.5
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2019,
+        "Share": 67.1
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2020,
+        "Share": 73.9
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2021,
+        "Share": 78.8
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2022,
+        "Share": 82.4
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2023,
+        "Share": 84.9
+      },
+      {
+        "Entity": "East Asia and Pacific (WB)",
+        "Code": "WB_EAP",
+        "Year": 2024,
+        "Share": 86.6
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2005,
+        "Share": 68.3
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2006,
+        "Share": 69.3
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2007,
+        "Share": 74.8
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2008,
+        "Share": 74.3
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2009,
+        "Share": 71.9
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2010,
+        "Share": 72.5
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2011,
+        "Share": 71
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2012,
+        "Share": 75.5
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2013,
+        "Share": 72.8
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2014,
+        "Share": 74.4
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2015,
+        "Share": 76.1
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2016,
+        "Share": 86.1
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2017,
+        "Share": 87.8
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2018,
+        "Share": 89.1
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2019,
+        "Share": 89.7
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2020,
+        "Share": 90.5
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2021,
+        "Share": 91.5
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2022,
+        "Share": 92.6
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2023,
+        "Share": 93.3
+      },
+      {
+        "Entity": "North America (WB)",
+        "Code": "WB_NA",
+        "Year": 2024,
+        "Share": 94.4
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2005,
+        "Share": 2.1
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2006,
+        "Share": 2.6
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2007,
+        "Share": 3.7
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2008,
+        "Share": 4.1
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2009,
+        "Share": 4.9
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2010,
+        "Share": 7.1
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2011,
+        "Share": 9.4
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2012,
+        "Share": 10.4
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2013,
+        "Share": 11.7
+      },
+      {"Entity": "South Asia (WB)", "Code": "WB_SA", "Year": 2014, "Share": 13},
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2015,
+        "Share": 14.7
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2016,
+        "Share": 16.7
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2017,
+        "Share": 18.8
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2018,
+        "Share": 20.9
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2019,
+        "Share": 29.7
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2020,
+        "Share": 42.5
+      },
+      {"Entity": "South Asia (WB)", "Code": "WB_SA", "Year": 2021, "Share": 48},
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2022,
+        "Share": 54.2
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2023,
+        "Share": 58.3
+      },
+      {
+        "Entity": "South Asia (WB)",
+        "Code": "WB_SA",
+        "Year": 2024,
+        "Share": 62.8
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2005,
+        "Share": 2
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2006,
+        "Share": 2.6
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2007,
+        "Share": 3.1
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2008,
+        "Share": 3.6
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2009,
+        "Share": 4.3
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2010,
+        "Share": 6
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2011,
+        "Share": 7.5
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2012,
+        "Share": 9.2
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2013,
+        "Share": 11.2
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2014,
+        "Share": 13.4
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2015,
+        "Share": 16.2
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2016,
+        "Share": 18.3
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2017,
+        "Share": 20
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2018,
+        "Share": 22
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2019,
+        "Share": 24.4
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2020,
+        "Share": 26.7
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2021,
+        "Share": 29
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2022,
+        "Share": 31.1
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2023,
+        "Share": 32.3
+      },
+      {
+        "Entity": "Sub-Saharan Africa (WB)",
+        "Code": "WB_SSA",
+        "Year": 2024,
+        "Share": 33.6
+      }
+    ]
+  },
+  "layer": [
+    {
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "quantitative",
+          "scale": {"domain": [2005, 2024]},
+          "axis": {
+            "title": null,
+            "values": [2005, 2010, 2015, 2020, 2024],
+            "format": "d",
+            "grid": false,
+            "domain": true,
+            "domainColor": "#999999",
+            "ticks": true,
+            "tickColor": "#999999",
+            "labelColor": "#666666",
+            "labelFontSize": 14,
+            "labelPadding": 6
+          }
+        },
+        "y": {
+          "field": "Share",
+          "type": "quantitative",
+          "scale": {"domain": [0, 100]},
+          "axis": {
+            "title": null,
+            "values": [0, 20, 40, 60, 80, 100],
+            "labelExpr": "datum.value + '%'",
+            "grid": true,
+            "gridDash": [4, 4],
+            "gridColor": "#dddddd",
+            "domain": false,
+            "ticks": false,
+            "labelAlign": "right",
+            "labelColor": "#666666",
+            "labelFontSize": 14,
+            "labelPadding": 6
+          }
+        },
+        "color": {
+          "field": "Entity",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "North America (WB)",
+              "East Asia and Pacific (WB)",
+              "South Asia (WB)",
+              "Sub-Saharan Africa (WB)"
+            ],
+            "range": ["#c84b31", "#4c6a9c", "#9a6024", "#208b65"]
+          },
+          "legend": null
+        }
+      },
+      "layer": [
+        {
+          "description": "Connecting lines",
+          "mark": {"type": "line", "strokeWidth": 1.5}
+        },
+        {
+          "description": "Data points",
+          "mark": {"type": "point", "filled": true, "size": 30, "opacity": 1}
+        },
+        {
+          "description": "Direct labels at the end of the lines (Year 2024)",
+          "transform": [{"filter": "datum.Year == 2024"}],
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "dx": 8,
+            "fontSize": 15
+          },
+          "encoding": {"text": {"field": "Entity"}}
+        }
+      ]
+    },
+    {
+      "description": "Footer Text: Data source and License",
+      "data": {"values": [{}]},
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "color": "#777777",
+        "fontSize": 14,
+        "lineHeight": 20
+      },
+      "encoding": {
+        "x": {"value": 0},
+        "y": {"value": 540},
+        "text": {
+          "value": [
+            "Data source: World Telecommunication/ICT Indicators Database - International Telecommunication Union (ITU), via World Bank (2026)",
+            "OurWorldInData.org/internet | CC BY"
+          ]
+        }
+      }
+    },
+    {
+      "description": "Footer Line Divider",
+      "data": {"values": [{}]},
+      "mark": {"type": "rule", "color": "#dddddd", "strokeWidth": 1},
+      "encoding": {"x": {"value": 0}, "x2": {"value": 850}, "y": {"value": 595}}
+    },
+    {
+      "description": "Footer Text: Detailed Footnote",
+      "data": {"values": [{}]},
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "color": "#777777",
+        "fontSize": 13,
+        "lineHeight": 18
+      },
+      "encoding": {
+        "x": {"value": 0},
+        "y": {"value": 615},
+        "text": {
+          "value": [
+            "1. Internet user: The International Telecommunication Union defines an Internet user as anyone who has accessed the Internet from any location in",
+            "the last three months.",
+            "This can be from any type of device, including a computer, mobile phone, personal digital assistant, games machine, digital TV, and other technological",
+            "devices."
+          ]
+        }
+      }
+    }
+  ],
+  "config": {"view": {"stroke": "transparent"}}
+}

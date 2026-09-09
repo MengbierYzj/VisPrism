@@ -1,0 +1,121 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 900,
+  "height": 500,
+  "background": "white",
+  "title": {
+    "text": "Deforestation rates - Legal Amazon - States",
+    "anchor": "start",
+    "color": "#2a7261",
+    "fontSize": 24,
+    "fontWeight": "bold",
+    "offset": 20
+  },
+  "data": {
+    "values": [
+      {"year": 1988, "area": 21050},
+      {"year": 1989, "area": 17770},
+      {"year": 1990, "area": 13730},
+      {"year": 1991, "area": 11030},
+      {"year": 1992, "area": 13786},
+      {"year": 1993, "area": 14896},
+      {"year": 1994, "area": 14896},
+      {"year": 1995, "area": 29059},
+      {"year": 1996, "area": 18161},
+      {"year": 1997, "area": 13227},
+      {"year": 1998, "area": 17383},
+      {"year": 1999, "area": 17259},
+      {"year": 2000, "area": 18226},
+      {"year": 2001, "area": 18165},
+      {"year": 2002, "area": 21650},
+      {"year": 2003, "area": 25396},
+      {"year": 2004, "area": 27772},
+      {"year": 2005, "area": 19014},
+      {"year": 2006, "area": 14286},
+      {"year": 2007, "area": 11651},
+      {"year": 2008, "area": 12911},
+      {"year": 2009, "area": 7464},
+      {"year": 2010, "area": 7000},
+      {"year": 2011, "area": 6418},
+      {"year": 2012, "area": 4571},
+      {"year": 2013, "area": 5891},
+      {"year": 2014, "area": 5012},
+      {"year": 2015, "area": 6207},
+      {"year": 2016, "area": 7893},
+      {"year": 2017, "area": 6947},
+      {"year": 2018, "area": 7536},
+      {"year": 2019, "area": 10129},
+      {"year": 2020, "area": 10851},
+      {"year": 2021, "area": 13038},
+      {"year": 2022, "area": 11594},
+      {"year": 2023, "area": 9064},
+      {"year": 2024, "area": 6518},
+      {"year": 2025, "area": 5796}
+    ]
+  },
+  "transform": [
+    {"calculate": "(round(datum.area / 100) / 10) + 'K'", "as": "label"}
+  ],
+  "layer": [
+    {
+      "mark": {"type": "bar", "tooltip": true},
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "scale": {"paddingInner": 0.2},
+          "axis": {
+            "title": null,
+            "labelAngle": -45,
+            "grid": true,
+            "gridColor": "#f0f0f0",
+            "labelColor": "#555",
+            "tickColor": "#000",
+            "domainColor": "#000"
+          }
+        },
+        "y": {
+          "field": "area",
+          "type": "quantitative",
+          "axis": {
+            "title": "Rates (km²)",
+            "titleFontSize": 18,
+            "titleFontWeight": "bold",
+            "titlePadding": 15,
+            "values": [0, 5000, 10000, 15000, 20000, 25000, 30000],
+            "format": ",",
+            "grid": true,
+            "gridColor": "#f0f0f0",
+            "labelColor": "#555",
+            "tickColor": "#000",
+            "domainColor": "#000"
+          },
+          "scale": {"domainMax": 35000}
+        },
+        "color": {
+          "condition": {"test": "datum.year == 2025", "value": "#d46c31"},
+          "value": "#f7d570"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "angle": -55,
+        "dx": 3,
+        "dy": -3,
+        "fontWeight": "bold",
+        "fontSize": 12,
+        "color": "#2a7261"
+      },
+      "encoding": {
+        "x": {"field": "year", "type": "ordinal"},
+        "y": {"field": "area", "type": "quantitative"},
+        "text": {"field": "label", "type": "nominal"}
+      }
+    }
+  ],
+  "config": {"view": {"stroke": "transparent"}}
+}

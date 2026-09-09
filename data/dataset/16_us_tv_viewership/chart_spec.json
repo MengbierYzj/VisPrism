@@ -1,0 +1,267 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Nielsen's September 2023 Gauge snapshot of U.S. TV usage.",
+  "background": "#ffffff",
+  "padding": 28,
+  "spacing": 0,
+  "hconcat": [
+    {
+      "width": 285,
+      "height": 560,
+      "layer": [
+        {
+          "data": {
+            "values": [
+              {"x": 22, "y": 190, "color": "#ff2147", "shape": "triangle-right"},
+              {"x": 38, "y": 181, "color": "#00b9b4", "shape": "triangle-left"},
+              {"x": 38, "y": 199, "color": "#ff8a00", "shape": "triangle-right"},
+              {"x": 54, "y": 190, "color": "#7124ff", "shape": "triangle-right"}
+            ]
+          },
+          "mark": {"type": "point", "filled": true, "size": 145},
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": {"domain": [0, 285], "nice": false}, "axis": null},
+            "y": {"field": "y", "type": "quantitative", "scale": {"domain": [560, 0], "nice": false}, "axis": null},
+            "color": {"field": "color", "type": "nominal", "scale": null, "legend": null},
+            "shape": {"field": "shape", "type": "nominal", "scale": null, "legend": null}
+          }
+        },
+        {
+          "data": {"values": [{"x": 70, "y": 190, "text": "Nielsen"}]},
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "font": "Arial",
+            "fontSize": 35,
+            "fontWeight": "bold",
+            "color": "#092746"
+          },
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": {"domain": [0, 285], "nice": false}, "axis": null},
+            "y": {"field": "y", "type": "quantitative", "scale": {"domain": [560, 0], "nice": false}, "axis": null},
+            "text": {"field": "text"}
+          }
+        },
+        {
+          "data": {"values": [{"x": 20, "x2": 278, "y": 258, "y2": 314}]},
+          "mark": {"type": "rect", "color": "#7124ff", "cornerRadius": 7},
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": {"domain": [0, 285], "nice": false}, "axis": null},
+            "x2": {"field": "x2"},
+            "y": {"field": "y", "type": "quantitative", "scale": {"domain": [560, 0], "nice": false}, "axis": null},
+            "y2": {"field": "y2"}
+          }
+        },
+        {
+          "data": {"values": [{"x": 149, "y": 286, "text": "September 2023"}]},
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "baseline": "middle",
+            "font": "Arial",
+            "fontSize": 27,
+            "fontWeight": "bold",
+            "color": "#ffffff"
+          },
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": {"domain": [0, 285], "nice": false}, "axis": null},
+            "y": {"field": "y", "type": "quantitative", "scale": {"domain": [560, 0], "nice": false}, "axis": null},
+            "text": {"field": "text"}
+          }
+        },
+        {
+          "data": {"values": [{"x": 25, "y": 350, "text": "Total Day | Persons 2+"}]},
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "font": "Arial",
+            "fontSize": 22,
+            "fontWeight": "normal",
+            "color": "#092746"
+          },
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": {"domain": [0, 285], "nice": false}, "axis": null},
+            "y": {"field": "y", "type": "quantitative", "scale": {"domain": [560, 0], "nice": false}, "axis": null},
+            "text": {"field": "text"}
+          }
+        }
+      ]
+    },
+    {
+      "width": 520,
+      "height": 560,
+      "data": {
+        "values": [
+          {"Order": 1, "Category": "Streaming", "Percentage": 37.5, "Color": "#7124ff"},
+          {"Order": 2, "Category": "Other", "Percentage": 9.6, "Color": "#ff008c"},
+          {"Order": 3, "Category": "Cable", "Percentage": 29.8, "Color": "#00b9b4"},
+          {"Order": 4, "Category": "Broadcast", "Percentage": 23.0, "Color": "#ff8700"}
+        ]
+      },
+      "layer": [
+        {
+          "mark": {"type": "arc", "innerRadius": 92, "outerRadius": 235},
+          "encoding": {
+            "theta": {"field": "Percentage", "type": "quantitative", "stack": true},
+            "order": {"field": "Order", "type": "ordinal"},
+            "color": {"field": "Color", "type": "nominal", "scale": null, "legend": null},
+            "tooltip": [
+              {"field": "Category", "type": "nominal", "title": "Category"},
+              {"field": "Percentage", "type": "quantitative", "title": "Share of TV usage", "format": ".1f"}
+            ]
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {"x": 390, "y": 235, "Category": "Streaming"},
+              {"x": 355, "y": 418, "Category": "Other"},
+              {"x": 155, "y": 410, "Category": "Cable"},
+              {"x": 155, "y": 180, "Category": "Broadcast"}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "baseline": "middle",
+            "font": "Arial",
+            "fontSize": 22,
+            "fontWeight": "bold",
+            "color": "#ffffff"
+          },
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": {"domain": [0, 520], "nice": false}, "axis": null},
+            "y": {"field": "y", "type": "quantitative", "scale": {"domain": [560, 0], "nice": false}, "axis": null},
+            "text": {"field": "Category", "type": "nominal"}
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {"x": 405, "y": 268, "Percentage": 37.5},
+              {"x": 355, "y": 451, "Percentage": 9.6},
+              {"x": 155, "y": 443, "Percentage": 29.8},
+              {"x": 155, "y": 213, "Percentage": 23.0}
+            ]
+          },
+          "transform": [{"calculate": "format(datum.Percentage, '.1f') + '%'", "as": "PercentLabel"}],
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "baseline": "middle",
+            "font": "Arial",
+            "fontSize": 39,
+            "fontWeight": "normal",
+            "color": "#ffffff"
+          },
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": {"domain": [0, 520], "nice": false}, "axis": null},
+            "y": {"field": "y", "type": "quantitative", "scale": {"domain": [560, 0], "nice": false}, "axis": null},
+            "text": {"field": "PercentLabel", "type": "nominal"}
+          }
+        }
+      ]
+    },
+    {
+      "width": 350,
+      "height": 560,
+      "layer": [
+        {
+          "data": {
+            "values": [
+              {"x": 22, "x2": 22, "y": 28, "y2": 518},
+              {"x": 22, "x2": 38, "y": 28, "y2": 28},
+              {"x": 0, "x2": 22, "y": 280, "y2": 280},
+              {"x": 22, "x2": 38, "y": 518, "y2": 518}
+            ]
+          },
+          "mark": {"type": "rule", "stroke": "#b9bfce", "strokeWidth": 1.5},
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": {"domain": [0, 350], "nice": false}, "axis": null},
+            "x2": {"field": "x2"},
+            "y": {"field": "y", "type": "quantitative", "scale": {"domain": [560, 0], "nice": false}, "axis": null},
+            "y2": {"field": "y2"}
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {"y": 28, "Percentage": 5.0, "Brand": "Other Streaming", "BrandColor": "#5420c9"},
+              {"y": 73, "Percentage": 9.0, "Brand": "YouTube", "BrandColor": "#151515"},
+              {"y": 118, "Percentage": 7.8, "Brand": "NETFLIX", "BrandColor": "#e50914"},
+              {"y": 163, "Percentage": 3.6, "Brand": "prime video", "BrandColor": "#1598c5"},
+              {"y": 208, "Percentage": 3.6, "Brand": "hulu", "BrandColor": "#21c45b"},
+              {"y": 253, "Percentage": 1.9, "Brand": "Disney+", "BrandColor": "#173b70"},
+              {"y": 298, "Percentage": 1.3, "Brand": "tubi", "BrandColor": "#101010"},
+              {"y": 343, "Percentage": 1.2, "Brand": "max", "BrandColor": "#1454d8"},
+              {"y": 388, "Percentage": 1.1, "Brand": "Roku Channel", "BrandColor": "#6f38a5"},
+              {"y": 433, "Percentage": 1.1, "Brand": "peacock", "BrandColor": "#111111"},
+              {"y": 478, "Percentage": 1.0, "Brand": "Paramount+", "BrandColor": "#2878d8"},
+              {"y": 523, "Percentage": 0.8, "Brand": "pluto tv", "BrandColor": "#111111"}
+            ]
+          },
+          "transform": [{"calculate": "format(datum.Percentage, '.1f') + '%'", "as": "PercentLabel"}],
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "baseline": "middle",
+            "font": "Arial",
+            "fontSize": 25,
+            "fontWeight": "normal",
+            "color": "#092746"
+          },
+          "encoding": {
+            "x": {"datum": 132, "type": "quantitative", "scale": {"domain": [0, 350], "nice": false}, "axis": null},
+            "y": {"field": "y", "type": "quantitative", "scale": {"domain": [560, 0], "nice": false}, "axis": null},
+            "text": {"field": "PercentLabel", "type": "nominal"},
+            "tooltip": [
+              {"field": "Brand", "type": "nominal", "title": "Streaming service"},
+              {"field": "Percentage", "type": "quantitative", "title": "Share of TV usage", "format": ".1f"}
+            ]
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {"y": 28, "Brand": "Other Streaming", "BrandColor": "#5420c9"},
+              {"y": 73, "Brand": "YouTube", "BrandColor": "#151515"},
+              {"y": 118, "Brand": "NETFLIX", "BrandColor": "#e50914"},
+              {"y": 163, "Brand": "prime video", "BrandColor": "#1598c5"},
+              {"y": 208, "Brand": "hulu", "BrandColor": "#21c45b"},
+              {"y": 253, "Brand": "Disney+", "BrandColor": "#173b70"},
+              {"y": 298, "Brand": "tubi", "BrandColor": "#101010"},
+              {"y": 343, "Brand": "max", "BrandColor": "#1454d8"},
+              {"y": 388, "Brand": "Roku Channel", "BrandColor": "#6f38a5"},
+              {"y": 433, "Brand": "peacock", "BrandColor": "#111111"},
+              {"y": 478, "Brand": "Paramount+", "BrandColor": "#2878d8"},
+              {"y": 523, "Brand": "pluto tv", "BrandColor": "#111111"}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "font": "Arial",
+            "fontSize": 18,
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "x": {"datum": 150, "type": "quantitative", "scale": {"domain": [0, 350], "nice": false}, "axis": null},
+            "y": {"field": "y", "type": "quantitative", "scale": {"domain": [560, 0], "nice": false}, "axis": null},
+            "text": {"field": "Brand", "type": "nominal"},
+            "color": {"field": "BrandColor", "type": "nominal", "scale": null, "legend": null}
+          }
+        }
+      ]
+    }
+  ],
+  "resolve": {"scale": {"color": "independent", "shape": "independent"}},
+  "config": {
+    "font": "Arial",
+    "view": {"stroke": null},
+    "axis": {"grid": false, "domain": false, "ticks": false, "labels": false, "title": null},
+    "concat": {"spacing": 0}
+  }
+}

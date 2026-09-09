@@ -1,0 +1,473 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "UK Ministry of Defence 2024 figure showing 2023 real defence expenditure against compound average annual change from 2014 to 2023 for NATO Europe and Canada. Source data: supporting ODS tables published by GOV.UK.",
+  "background": "#ffffff",
+  "width": 860,
+  "height": 560,
+  "padding": {
+    "left": 20,
+    "right": 20,
+    "top": 20,
+    "bottom": 15
+  },
+  "data": {
+    "values": [
+      {
+        "Country": "Albania",
+        "Defence Expenditure 2023 (US$ billion)": 0.4,
+        "Average Annual Change 2014-2023 (%)": 8,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Belgium",
+        "Defence Expenditure 2023 (US$ billion)": 7.6,
+        "Average Annual Change 2014-2023 (%)": 4.1,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Bulgaria",
+        "Defence Expenditure 2023 (US$ billion)": 2,
+        "Average Annual Change 2014-2023 (%)": 8,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Canada",
+        "Defence Expenditure 2023 (US$ billion)": 28,
+        "Average Annual Change 2014-2023 (%)": 4.6,
+        "Label": "Canada",
+        "Highlight": false,
+        "LabelDx": 8,
+        "LabelDy": -20
+      },
+      {
+        "Country": "Croatia",
+        "Defence Expenditure 2023 (US$ billion)": 1.4,
+        "Average Annual Change 2014-2023 (%)": 2.7,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Czechia",
+        "Defence Expenditure 2023 (US$ billion)": 4.5,
+        "Average Annual Change 2014-2023 (%)": 6.3,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Denmark",
+        "Defence Expenditure 2023 (US$ billion)": 8.1,
+        "Average Annual Change 2014-2023 (%)": 8.8,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Estonia",
+        "Defence Expenditure 2023 (US$ billion)": 1.2,
+        "Average Annual Change 2014-2023 (%)": 8,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Finland",
+        "Defence Expenditure 2023 (US$ billion)": 6.3,
+        "Average Annual Change 2014-2023 (%)": 5.2,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "France",
+        "Defence Expenditure 2023 (US$ billion)": 59.4,
+        "Average Annual Change 2014-2023 (%)": 1.9,
+        "Label": "France",
+        "Highlight": false,
+        "LabelDx": 8,
+        "LabelDy": -20
+      },
+      {
+        "Country": "Germany",
+        "Defence Expenditure 2023 (US$ billion)": 73.1,
+        "Average Annual Change 2014-2023 (%)": 4.7,
+        "Label": "Germany",
+        "Highlight": false,
+        "LabelDx": -10,
+        "LabelDy": -15
+      },
+      {
+        "Country": "Greece",
+        "Defence Expenditure 2023 (US$ billion)": 6.7,
+        "Average Annual Change 2014-2023 (%)": 3.8,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Hungary",
+        "Defence Expenditure 2023 (US$ billion)": 4.4,
+        "Average Annual Change 2014-2023 (%)": 13.6,
+        "Label": "Hungary",
+        "Highlight": false,
+        "LabelDx": 3,
+        "LabelDy": -16
+      },
+      {
+        "Country": "Italy",
+        "Defence Expenditure 2023 (US$ billion)": 33.9,
+        "Average Annual Change 2014-2023 (%)": 4.1,
+        "Label": "Italy",
+        "Highlight": false,
+        "LabelDx": 8,
+        "LabelDy": -19
+      },
+      {
+        "Country": "Latvia",
+        "Defence Expenditure 2023 (US$ billion)": 1.3,
+        "Average Annual Change 2014-2023 (%)": 9,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Lithuania",
+        "Defence Expenditure 2023 (US$ billion)": 2.2,
+        "Average Annual Change 2014-2023 (%)": 30.5,
+        "Label": "Lithuania",
+        "Highlight": false,
+        "LabelDx": 2,
+        "LabelDy": -17
+      },
+      {
+        "Country": "Luxembourg",
+        "Defence Expenditure 2023 (US$ billion)": 0.6,
+        "Average Annual Change 2014-2023 (%)": 8,
+        "Label": "Luxembourg",
+        "Highlight": false,
+        "LabelDx": 8,
+        "LabelDy": -25
+      },
+      {
+        "Country": "Montenegro",
+        "Defence Expenditure 2023 (US$ billion)": 0.1,
+        "Average Annual Change 2014-2023 (%)": 0,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Netherlands",
+        "Defence Expenditure 2023 (US$ billion)": 16.8,
+        "Average Annual Change 2014-2023 (%)": 6.3,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "North Macedonia",
+        "Defence Expenditure 2023 (US$ billion)": 0.3,
+        "Average Annual Change 2014-2023 (%)": 13,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Norway",
+        "Defence Expenditure 2023 (US$ billion)": 8.8,
+        "Average Annual Change 2014-2023 (%)": 3.4,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Poland",
+        "Defence Expenditure 2023 (US$ billion)": 26.5,
+        "Average Annual Change 2014-2023 (%)": 10.3,
+        "Label": "Poland",
+        "Highlight": false,
+        "LabelDx": 8,
+        "LabelDy": -22
+      },
+      {
+        "Country": "Portugal",
+        "Defence Expenditure 2023 (US$ billion)": 4.2,
+        "Average Annual Change 2014-2023 (%)": 3.4,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Romania",
+        "Defence Expenditure 2023 (US$ billion)": 5.6,
+        "Average Annual Change 2014-2023 (%)": 5.4,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Slovak Republic",
+        "Defence Expenditure 2023 (US$ billion)": 2.4,
+        "Average Annual Change 2014-2023 (%)": 9.1,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Slovenia",
+        "Defence Expenditure 2023 (US$ billion)": 0.9,
+        "Average Annual Change 2014-2023 (%)": 6.7,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Spain",
+        "Defence Expenditure 2023 (US$ billion)": 18.9,
+        "Average Annual Change 2014-2023 (%)": 4.8,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Sweden",
+        "Defence Expenditure 2023 (US$ billion)": 9.8,
+        "Average Annual Change 2014-2023 (%)": 7.3,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "Turkey",
+        "Defence Expenditure 2023 (US$ billion)": 16.6,
+        "Average Annual Change 2014-2023 (%)": 5.2,
+        "Label": "",
+        "Highlight": false,
+        "LabelDx": 0,
+        "LabelDy": 0
+      },
+      {
+        "Country": "United Kingdom",
+        "Defence Expenditure 2023 (US$ billion)": 76.9,
+        "Average Annual Change 2014-2023 (%)": 2.1,
+        "Label": "United Kingdom",
+        "Highlight": true,
+        "LabelDx": -75,
+        "LabelDy": -55
+      }
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "stroke": "#333333",
+        "strokeDash": [
+          6,
+          6
+        ],
+        "strokeWidth": 1.4
+      },
+      "encoding": {
+        "y": {
+          "datum": 0,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -40,
+              40
+            ]
+          }
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 165,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "Defence Expenditure 2023 (US$ billion)",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              80
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": "2023 Defence Expenditure (US$ billion)",
+            "values": [
+              0,
+              10,
+              20,
+              30,
+              40,
+              50,
+              60,
+              70,
+              80
+            ],
+            "grid": false,
+            "labelFont": "Arial",
+            "labelFontSize": 13,
+            "titleFont": "Arial",
+            "titleFontSize": 15,
+            "titleFontWeight": "bold",
+            "tickSize": 4,
+            "domainColor": "#333333"
+          }
+        },
+        "y": {
+          "field": "Average Annual Change 2014-2023 (%)",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -40,
+              40
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": [
+              "Average Annual Percentage Change in Real",
+              "Defence Spending 2014–2023"
+            ],
+            "values": [
+              -40,
+              -30,
+              -20,
+              -10,
+              0,
+              10,
+              20,
+              30,
+              40
+            ],
+            "grid": false,
+            "labelFont": "Arial",
+            "labelFontSize": 13,
+            "titleFont": "Arial",
+            "titleFontSize": 15,
+            "titleFontWeight": "bold",
+            "tickSize": 4,
+            "domainColor": "#333333"
+          }
+        },
+        "color": {
+          "condition": {
+            "test": "datum.Highlight === true",
+            "value": "#5b1836"
+          },
+          "value": "#b9b9b9"
+        },
+        "tooltip": [
+          {
+            "field": "Country",
+            "type": "nominal"
+          },
+          {
+            "field": "Defence Expenditure 2023 (US$ billion)",
+            "type": "quantitative",
+            "format": ".1f"
+          },
+          {
+            "field": "Average Annual Change 2014-2023 (%)",
+            "type": "quantitative",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.Label !== ''"
+        },
+        {
+          "calculate": "datum['Defence Expenditure 2023 (US$ billion)'] + datum.LabelDx * 80 / 860",
+          "as": "LabelX"
+        },
+        {
+          "calculate": "datum['Average Annual Change 2014-2023 (%)'] - datum.LabelDy * 80 / 560",
+          "as": "LabelY"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "font": "Arial",
+        "fontSize": 15,
+        "fontWeight": "bold",
+        "color": "#111111"
+      },
+      "encoding": {
+        "x": {
+          "field": "LabelX",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              80
+            ]
+          }
+        },
+        "y": {
+          "field": "LabelY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -40,
+              40
+            ]
+          }
+        },
+        "text": {
+          "field": "Label"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "Arial",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelColor": "#111111",
+      "titleColor": "#111111"
+    }
+  }
+}

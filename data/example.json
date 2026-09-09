@@ -1,0 +1,20 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 350,
+    "height": 220,
+    "title": "各产品销量对比",
+    "data": {
+      "values": [
+        {"product": "A产品", "num": 320},
+        {"product": "B产品", "num": 210},
+        {"product": "C产品", "num": 450},
+        {"product": "D产品", "num": 280}
+      ]
+    },
+    "mark": "bar",
+    "encoding": {
+      "x": {"field": "product", "type": "nominal"},
+      "y": {"field": "num", "type": "quantitative"},
+      "color": {"field": "product", "type": "nominal", "legend": null}
+    }
+  }

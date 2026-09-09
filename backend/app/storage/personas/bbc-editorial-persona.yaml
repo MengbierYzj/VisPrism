@@ -1,0 +1,51 @@
+# 手工增强副本：继承 data/bbc-persona.yaml，供 persona-specific beat3 策略使用。
+extends: bbc
+institution:
+  id: bbc-editorial
+  name: BBC Editorial
+  domain: journalism
+  source: bbc-persona.yaml + editorial strategy overlay
+
+diagnostics:
+  - id: bbc-time-axis-readability
+    problem_type: dense_time_axis
+    diagnosis: "新闻图应让读者先读到趋势和事件，而不是逐月刻度。"
+    principle_refs: [p-clarity, p-accessibility]
+  - id: bbc-narrative-focus
+    problem_type: competing_visual_elements
+    diagnosis: "辅助元素不能盖过数据叙事；重点应明确且可解释。"
+    principle_refs: [p-integrity, p-clarity]
+
+# L2：视觉审图给出 issue 后才适用；scope 防止拍2在无图像证据时预先触发。
+L2_adaptations:
+  # 绝对像素文字与原生坐标轴不能在未迁移布局的情况下各自跟随不同的画布基准。
+  # 此策略把它们交给拍 3 的组件规划、拍 4 的受控重组，而不是靠 padding 修补。
+  - id: bbc-component-editorial-reassembly
+    scope: component-assembly
+    when: { pixel_positioned_text: true }
+    evidence_quote: "Editorial hierarchy separates headline, chart evidence and attribution into stable reading regions."
+    philosophy_id: p-clarity
+    then: { profile: editorial }
+    strength: should
+  - id: bbc-dense-time-axis
+    scope: visual-strategy
+    visual_issues: [overlap, crowding]
+    when: { axis_x_dense: true, mark_types: [line, area, bar] }
+    evidence_quote: "Clarity First: Information should be immediately understandable"
+    philosophy_id: p-clarity
+    then: { visual_actions: [thin_axis_labels, reduce_axis_grid] }
+    strength: should
+  - id: bbc-data-label-collision
+    scope: visual-strategy
+    visual_issues: [mark_label_overlap, text_mark_collision]
+    evidence_quote: "Accessibility: Charts must work for all audiences, including those with visual impairments"
+    philosophy_id: p-accessibility
+    then: { visual_actions: [remove_value_labels, increase_padding] }
+    strength: should
+  - id: bbc-narrative-breathing-room
+    scope: visual-strategy
+    visual_issues: [whitespace, crowding]
+    evidence_quote: "Editorial Integrity: Data presentation supports, not overshadows, the journalism"
+    philosophy_id: p-integrity
+    then: { visual_actions: [increase_padding] }
+    strength: should

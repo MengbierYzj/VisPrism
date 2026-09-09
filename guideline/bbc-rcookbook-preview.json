@@ -1,0 +1,461 @@
+{
+  "persona": {
+    "institution": {
+      "id": "bbc-visual-and-data-journalism-cookbook",
+      "name": "BBC Visual and Data Journalism Cookbook",
+      "domain": "custom",
+      "source": "bbc-visual-and-data-journalism-cookbook.md"
+    },
+    "applicability": {},
+    "L1_signature": {
+      "tokens": {
+        "color": {
+          "primary": "#1380A1",
+          "accent": "#FAAB18",
+          "grid": "#cbcbcb"
+        },
+        "palette": {
+          "categorical": [
+            "#FAAB18",
+            "#1380A1",
+            "#990000",
+            "#588300"
+          ],
+          "two_series": [
+            "#FAAB18",
+            "#1380A1"
+          ]
+        },
+        "font": {
+          "family": "Helvetica",
+          "size": {
+            "title": 28,
+            "subtitle": 22,
+            "legend_label": 18,
+            "axis_label": 18
+          }
+        }
+      },
+      "rules": [
+        {
+          "id": "s-helvetica",
+          "rule": "所有图表文字使用 Helvetica 字体",
+          "strength": "must",
+          "check": "programmatic",
+          "story": "",
+          "src": "L81",
+          "evidence_quote": "##     font <- \"Helvetica\"",
+          "raw_requirement": "所有图表文字使用 Helvetica 字体",
+          "derived": false,
+          "pattern_sources": [],
+          "then": {
+            "set": "font.family",
+            "to": "{font.family}"
+          }
+        },
+        {
+          "id": "s-custom",
+          "rule": "使用指南定义的标题、副标题、图例和坐标轴字号层级",
+          "strength": "must",
+          "check": "programmatic",
+          "story": "",
+          "src": "L82-L90",
+          "evidence_quote": "##     ggplot2::theme(plot.title = ggplot2::element_text(family = font, \n##         size = 28, face = \"bold\", color = \"#222222\"), plot.subtitle = ggplot2::element_text(family = font, \n##         size = 22, margin = ggplot2::margin(9, 0, 9, 0)), plot.caption = ggplot2::element_blank(), \n##         legend.position = \"top\", legend.text.align = 0, legend.background = ggplot2::element_blank(), \n##         legend.title = ggplot2::element_blank(), legend.key = ggplot2::element_blank(), \n##         legend.text = ggplot2::element_text(family = font, size = 18, \n##             color = \"#222222\"), axis.title = ggplot2::element_blank(), \n##         axis.text = ggplot2::element_text(family = font, size = 18, \n##             color = \"#222222\"), axis.text.x = ggplot2::element_text(margin = ggplot2::margin(5,",
+          "raw_requirement": "使用指南定义的标题、副标题、图例和坐标轴字号层级",
+          "derived": false,
+          "pattern_sources": [],
+          "then": {
+            "set": "font.sizes",
+            "to": {
+              "title": 28,
+              "subtitle": 22,
+              "legend_label": 18,
+              "axis_label": 18
+            }
+          }
+        },
+        {
+          "id": "s-custom-2",
+          "rule": "图例默认置于图表顶部",
+          "strength": "must",
+          "check": "programmatic",
+          "story": "",
+          "src": "L85",
+          "evidence_quote": "##         legend.position = \"top\", legend.text.align = 0, legend.background = ggplot2::element_blank(),",
+          "raw_requirement": "图例默认置于图表顶部",
+          "derived": false,
+          "pattern_sources": [],
+          "then": {
+            "set": "legend.orient",
+            "to": "top"
+          }
+        },
+        {
+          "id": "s-custom-3",
+          "rule": "默认移除图例标题",
+          "strength": "must",
+          "check": "programmatic",
+          "story": "",
+          "src": "L86",
+          "evidence_quote": "##         legend.title = ggplot2::element_blank(), legend.key = ggplot2::element_blank(),",
+          "raw_requirement": "默认移除图例标题",
+          "derived": false,
+          "pattern_sources": [],
+          "then": {
+            "set": "legend.title",
+            "to": null
+          }
+        },
+        {
+          "id": "s-custom-4",
+          "rule": "仅保留水平网格线并使用指南网格色",
+          "strength": "must",
+          "check": "programmatic",
+          "story": "",
+          "src": "L93",
+          "evidence_quote": "##         panel.grid.major.y = ggplot2::element_line(color = \"#cbcbcb\"),",
+          "raw_requirement": "仅保留水平网格线并使用指南网格色",
+          "derived": false,
+          "pattern_sources": [],
+          "then": {
+            "set": "grid.horizontal",
+            "to": "{color.grid}"
+          }
+        },
+        {
+          "id": "s-custom-5",
+          "rule": "默认不显示垂直网格线",
+          "strength": "must",
+          "check": "programmatic",
+          "story": "",
+          "src": "L94",
+          "evidence_quote": "##         panel.grid.major.x = ggplot2::element_blank(), panel.background = ggplot2::element_blank(),",
+          "raw_requirement": "默认不显示垂直网格线",
+          "derived": false,
+          "pattern_sources": [],
+          "then": {
+            "set": "grid.vertical",
+            "to": false
+          }
+        },
+        {
+          "id": "s-custom-6",
+          "rule": "标题与副标题左对齐",
+          "strength": "must",
+          "check": "programmatic",
+          "story": "",
+          "src": "L138",
+          "evidence_quote": "The finalise_plot() function does more than just save out your chart, it also left-aligns the title and subtitle as is standard for BBC graphics, adds a footer with the logo on the right side and lets you input source text on the left side.",
+          "raw_requirement": "标题与副标题左对齐",
+          "derived": false,
+          "pattern_sources": [],
+          "then": {
+            "set": "title.anchor",
+            "to": "start"
+          }
+        },
+        {
+          "id": "s-source",
+          "rule": "图表应包含以 Source: 开头的数据来源署名",
+          "strength": "must",
+          "check": "programmatic",
+          "story": "",
+          "src": "L117",
+          "evidence_quote": "* `source`: the source text that you want to appear at the bottom left corner of your plot. You will need to type the word `\"Source:\"` before it, so for example `source = \"Source: ONS\"` would be the right way to do that.",
+          "raw_requirement": "图表应包含以 Source: 开头的数据来源署名",
+          "derived": false,
+          "pattern_sources": [],
+          "then": {
+            "set": "source.required",
+            "to": true
+          }
+        },
+        {
+          "id": "s-640-450",
+          "rule": "发布图表默认尺寸为 640×450 像素",
+          "strength": "must",
+          "check": "programmatic",
+          "story": "",
+          "src": "L114",
+          "evidence_quote": "Here are the function arguments: `finalise_plot(plot_name, source, save_filepath, width_pixels = 640, height_pixels = 450)`",
+          "raw_requirement": "发布图表默认尺寸为 640×450 像素",
+          "derived": false,
+          "pattern_sources": [],
+          "then": {
+            "set": "chart.size",
+            "to": "640x450"
+          }
+        }
+      ]
+    },
+    "L2_adaptations": [
+      {
+        "id": "a-1380a1",
+        "when": {
+          "series_count": 1
+        },
+        "then": {
+          "set": "mark.color",
+          "to": "{color.primary}"
+        },
+        "strength": "should",
+        "check": "programmatic",
+        "story": "n-custom",
+        "src": "L152-L161",
+        "evidence_quote": "## Make a line chart\n\n```r\n#Prepare data\nline_df <- gapminder %>%\n  filter(country == \"China\") \n\n#Make plot\nline <- ggplot(line_df, aes(x = year, y = lifeExp)) +\n  geom_line(colour = \"#1380A1\", size = 1) +",
+        "raw_requirement": "单序列图使用机构主色 #1380A1",
+        "derived": true,
+        "pattern_sources": [
+          "L67",
+          "L161",
+          "L179",
+          "L272",
+          "L312",
+          "L712",
+          "L738",
+          "L793",
+          "L826"
+        ]
+      },
+      {
+        "id": "a-custom",
+        "when": {
+          "series_count": 2
+        },
+        "then": {
+          "set": "color.range",
+          "to": "{palette.two_series}"
+        },
+        "strength": "should",
+        "check": "programmatic",
+        "story": "n-custom-2",
+        "src": "L168-L179",
+        "evidence_quote": "## Make a multiple line chart\n\n```r\n#Prepare data\nmultiple_line_df <- gapminder %>%\n  filter(country == \"China\" | country == \"United States\") \n\n#Make plot\nmultiple_line <- ggplot(multiple_line_df, aes(x = year, y = lifeExp, colour = country)) +\n  geom_line(size = 1) +\n  geom_hline(yintercept = 0, size = 1, colour=\"#333333\") +\n  scale_colour_manual(values = c(\"#FAAB18\", \"#1380A1\")) +",
+        "raw_requirement": "双序列图使用指南中重复出现的双色组合",
+        "derived": true,
+        "pattern_sources": [
+          "L179",
+          "L272"
+        ]
+      },
+      {
+        "id": "a-fill",
+        "when": {
+          "context": "proportions"
+        },
+        "then": "堆叠图表达比例时使用 fill 位置模式",
+        "strength": "should",
+        "check": "llm",
+        "story": "",
+        "src": "L242",
+        "evidence_quote": "`position = \"fill\"` will draw your stacks as proportions, and `position = \"identity\"` will draw number values.",
+        "raw_requirement": "堆叠图表达比例时使用 fill 位置模式",
+        "derived": false,
+        "pattern_sources": []
+      },
+      {
+        "id": "a-identity",
+        "when": {
+          "context": "number values"
+        },
+        "then": "堆叠图表达实际数值时使用 identity 位置模式",
+        "strength": "should",
+        "check": "llm",
+        "story": "",
+        "src": "L242",
+        "evidence_quote": "`position = \"fill\"` will draw your stacks as proportions, and `position = \"identity\"` will draw number values.",
+        "raw_requirement": "堆叠图表达实际数值时使用 identity 位置模式",
+        "derived": false,
+        "pattern_sources": []
+      },
+      {
+        "id": "a-y",
+        "when": {
+          "context": "small multiples"
+        },
+        "then": "小多重图默认保持统一 y 轴尺度；必要时才允许独立尺度",
+        "strength": "should",
+        "check": "llm",
+        "story": "n-custom-4",
+        "src": "L728",
+        "evidence_quote": "By default, faceting uses fixed axis scales across the small multiples. It’s always best to use the same y axis scale across small multiples, to avoid misleading, but sometimes you may need to set these independently for each multiple, which we can do by adding the argument `scales = \"free\"`.",
+        "raw_requirement": "小多重图默认保持统一 y 轴尺度；必要时才允许独立尺度",
+        "derived": false,
+        "pattern_sources": []
+      }
+    ],
+    "L3_narrative": {
+      "philosophy": [
+        {
+          "id": "p-custom",
+          "title": "",
+          "quote": "通过可复现流程创建可发布的机构风格图形，并降低新用户制作门槛。",
+          "src": "L14",
+          "evidence_quote": "At the BBC data team, we have developed an R package and an R cookbook to make the process of creating publication-ready graphics in our in-house style using R’s ggplot2 library a more reproducible process, as well as making it easier for people new to R to create graphics."
+        }
+      ],
+      "stories": [
+        {
+          "id": "n-custom",
+          "story": "该主色在多种单序列图示中重复形成可识别的一致性",
+          "src": "L152-L161",
+          "evidence_quote": "## Make a line chart\n\n```r\n#Prepare data\nline_df <- gapminder %>%\n  filter(country == \"China\") \n\n#Make plot\nline <- ggplot(line_df, aes(x = year, y = lifeExp)) +\n  geom_line(colour = \"#1380A1\", size = 1) +"
+        },
+        {
+          "id": "n-custom-2",
+          "story": "双色组合在多序列折线图和分组图中重复使用",
+          "src": "L168-L179",
+          "evidence_quote": "## Make a multiple line chart\n\n```r\n#Prepare data\nmultiple_line_df <- gapminder %>%\n  filter(country == \"China\" | country == \"United States\") \n\n#Make plot\nmultiple_line <- ggplot(multiple_line_df, aes(x = year, y = lifeExp, colour = country)) +\n  geom_line(size = 1) +\n  geom_hline(yintercept = 0, size = 1, colour=\"#333333\") +\n  scale_colour_manual(values = c(\"#FAAB18\", \"#1380A1\")) +"
+        },
+        {
+          "id": "n-custom-3",
+          "story": "优先使用直接文字标注，而不是仅依赖图例",
+          "src": "L328",
+          "evidence_quote": "Remove the legend to become one - it’s better to label data directly with text annotations."
+        },
+        {
+          "id": "n-custom-4",
+          "story": "统一尺度可避免误导性比较",
+          "src": "L728",
+          "evidence_quote": "By default, faceting uses fixed axis scales across the small multiples. It’s always best to use the same y axis scale across small multiples, to avoid misleading, but sometimes you may need to set these independently for each multiple, which we can do by adding the argument `scales = \"free\"`."
+        },
+        {
+          "id": "n-bbc",
+          "story": "BBC 图表主题由设计团队的建议与反馈形成。",
+          "src": "L54",
+          "evidence_quote": "`bbc_style()`: has no arguments and is added to the ggplot ‘chain’ after you have created a plot. What it does is generally makes text size, font and colour, axis lines, axis text, margins and many other standard chart components into BBC style, which has been formulated based on recommendations and feedback from the design team."
+        }
+      ]
+    },
+    "unmapped_requirements": [
+      {
+        "classification": "L2",
+        "requirement": "堆叠图表达比例时使用 fill 位置模式",
+        "src": "L242",
+        "quote": "`position = \"fill\"` will draw your stacks as proportions, and `position = \"identity\"` will draw number values.",
+        "handling": "保留在对应层，check:llm / suggested，不丢弃"
+      },
+      {
+        "classification": "L2",
+        "requirement": "堆叠图表达实际数值时使用 identity 位置模式",
+        "src": "L242",
+        "quote": "`position = \"fill\"` will draw your stacks as proportions, and `position = \"identity\"` will draw number values.",
+        "handling": "保留在对应层，check:llm / suggested，不丢弃"
+      },
+      {
+        "classification": "L2",
+        "requirement": "小多重图默认保持统一 y 轴尺度；必要时才允许独立尺度",
+        "src": "L728",
+        "quote": "By default, faceting uses fixed axis scales across the small multiples. It’s always best to use the same y axis scale across small multiples, to avoid misleading, but sometimes you may need to set these independently for each multiple, which we can do by adding the argument `scales = \"free\"`.",
+        "handling": "保留在对应层，check:llm / suggested，不丢弃"
+      }
+    ],
+    "evidence_catalog": {
+      "token_sources": {
+        "color.primary": {
+          "src": "L67",
+          "quote": "geom_line(colour = \"#1380A1\", size = 1) +",
+          "evidence_kind": "repeated-pattern",
+          "pattern_sources": [
+            "L67",
+            "L161",
+            "L179",
+            "L272",
+            "L312",
+            "L712",
+            "L738",
+            "L793",
+            "L826"
+          ]
+        },
+        "color.accent": {
+          "src": "L179",
+          "quote": "scale_colour_manual(values = c(\"#FAAB18\", \"#1380A1\")) +",
+          "evidence_kind": "repeated-pattern",
+          "pattern_sources": [
+            "L179",
+            "L272",
+            "L712",
+            "L738"
+          ]
+        },
+        "palette.categorical": {
+          "src": "L712",
+          "quote": "scale_fill_manual(values = c(\"#FAAB18\", \"#1380A1\",\"#990000\", \"#588300\")) +",
+          "evidence_kind": "repeated-pattern",
+          "pattern_sources": [
+            "L712",
+            "L738"
+          ]
+        },
+        "palette.two_series": {
+          "src": "L179",
+          "quote": "scale_colour_manual(values = c(\"#FAAB18\", \"#1380A1\")) +",
+          "evidence_kind": "repeated-pattern",
+          "pattern_sources": [
+            "L179",
+            "L272"
+          ]
+        },
+        "font.family": {
+          "src": "L81",
+          "quote": "##     font <- \"Helvetica\"",
+          "evidence_kind": "direct",
+          "pattern_sources": []
+        },
+        "font.size.title": {
+          "src": "L82-L83",
+          "quote": "##     ggplot2::theme(plot.title = ggplot2::element_text(family = font, \n##         size = 28, face = \"bold\", color = \"#222222\"), plot.subtitle = ggplot2::element_text(family = font,",
+          "evidence_kind": "direct",
+          "pattern_sources": []
+        },
+        "font.size.subtitle": {
+          "src": "L83-L84",
+          "quote": "##         size = 28, face = \"bold\", color = \"#222222\"), plot.subtitle = ggplot2::element_text(family = font, \n##         size = 22, margin = ggplot2::margin(9, 0, 9, 0)), plot.caption = ggplot2::element_blank(),",
+          "evidence_kind": "direct",
+          "pattern_sources": []
+        },
+        "font.size.legend_label": {
+          "src": "L87-L88",
+          "quote": "##         legend.text = ggplot2::element_text(family = font, size = 18, \n##             color = \"#222222\"), axis.title = ggplot2::element_blank(),",
+          "evidence_kind": "direct",
+          "pattern_sources": []
+        },
+        "font.size.axis_label": {
+          "src": "L89-L90",
+          "quote": "##         axis.text = ggplot2::element_text(family = font, size = 18, \n##             color = \"#222222\"), axis.text.x = ggplot2::element_text(margin = ggplot2::margin(5,",
+          "evidence_kind": "direct",
+          "pattern_sources": []
+        },
+        "color.grid": {
+          "src": "L93",
+          "quote": "##         panel.grid.major.y = ggplot2::element_line(color = \"#cbcbcb\"),",
+          "evidence_kind": "direct",
+          "pattern_sources": []
+        }
+      },
+      "examples": []
+    },
+    "parser_provenance": {
+      "mode": "deterministic-fallback",
+      "source_lines": 834,
+      "chunks": 7,
+      "llm_chunks_succeeded": 0,
+      "llm_chunks_failed": 7,
+      "accepted_items": 17,
+      "rejected_items": 0,
+      "quality_errors": []
+    }
+  },
+  "warnings": [
+    "确定性降级完成：7 块，L1 9 / L2 5 / L3 6",
+    "第 1/7 块解析失败：Request timed out.",
+    "第 2/7 块解析失败：Request timed out.",
+    "第 3/7 块解析失败：Request timed out.",
+    "第 4/7 块解析失败：Request timed out.",
+    "第 5/7 块解析失败：Request timed out.",
+    "第 6/7 块解析失败：Request timed out.",
+    "第 7/7 块解析失败：Request timed out.",
+    "L328：无条件弱指导不属于 L1，已重分类为 L3-story"
+  ]
+}

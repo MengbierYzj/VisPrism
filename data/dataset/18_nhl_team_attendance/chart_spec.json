@@ -1,0 +1,161 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Faithful reconstruction of the NHL attendance chart published by NHL to Seattle on February 10, 2013. Average-attendance values were digitized from the source image; YoY labels were transcribed from the chart.",
+  "background": "#f7f7f7",
+  "width": 960,
+  "height": 364,
+  "padding": {"left": 8, "right": 12, "top": 12, "bottom": 8},
+  "data": {
+    "values": [
+      {"Team":"ANAHEIM","Average attendance":15870,"YoY change (%)":11},
+      {"Team":"BOSTON","Average attendance":17550,"YoY change (%)":0},
+      {"Team":"BUFFALO","Average attendance":18870,"YoY change (%)":1},
+      {"Team":"CALGARY","Average attendance":19260,"YoY change (%)":0},
+      {"Team":"CAROLINA","Average attendance":18140,"YoY change (%)":15},
+      {"Team":"CHICAGO","Average attendance":21510,"YoY change (%)":0},
+      {"Team":"COLORADO","Average attendance":15110,"YoY change (%)":1},
+      {"Team":"COLUMBUS","Average attendance":14047,"YoY change (%)":8},
+      {"Team":"DALLAS","Average attendance":17980,"YoY change (%)":94},
+      {"Team":"DETROIT","Average attendance":20050,"YoY change (%)":0},
+      {"Team":"EDMONTON","Average attendance":16820,"YoY change (%)":0},
+      {"Team":"FLORIDA","Average attendance":17580,"YoY change (%)":16},
+      {"Team":"LOS ANGELES","Average attendance":18310,"YoY change (%)":19},
+      {"Team":"MINNESOTA","Average attendance":18340,"YoY change (%)":8},
+      {"Team":"MONTREAL","Average attendance":21240,"YoY change (%)":0},
+      {"Team":"NASHVILLE","Average attendance":17090,"YoY change (%)":4},
+      {"Team":"NEW JERSEY","Average attendance":17120,"YoY change (%)":22},
+      {"Team":"NY ISLANDERS","Average attendance":13400,"YoY change (%)":4},
+      {"Team":"NY RANGERS","Average attendance":17190,"YoY change (%)":-5},
+      {"Team":"OTTAWA","Average attendance":19000,"YoY change (%)":2},
+      {"Team":"PHILADELPHIA","Average attendance":19690,"YoY change (%)":0},
+      {"Team":"PHOENIX","Average attendance":12349,"YoY change (%)":23},
+      {"Team":"PITTSBURGH","Average attendance":18640,"YoY change (%)":1},
+      {"Team":"SAN JOSE","Average attendance":17550,"YoY change (%)":0},
+      {"Team":"ST LOUIS","Average attendance":17650,"YoY change (%)":-8},
+      {"Team":"TAMPA BAY","Average attendance":19200,"YoY change (%)":1},
+      {"Team":"TORONTO","Average attendance":19230,"YoY change (%)":-1},
+      {"Team":"VANCOUVER","Average attendance":19030,"YoY change (%)":1},
+      {"Team":"WASHINGTON","Average attendance":18470,"YoY change (%)":0},
+      {"Team":"WINNIPEG","Average attendance":14980,"YoY change (%)":0}
+    ]
+  },
+  "encoding": {
+    "x": {
+      "field": "Team",
+      "type": "nominal",
+      "sort": ["ANAHEIM","BOSTON","BUFFALO","CALGARY","CAROLINA","CHICAGO","COLORADO","COLUMBUS","DALLAS","DETROIT","EDMONTON","FLORIDA","LOS ANGELES","MINNESOTA","MONTREAL","NASHVILLE","NEW JERSEY","NY ISLANDERS","NY RANGERS","OTTAWA","PHILADELPHIA","PHOENIX","PITTSBURGH","SAN JOSE","ST LOUIS","TAMPA BAY","TORONTO","VANCOUVER","WASHINGTON","WINNIPEG"],
+      "axis": {
+        "title": null,
+        "labelAngle": -45,
+        "labelAlign": "right",
+        "labelBaseline": "middle",
+        "labelPadding": 8,
+        "labelFontSize": 9,
+        "labelColor": "#111111",
+        "ticks": false,
+        "domainColor": "#888888"
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "size": 13,
+        "color": "#3167a5",
+        "stroke": "#204d83",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "y": {
+          "field": "Average attendance",
+          "type": "quantitative",
+          "scale": {"domain": [10000, 22000], "zero": false},
+          "axis": {
+            "title": "Average Attendance",
+            "titleFontSize": 16,
+            "titleFontWeight": "bold",
+            "titlePadding": 10,
+            "labelFontSize": 10,
+            "format": ",d",
+            "values": [10000,12000,14000,16000,18000,20000,22000],
+            "grid": true,
+            "gridColor": "#8d8d8d",
+            "gridOpacity": 0.7,
+            "tickColor": "#888888",
+            "domainColor": "#888888"
+          }
+        },
+        "y2": {"datum": 10000}
+      }
+    },
+    {
+      "encoding": {
+        "y": {
+          "field": "YoY change (%)",
+          "type": "quantitative",
+          "scale": {"domain": [-20, 100], "zero": false},
+          "axis": {
+            "orient": "right",
+            "title": "Increase/Decrease Y/Y",
+            "titleColor": "#111111",
+            "titleFontSize": 16,
+            "titleFontWeight": "bold",
+            "titlePadding": 10,
+            "labelFontSize": 10,
+            "labelExpr": "datum.value + '%'",
+            "values": [-20,0,20,40,60,80,100],
+            "grid": false,
+            "tickColor": "#888888",
+            "domainColor": "#888888"
+          }
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "line",
+            "color": "#8ca5cf",
+            "strokeWidth": 6,
+            "strokeJoin": "miter"
+          }
+        },
+        {
+          "mark": {
+            "type": "point",
+            "shape": "square",
+            "filled": true,
+            "size": 250,
+            "color": "#829ac2",
+            "stroke": "#6f85aa",
+            "strokeWidth": 1
+          }
+        },
+        {
+          "transform": [
+            {"calculate": "format(datum['YoY change (%)'], '.0f') + '%'", "as": "YoY label"}
+          ],
+          "mark": {
+            "type": "text",
+            "dy": -15,
+            "font": "Arial",
+            "fontSize": 12,
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "text": {"field": "YoY label"},
+            "color": {
+              "condition": {"test": "datum['YoY change (%)'] < 0", "value": "#e00000"},
+              "value": "#000000"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "resolve": {"scale": {"y": "independent"}},
+  "config": {
+    "font": "Arial",
+    "view": {"stroke": null}
+  }
+}

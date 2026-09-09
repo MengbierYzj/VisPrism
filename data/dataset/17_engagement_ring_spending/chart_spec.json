@@ -1,0 +1,208 @@
+{
+    "$schema":  "https://vega.github.io/schema/vega-lite/v5.json",
+    "background":  "#ffffff",
+    "padding":  22,
+    "width":  760,
+    "height":  330,
+    "title":  {
+                  "text":  "Lower-income Americans spend a larger share on engagement rings",
+                  "subtitle":  [
+                                   "Typical spending relative to annual income",
+                                   "Source: The New York Times via Makeover Monday"
+                               ],
+                  "anchor":  "start",
+                  "font":  "Arial",
+                  "fontSize":  23,
+                  "fontWeight":  "bold",
+                  "color":  "#202124",
+                  "subtitleFont":  "Arial",
+                  "subtitleFontSize":  13,
+                  "subtitleFontWeight":  "normal",
+                  "subtitleColor":  "#666666",
+                  "subtitlePadding":  8,
+                  "offset":  18
+              },
+    "data":  {
+                 "values":  [
+                                {
+                                    "Annual income":  "Less than $23,000",
+                                    "Share of income spent on an engagement ring":  "2.2 months",
+                                    "Percentage":  16.7
+                                },
+                                {
+                                    "Annual income":  "$23,000 to $40,000",
+                                    "Share of income spent on an engagement ring":  "2 weeks",
+                                    "Percentage":  4
+                                },
+                                {
+                                    "Annual income":  "$40,000 to $58,000",
+                                    "Share of income spent on an engagement ring":  "1.9 weeks",
+                                    "Percentage":  3.7
+                                },
+                                {
+                                    "Annual income":  "$58,000 to $90,000",
+                                    "Share of income spent on an engagement ring":  "1.6 weeks",
+                                    "Percentage":  3.1
+                                },
+                                {
+                                    "Annual income":  "More than $90,000",
+                                    "Share of income spent on an engagement ring":  "1.6 weeks",
+                                    "Percentage":  3.1
+                                }
+                            ]
+             },
+    "layer":  [
+                  {
+                      "mark":  {
+                                   "type":  "bar",
+                                   "color":  "#4C78A8",
+                                   "cornerRadiusEnd":  3,
+                                   "height":  {
+                                                  "band":  0.64
+                                              }
+                               },
+                      "encoding":  {
+                                       "y":  {
+                                                 "field":  "Annual income",
+                                                 "type":  "nominal",
+                                                 "sort":  [
+                                                              "Less than $23,000",
+                                                              "$23,000 to $40,000",
+                                                              "$40,000 to $58,000",
+                                                              "$58,000 to $90,000",
+                                                              "More than $90,000"
+                                                          ],
+                                                 "axis":  {
+                                                              "title":  "Annual income",
+                                                              "titleFontSize":  13,
+                                                              "titlePadding":  14,
+                                                              "labelFontSize":  13,
+                                                              "labelLimit":  260,
+                                                              "ticks":  false,
+                                                              "domain":  false
+                                                          }
+                                             },
+                                       "x":  {
+                                                 "field":  "Percentage",
+                                                 "type":  "quantitative",
+                                                 "scale":  {
+                                                               "domain":  [
+                                                                              0,
+                                                                              18
+                                                                          ]
+                                                           },
+                                                 "axis":  {
+                                                              "title":  "Share of annual income spent (%)",
+                                                              "titleFontSize":  13,
+                                                              "labelFontSize":  12,
+                                                              "grid":  true,
+                                                              "tickCount":  7
+                                                          }
+                                             },
+                                       "tooltip":  [
+                                                       {
+                                                           "field":  "Annual income",
+                                                           "type":  "nominal",
+                                                           "title":  "Annual income"
+                                                       },
+                                                       {
+                                                           "field":  "Share of income spent on an engagement ring",
+                                                           "type":  "nominal",
+                                                           "title":  "Typical spending"
+                                                       },
+                                                       {
+                                                           "field":  "Percentage",
+                                                           "type":  "quantitative",
+                                                           "title":  "Share of income",
+                                                           "format":  ".1f"
+                                                       }
+                                                   ]
+                                   }
+                  },
+                  {
+                      "mark":  {
+                                   "type":  "text",
+                                   "align":  "left",
+                                   "baseline":  "middle",
+                                   "dx":  7,
+                                   "font":  "Arial",
+                                   "fontSize":  13,
+                                   "fontWeight":  "bold",
+                                   "color":  "#2F3B4D"
+                               },
+                      "encoding":  {
+                                       "y":  {
+                                                 "field":  "Annual income",
+                                                 "type":  "nominal",
+                                                 "sort":  [
+                                                              "Less than $23,000",
+                                                              "$23,000 to $40,000",
+                                                              "$40,000 to $58,000",
+                                                              "$58,000 to $90,000",
+                                                              "More than $90,000"
+                                                          ]
+                                             },
+                                       "x":  {
+                                                 "field":  "Percentage",
+                                                 "type":  "quantitative"
+                                             },
+                                       "text":  {
+                                                    "field":  "Percentage",
+                                                    "type":  "quantitative",
+                                                    "format":  ".1f"
+                                                }
+                                   }
+                  },
+                  {
+                      "mark":  {
+                                   "type":  "text",
+                                   "align":  "left",
+                                   "baseline":  "middle",
+                                   "dx":  48,
+                                   "font":  "Arial",
+                                   "fontSize":  12,
+                                   "color":  "#666666"
+                               },
+                      "encoding":  {
+                                       "y":  {
+                                                 "field":  "Annual income",
+                                                 "type":  "nominal",
+                                                 "sort":  [
+                                                              "Less than $23,000",
+                                                              "$23,000 to $40,000",
+                                                              "$40,000 to $58,000",
+                                                              "$58,000 to $90,000",
+                                                              "More than $90,000"
+                                                          ]
+                                             },
+                                       "x":  {
+                                                 "field":  "Percentage",
+                                                 "type":  "quantitative"
+                                             },
+                                       "text":  {
+                                                    "field":  "Share of income spent on an engagement ring",
+                                                    "type":  "nominal"
+                                                }
+                                   }
+                  }
+              ],
+    "config":  {
+                   "view":  {
+                                "stroke":  null
+                            },
+                   "axis":  {
+                                "labelFont":  "Arial",
+                                "titleFont":  "Arial",
+                                "labelColor":  "#444444",
+                                "titleColor":  "#333333",
+                                "gridColor":  "#E8E8E8",
+                                "domainColor":  "#B5B5B5",
+                                "tickColor":  "#B5B5B5"
+                            },
+                   "title":  {
+                                 "font":  "Arial",
+                                 "subtitleFont":  "Arial",
+                                 "color":  "#202124"
+                             }
+               }
+}

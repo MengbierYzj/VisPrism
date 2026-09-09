@@ -1,0 +1,212 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#ffffff",
+  "padding": 20,
+  "title": {
+    "text": "Plastic waste generation per capita, 2020",
+    "subtitle": [
+      "Estimated plastic waste generated per person per year from municipal sources",
+      "such as households, shops and offices."
+    ],
+    "anchor": "start",
+    "font": "Arial",
+    "fontSize": 24,
+    "fontWeight": "bold",
+    "color": "#2d2e2d",
+    "subtitleFont": "Arial",
+    "subtitleFontSize": 14,
+    "subtitleFontWeight": "normal",
+    "subtitleColor": "#5b5b5b",
+    "subtitlePadding": 8,
+    "offset": 18
+  },
+  "vconcat": [
+    {
+      "width": 690,
+      "height": 350,
+      "data": {
+        "values": [
+          {
+            "Country": "United States",
+            "Year": 2020,
+            "Plastic waste": 74.34526
+          },
+          {
+            "Country": "Russia",
+            "Year": 2020,
+            "Plastic waste": 41.9666
+          },
+          {
+            "Country": "Brazil",
+            "Year": 2020,
+            "Plastic waste": 41.236485
+          },
+          {
+            "Country": "China",
+            "Year": 2020,
+            "Plastic waste": 29.010008
+          },
+          {
+            "Country": "Nigeria",
+            "Year": 2020,
+            "Plastic waste": 26.982248
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "color": "#168c96",
+            "cornerRadiusEnd": 2,
+            "height": {
+              "band": 0.68
+            }
+          },
+          "encoding": {
+            "y": {
+              "field": "Country",
+              "type": "nominal",
+              "sort": [
+                "United States",
+                "Russia",
+                "Brazil",
+                "China",
+                "Nigeria"
+              ],
+              "title": null,
+              "axis": {
+                "labelFont": "Arial",
+                "labelFontSize": 13,
+                "labelColor": "#333333",
+                "labelPadding": 8,
+                "ticks": false,
+                "domain": false
+              }
+            },
+            "x": {
+              "field": "Plastic waste",
+              "type": "quantitative",
+              "title": "Kilograms per person per year",
+              "scale": {
+                "domain": [
+                  0,
+                  80
+                ]
+              },
+              "axis": {
+                "format": ".0f",
+                "tickCount": 9,
+                "labelColor": "#555555",
+                "titleColor": "#333333",
+                "gridColor": "#dddddd",
+                "gridDash": [
+                  3,
+                  3
+                ],
+                "domain": false,
+                "tickColor": "#bbbbbb"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "Country",
+                "type": "nominal",
+                "title": "Country"
+              },
+              {
+                "field": "Year",
+                "type": "quantitative",
+                "title": "Year",
+                "format": "d"
+              },
+              {
+                "field": "Plastic waste",
+                "type": "quantitative",
+                "title": "kg per person per year",
+                "format": ".1f"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "dx": 6,
+            "font": "Arial",
+            "fontSize": 12,
+            "color": "#333333"
+          },
+          "encoding": {
+            "y": {
+              "field": "Country",
+              "type": "nominal",
+              "sort": [
+                "United States",
+                "Russia",
+                "Brazil",
+                "China",
+                "Nigeria"
+              ]
+            },
+            "x": {
+              "field": "Plastic waste",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "Plastic waste",
+              "type": "quantitative",
+              "format": ".1f"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "width": 690,
+      "height": 42,
+      "data": {
+        "values": [
+          {
+            "note": "Source: Cottom et al. (2024), with minor processing by Our World in Data."
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "font": "Arial",
+        "fontSize": 12,
+        "color": "#666666"
+      },
+      "encoding": {
+        "text": {
+          "field": "note"
+        },
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 21
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "concat": {
+      "spacing": 8
+    },
+    "axis": {
+      "labelFont": "Arial",
+      "titleFont": "Arial",
+      "labelFontSize": 12,
+      "titleFontSize": 13
+    }
+  }
+}

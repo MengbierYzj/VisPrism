@@ -1,0 +1,113 @@
+# ==============================================================
+# CMU Institutional Design Persona
+# Representation theory: McAdams three-layer personality model
+#   (layer criteria documented in the bbc-persona.yaml header note)
+# Source: vizguide/Carnegie Mellon Univeristy.md (university brand dataviz guide, 342 lines)
+# Genre traits: accessibility-first university guide — complete palette/type
+#   tables, narrative chart-type rules, and a legend policy opposite to
+#   BBC/IBM's (avoid legends, label data directly)
+# ==============================================================
+
+institution: { id: cmu, name: CMU, domain: academia, source: vizguide/Carnegie Mellon Univeristy.md }
+
+# ---------- Applicability (src: L8-30 Purpose/Audience/Accessibility) ----------
+applicability:
+  suits:
+    - "Academic presentations and university-brand data communication"
+    - "Institutional comparisons (this institution vs peers)"
+    - "Audiences of unknown data literacy that call for common chart types"
+    - "Public reports with hard screen-reader / color-vision requirements"
+  promises: ["Accessibility best practices (usable by the 4.5% with color-vision deficiency)", "Clear text hierarchy", "Restrained, intentional color"]
+
+# ---------- L1 signature (unconditional: tokens + must/never rules) ----------
+L1_signature:
+  tokens:
+    color:
+      cmu-red: "#c41230"            # categorical core; represents CMU itself (L52, L62)
+      dark-gray: "#4d5051"          # categorical core; represents all other values (L58, L62)
+      teal: "#008285"               # secondary (L70)
+      blue: "#043673"               # secondary (L76)
+      green: "#00853e"              # secondary (L82)
+      dark-green: "#1f4c4c"         # secondary (L88)
+      highlands-sky-blue: "#007bc0" # secondary; also the sequential palette anchor (L94, L122)
+      weaver-blue: "#182c4b"        # secondary (L100)
+      skibo-red: "#941120"          # secondary (L106)
+      gold-thread: "#fdb515"        # sequential secondary / divergent endpoint (L148, L174)
+    palette:
+      categorical: [cmu-red, dark-gray, teal, blue, green, highlands-sky-blue]   # core→secondary order (L48-116)
+      sequential-primary: ["#007bc0", "#458ac8", "#679ad0", "#83aad8", "#9dbae0", "#b6cbe8", "#cfdcf0", "#e7edf7"]   # L120-138
+      sequential-secondary: ["#fdb515", "#ffbe41", "#ffc75f", "#ffd07b", "#ffd995", "#ffe2b0", "#ffecca", "#fff5e4"] # L146-164
+      divergent: ["#fdb515", "#ffc35c", "#ffd28f", "#fbe1c0", "#f1f1f1", "#c4d2e5", "#96b4d9", "#6397cd"]            # L170-190
+    font:
+      family: Helvetica              # Helvetica everywhere outside Tableau (L196)
+      size: { title: 15pt, subtitle: 13pt, body: 12pt, caption: 11pt }   # Title 15 Bold / Subtitle 13 / Axis 12 / Data labels 11 (L204-234)
+      weight: { title: bold }        # Title Bold (L210-214)
+
+  rules:   # unconditional rules: hold no matter what chart or data
+    - { id: s-type-hierarchy, rule: "Apply the fixed type hierarchy (Title 15pt Bold / Subtitle 13pt / axis labels 12pt / data labels 11pt)",
+        strength: must, check: programmatic, story: n-hierarchy, src: L204-238 }
+    - { id: s-title-descriptive, rule: "Titles are simple but summarize the story the chart is telling",
+        strength: must, check: llm, story: n-summary, src: [L34, L318-320] }
+    - { id: s-house-palette, rule: "Use the recommended palettes (designed for best contrast) and as few colors as possible",
+        strength: must, check: programmatic, story: n-fewcolors, src: [L30, L40, L48-116] }
+    - { id: s-accessibility, rule: "Color must never be the only information channel; palettes must pass contrast and colorblind checks",
+        strength: must, check: programmatic, story: n-cvd, src: [L26-30] }
+    - { id: s-legend-avoid, rule: "Avoid legends whenever possible; incorporate data labels directly into the visualization",
+        strength: must, check: programmatic, story: n-direct-label,
+        then: { set: labels.direct, to: on }, src: L338-340 }
+    - { id: s-text-horizontal, rule: "All text runs horizontally — never vertical; size text by importance",
+        strength: must, check: llm, story: n-readable,
+        then: { set: axis.label-angle, to: horizontal }, src: [L306-316] }
+    - { id: s-label-rounding, rule: "Value labels use thousands separators and few decimals; round numbers reduce visual noise; axis labels may skip at regular intervals",
+        strength: should, check: llm, story: n-readable, src: [L326-330] }
+    - { id: s-label-abbrev, rule: "Use standard abbreviations for time-like categories (Sun/Mon, Jan/Feb)",
+        strength: should, check: llm, story: n-readable, src: L332 }
+
+# ---------- L2 adaptations (conditional norms: when hooks data/task/topic/medium) ----------
+L2_adaptations:
+  - { id: a-color-single,    when: { series_count: 1 },
+      then: { set: mark.color, to: "{color.cmu-red}" },
+      strength: should, check: programmatic, story: n-onecolor, src: [L252-254, L50-52] }
+  - { id: a-emphasis,        when: { intent: "single out this institution / the key subject in a comparison" },
+      then: { set: emphasized-mark.color, to: "{color.cmu-red}" },
+      strength: should, check: llm, story: n-identity, src: L62 }
+  - { id: a-color-support,   when: { data_role: "other institutions / reference values in a comparison" },
+      then: { set: supporting-mark.color, to: "{color.dark-gray}" },
+      strength: should, check: llm, story: n-identity, src: L62 }
+  - { id: a-color-internal,  when: { audience: "internal audiences or financial-data contexts" },
+      then: { prefer: mark.color, to: "{color.highlands-sky-blue}" },
+      strength: may, check: llm, story: n-culture, src: L64 }
+  - { id: a-chart-common,    when: { audience: "general audiences of unknown data literacy" },
+      then: { prefer: chart.type, to: bar },
+      strength: should, check: llm, story: n-audience, src: L20 }
+  - { id: a-pie-to-stacked,  when: { comparison: "a pie with more than 2-3 slices that needs precise percentage comparison" },
+      then: { prefer: chart.type, to: stacked-bar },
+      strength: should, check: llm, story: n-audience, src: [L274-282] }
+  - { id: a-seq-map,         when: { data_topic: "single-value geographic distribution" },
+      then: { set: color.range, to: "{palette.sequential-primary}" },
+      strength: may, check: llm, story: n-fewcolors, src: [L288-294] }
+
+# ---------- L3 narrative identity (philosophy + warrant stories + exemplars) ----------
+L3_narrative:
+  philosophy:
+    - { id: p-purpose,   title: "Insight-first styling",
+        quote: "Choose charts that best convey the insight you wish to provide and apply styling carefully to support that message.", src: L8 }
+    - { id: p-cognitive, title: "One main theme",
+        quote: "Limit the visualization to one main theme with two or three supporting concepts to limit cognitive load and increase usefulness.", src: L12 }
+    - { id: p-access,    title: "Accessibility is a priority",
+        quote: "Approximately 4.5% of people have some form of color-vision deficiency, so color can't be the only way to explain or inform.", src: [L26, L30] }
+    - { id: p-textstory, title: "Text tells the same story",
+        quote: "Data visualizations can show a story, but it is just as important for the text that accompanies your image to tell the same story on its own.", src: L298 }
+  stories:
+    - { id: n-hierarchy,    story: "Font sizes and styles create a hierarchy that guides the user to the important information and emphasizes key points", src: [L194] }
+    - { id: n-summary,      story: "Titles should be simple but summarize the story your chart or graph is telling", src: [L320] }
+    - { id: n-fewcolors,    story: "Apply best practices to your selection and use as few colors as possible; choose your palette with intention", src: [L40-42] }
+    - { id: n-cvd,          story: "About 4.5% of people have a color-vision deficiency, so color can't be the only way to explain or inform", src: [L30] }
+    - { id: n-direct-label, story: "Going back and forth between the legend and the chart is more difficult visually and for people using assistive technology", src: [L340] }
+    - { id: n-onecolor,     story: "Use one color to represent all categories compared against the same measure", src: [L254] }
+    - { id: n-identity,     story: "Use CMU Red to represent CMU; use Dark Gray to represent all other values", src: [L62] }
+    - { id: n-culture,      story: "Consider the cultural implications of using red, particularly for financial data; for internal audiences use a secondary color", src: [L64] }
+    - { id: n-audience,     story: "Stick to common chart types (such as bar and line charts), especially when the audience's level of data literacy is unknown", src: [L20] }
+    - { id: n-readable,     story: "Round numbers minimize clutter and improve readability; use horizontal text for best readability", src: [L310, L328] }
+  exemplars:
+    - TODO: "CMU brand-site dataviz exemplars (to fill in after spec-practice alignment)"

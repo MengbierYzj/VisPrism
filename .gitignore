@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.env
+.venv
+venv/
+*.egg-info/
+.eggs/
+build/
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 前端
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+frontend/.env.*.local
+node_modules
+dist
+dist-ssr
+
+# 日志与本地配置
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.env.local
+*.local
+
+# 系统
+.DS_Store
+Thumbs.db
+
+.cursor
+
+# 本地个人后端文档（不提交）
+docs/backend-local/
+
+# 后端运行时产物（不提交）
+backend/storage/
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# 测试缓存（不提交）
+.pytest_cache/
+backend/.pytest_cache/

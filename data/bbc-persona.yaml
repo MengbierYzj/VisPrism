@@ -1,0 +1,137 @@
+# ==============================================================
+# BBC Institutional Design Persona
+# Representation theory: McAdams three-level personality model
+#   (McAdams 1995, J. of Personality 63(3); McAdams & Pals 2006, Am. Psychologist 61(3))
+#
+# Layer criteria (per the original texts):
+#   L1 dispositional traits — "broad, decontextualized, relatively
+#      NONCONDITIONAL... a dispositional SIGNATURE... psychology of the stranger"
+#      → unconditional tokens and rules; computational duty: compile into
+#        theme-injected spec edits + invariant checks
+#   L2 characteristic adaptations — "contextualized in time, place,
+#      and/or social role" → conditional norms keyed on data/task/topic/medium
+#      → computational duty: trigger-based rule bank; match design state,
+#        warrant every modification
+#   L3 narrative identity — "an inner story... unity, purpose, meaning"
+#      → design philosophy + reason stories + exemplar works
+#      → computational duty: critique lens (system prompt) + explanation
+#        language for change labels + few-shot material
+#   applicability — meta-knowledge outside the three layers: when to summon
+#      this institution (the Brief agent recommends institutions from it)
+#
+# Layering rubric: no substantive condition → L1; substantive context in
+#   `when` → L2; explanatory prose/manifesto/exemplar → L3
+# derived: true marks rules operationalized from philosophy (not verbatim
+#   guide text); provenance must stay visible
+# Source: bbc.md (2025-07 revision, 83 lines fully covered)
+# ==============================================================
+
+institution: { id: bbc, name: BBC, domain: journalism, source: bbc.md }
+
+# ---------- Applicability (when to summon the BBC persona; src: L13-16) ----------
+applicability:
+  suits:
+    - "News reporting and publications requiring professional graphics"
+    - "Publications aimed at general audiences"
+    - "Data stories requiring clear, accessible presentation"
+    - "Corporate communications following media standards"
+    - "Academic presentations requiring publication quality"
+  promises: ["Professional credibility", "Proven accessibility and readability", "Consistent cross-platform appearance"]   # Key Advantages (L16)
+
+# ---------- L1 dispositional signature (unconditional: tokens + must/never rules) ----------
+L1_signature:
+  tokens:
+    color:
+      bbc-blue: "#1380A1"      # Primary; main data series (L20)
+      bbc-orange: "#FAAB18"    # Secondary; highlighting (L22)
+      bbc-teal: "#007f7f"      # Tertiary (L24)
+      bbc-gray: "#333333"      # Neutral; supporting (L26)
+      deep-red: "#990000"      # Additional (L33)
+      forest-green: "#007A54"  # Additional (L33)
+      grid: "#cbcbcb"          # Horizontal gridlines (L69)
+    palette:
+      categorical: [bbc-blue, bbc-orange, bbc-teal, bbc-gray, deep-red, forest-green]
+    font:
+      family: Helvetica
+      size: { title: 28pt, subtitle: 22pt, body: 18pt, caption: 14pt }
+      weight: { title: bold }
+
+  rules:   # Unconditional rules: hold regardless of chart or data
+    - { id: s-type-hierarchy, rule: "Apply the four-level type hierarchy consistently (title/subtitle/body/caption)",
+        strength: must, check: programmatic, story: n-standard, src: L48-54 }
+    - { id: s-text-left,      rule: "Left-align all text elements",
+        strength: must, check: programmatic, story: n-standard, src: L57 }
+    - { id: s-title-case,     rule: "Use sentence case for titles",
+        strength: must, check: llm, story: n-standard, src: L59 }
+    - { id: s-source,         rule: "Always include source attribution (Source: <provider>, caption size)",
+        strength: must, check: programmatic, story: n-attribution, src: L65 }
+    - { id: s-grid-horizontal, rule: "Horizontal gridlines only, colored {color.grid}",
+        strength: must, check: programmatic, story: n-declutter, src: L69 }
+    - { id: s-grid-vertical,  rule: "No vertical gridlines",
+        strength: never, check: programmatic, story: n-declutter, src: L71 }
+    - { id: s-whitespace,     rule: "Generous white space around elements",
+        strength: should, check: llm, story: n-declutter, src: L73 }
+    - { id: s-legend-top,     rule: "Legend at the top (when a legend is present)",
+        strength: should, check: programmatic, story: n-standard, src: L78 }
+    - { id: s-legend-notitle, rule: "Remove legend titles (when a legend is present)",
+        requires: ["self-explanatory variable names"],
+        strength: must, check: programmatic, story: n-selfexplanatory, src: L80 }
+    - { id: s-title-descriptive, rule: "Title states the takeaway; subtitle adds context without repeating it",
+        strength: should, check: llm, story: n-informative, src: [L61, L63] }
+    - { id: s-accessibility,  rule: "Colors and text must pass accessibility checks (contrast, colorblind-safe)",
+        strength: must, check: programmatic, story: n-accessibility, src: L5,
+        derived: true }   # operationalized from the "Accessibility" philosophy, not verbatim
+    - { id: s-branding,       rule: "Brand elements appear subtly and consistently",
+        strength: should, check: llm, story: n-integrity, src: L12 }
+
+# ---------- L2 characteristic adaptations (conditional norms keyed on data/task/topic/medium) ----------
+L2_adaptations:
+  - { id: a-color-single,    when: { series_count: 1 },
+      then: { set: mark.color, to: "{color.bbc-blue}" },
+      strength: should, check: programmatic, story: n-consistency, src: L36 }
+  - { id: a-color-two,       when: { series_count: 2 },
+      then: { set: color.range, to: [bbc-blue, bbc-orange] },
+      strength: should, check: programmatic, story: n-contrast, src: L38 }
+  - { id: a-color-multi,     when: { series_count: { gte: 3 } },
+      then: { set: color.range, to: "{palette.categorical}" },
+      strength: should, check: programmatic, story: n-consistency, src: L40 }
+  - { id: a-color-highlight, when: { intent: "emphasize a specific point/series (communication goal or annotation implies it)" },
+      then: { set: emphasized-mark.color, to: "{color.bbc-orange}" },
+      strength: should, check: llm, story: n-contrast, src: L42 }
+  - { id: a-color-support,   when: { data_role: "supporting/reference series (e.g. national average)" },
+      then: { set: supporting-mark.color, to: "{color.bbc-gray}" },
+      strength: should, check: llm, story: n-consistency, src: L44 }
+  - { id: a-color-teal,      when: { data_topic: [health, environment] },
+      then: { prefer: mark.color, to: "{color.bbc-teal}" },
+      strength: may, check: llm, story: n-consistency, src: L24 }
+  - { id: a-size-digital,    when: { medium: digital },
+      then: { set: chart.size, to: "640px x 450px" },
+      strength: should, check: programmatic, story: n-standard, src: L75 }
+  - { id: a-color-crosschart, when: { context: "multiple related charts share a variable" }, scope: multi-chart,
+      then: { enforce: "Same variable keeps the same color across related charts" },
+      strength: should, check: programmatic, story: n-consistency, src: L82 }
+
+# ---------- L3 narrative identity (philosophy + reason stories + exemplars) ----------
+L3_narrative:
+  philosophy:   # The 2025-07 revision contains explicit manifesto lines (src: L3-7); stored verbatim
+    - { id: p-clarity,       quote: "Clarity First: Information should be immediately understandable", src: L4 }
+    - { id: p-accessibility, quote: "Accessibility: Charts must work for all audiences, including those with visual impairments", src: L5 }
+    - { id: p-consistency,   quote: "Professional Consistency: Every graphic follows the same design standards", src: L6 }
+    - { id: p-integrity,     quote: "Editorial Integrity: Data presentation supports, not overshadows, the journalism", src: L7 }
+  stories:   # Reason fragments = narrative "plot"; referenced by L1/L2 `story` fields → label language
+    - { id: n-consistency,     story: "Use BBC Blue for consistency / consistent color coding across related charts", src: [L36, L82] }
+    - { id: n-contrast,        story: "BBC Blue + BBC Orange for contrast; BBC Orange for emphasis", src: [L38, L42] }
+    - { id: n-declutter,       story: "No vertical gridlines (reduces visual clutter); Generous white space", src: [L71, L73] }
+    - { id: n-standard,        story: "Left-align all text (BBC standard); Top position is BBC standard", src: [L57, L78] }
+    - { id: n-informative,     story: "Keep titles descriptive and informative; Subtitles add context, not repeat", src: [L61, L63] }
+    - { id: n-selfexplanatory, story: "Remove legend titles (rely on clear variable names)", src: [L80] }
+    - { id: n-attribution,     story: "Always include source attribution", src: [L65] }
+    - { id: n-accessibility,   story: "Charts must work for all audiences, including those with visual impairments", src: [L5] }
+    - { id: n-integrity,       story: "Data presentation supports, not overshadows, the journalism; subtle but consistent BBC design elements", src: [L7, L12] }
+  exemplars:
+    - TODO: "2-3 representative BBC News data-journalism charts (fill in after norm-practice alignment)"
+
+# ---------- Evaluation mapping (one metric per layer) ----------
+# L1 → institutional recognizability experiment ("psychology of the stranger")
+# L2 → situational appropriateness of triggered conditional rules (expert review)
+# L3 → label-reason fidelity (do explanations stay faithful to the institution's self-narrative)

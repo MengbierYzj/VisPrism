@@ -1,0 +1,492 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#ffffff",
+  "padding": 20,
+  "spacing": 8,
+  "title": {
+    "text": "What animal could you beat in a fight?",
+    "subtitle": [
+      "Compared with women, men feel most able to take on medium-sized dogs and geese",
+      "Which animals, if any, do people think they could beat while unarmed?"
+    ],
+    "anchor": "start",
+    "font": "Arial",
+    "fontSize": 23,
+    "fontWeight": "bold",
+    "color": "#333333",
+    "subtitleFont": "Arial",
+    "subtitleFontSize": 14,
+    "subtitleFontWeight": "normal",
+    "subtitleColor": "#555555",
+    "subtitlePadding": 8,
+    "offset": 18
+  },
+  "vconcat": [
+    {
+      "width": 760,
+      "height": 500,
+      "data": {
+        "values": [
+          {
+            "Animal": "Rat",
+            "Total": 72,
+            "Male": 76,
+            "Female": 68
+          },
+          {
+            "Animal": "House cat",
+            "Total": 69,
+            "Male": 74,
+            "Female": 64
+          },
+          {
+            "Animal": "Medium sized dog",
+            "Total": 49,
+            "Male": 60,
+            "Female": 39
+          },
+          {
+            "Animal": "Large dog",
+            "Total": 23,
+            "Male": 31,
+            "Female": 15
+          },
+          {
+            "Animal": "Kangaroo",
+            "Total": 14,
+            "Male": 17,
+            "Female": 11
+          },
+          {
+            "Animal": "Eagle",
+            "Total": 30,
+            "Male": 38,
+            "Female": 23
+          },
+          {
+            "Animal": "Grizzly Bear",
+            "Total": 6,
+            "Male": 7,
+            "Female": 6
+          },
+          {
+            "Animal": "Wolf",
+            "Total": 12,
+            "Male": 16,
+            "Female": 9
+          },
+          {
+            "Animal": "Lion",
+            "Total": 8,
+            "Male": 7,
+            "Female": 8
+          },
+          {
+            "Animal": "Gorilla",
+            "Total": 8,
+            "Male": 9,
+            "Female": 8
+          },
+          {
+            "Animal": "Chimpanzee",
+            "Total": 17,
+            "Male": 22,
+            "Female": 12
+          },
+          {
+            "Animal": "King Cobra",
+            "Total": 15,
+            "Male": 23,
+            "Female": 8
+          },
+          {
+            "Animal": "Elephant",
+            "Total": 8,
+            "Male": 9,
+            "Female": 8
+          },
+          {
+            "Animal": "Crocodile",
+            "Total": 9,
+            "Male": 10,
+            "Female": 8
+          },
+          {
+            "Animal": "Goose",
+            "Total": 61,
+            "Male": 71,
+            "Female": 51
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "rule",
+            "color": "#e6e6e6",
+            "strokeWidth": 7
+          },
+          "encoding": {
+            "y": {
+              "field": "Animal",
+              "type": "nominal",
+              "sort": [
+                "Grizzly Bear",
+                "Lion",
+                "Elephant",
+                "Gorilla",
+                "Crocodile",
+                "Wolf",
+                "Kangaroo",
+                "Chimpanzee",
+                "King Cobra",
+                "Large dog",
+                "Eagle",
+                "Medium sized dog",
+                "Goose",
+                "House cat",
+                "Rat"
+              ],
+              "title": null,
+              "axis": {
+                "labelFont": "Arial",
+                "labelFontSize": 14,
+                "labelColor": "#333333",
+                "labelPadding": 10,
+                "ticks": false,
+                "domain": false
+              }
+            },
+            "x": {
+              "field": "Female",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  0,
+                  80
+                ],
+                "nice": false
+              },
+              "title": "Share who think they could win (%)",
+              "axis": {
+                "values": [
+                  0,
+                  10,
+                  20,
+                  30,
+                  40,
+                  50,
+                  60,
+                  70,
+                  80
+                ],
+                "grid": true,
+                "gridColor": "#e1e1e1",
+                "gridWidth": 1,
+                "labelFont": "Arial",
+                "labelFontSize": 12,
+                "labelColor": "#777777",
+                "titleFont": "Arial",
+                "titleFontSize": 13,
+                "titleColor": "#555555",
+                "titlePadding": 14,
+                "ticks": false,
+                "domain": false
+              }
+            },
+            "x2": {
+              "field": "Male"
+            },
+            "tooltip": [
+              {
+                "field": "Animal",
+                "type": "nominal",
+                "title": "Animal"
+              },
+              {
+                "field": "Total",
+                "type": "quantitative",
+                "title": "All adults",
+                "format": ".0f"
+              },
+              {
+                "field": "Male",
+                "type": "quantitative",
+                "title": "Men",
+                "format": ".0f"
+              },
+              {
+                "field": "Female",
+                "type": "quantitative",
+                "title": "Women",
+                "format": ".0f"
+              }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "fold": [
+                "Female",
+                "Male"
+              ],
+              "as": [
+                "Gender",
+                "Percent"
+              ]
+            }
+          ],
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "size": 165,
+            "stroke": "#ffffff",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "y": {
+              "field": "Animal",
+              "type": "nominal",
+              "sort": [
+                "Grizzly Bear",
+                "Lion",
+                "Elephant",
+                "Gorilla",
+                "Crocodile",
+                "Wolf",
+                "Kangaroo",
+                "Chimpanzee",
+                "King Cobra",
+                "Large dog",
+                "Eagle",
+                "Medium sized dog",
+                "Goose",
+                "House cat",
+                "Rat"
+              ]
+            },
+            "x": {
+              "field": "Percent",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  0,
+                  80
+                ],
+                "nice": false
+              }
+            },
+            "color": {
+              "field": "Gender",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "Female",
+                  "Male"
+                ],
+                "range": [
+                  "#77b9bb",
+                  "#7568c4"
+                ]
+              },
+              "legend": {
+                "title": null,
+                "orient": "top",
+                "direction": "horizontal",
+                "symbolType": "circle",
+                "symbolSize": 140,
+                "labelFont": "Arial",
+                "labelFontSize": 14,
+                "labelExpr": "datum.label === 'Female' ? 'Women' : datum.label === 'Male' ? 'Men' : datum.label"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "Animal",
+                "type": "nominal",
+                "title": "Animal"
+              },
+              {
+                "field": "Gender",
+                "type": "nominal",
+                "title": "Group"
+              },
+              {
+                "field": "Percent",
+                "type": "quantitative",
+                "title": "Think they could win (%)",
+                "format": ".0f"
+              }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "fold": [
+                "Female",
+                "Male"
+              ],
+              "as": [
+                "Gender",
+                "Percent"
+              ]
+            },
+            {
+              "filter": "datum.Gender === 'Female'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "dy": -11,
+            "baseline": "middle",
+            "font": "Arial",
+            "fontSize": 13,
+            "color": "#55999c"
+          },
+          "encoding": {
+            "y": {
+              "field": "Animal",
+              "type": "nominal",
+              "sort": [
+                "Grizzly Bear",
+                "Lion",
+                "Elephant",
+                "Gorilla",
+                "Crocodile",
+                "Wolf",
+                "Kangaroo",
+                "Chimpanzee",
+                "King Cobra",
+                "Large dog",
+                "Eagle",
+                "Medium sized dog",
+                "Goose",
+                "House cat",
+                "Rat"
+              ]
+            },
+            "x": {
+              "field": "Percent",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  0,
+                  80
+                ],
+                "nice": false
+              }
+            },
+            "text": {
+              "field": "Percent",
+              "type": "quantitative",
+              "format": ".0f"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "fold": [
+                "Female",
+                "Male"
+              ],
+              "as": [
+                "Gender",
+                "Percent"
+              ]
+            },
+            {
+              "filter": "datum.Gender === 'Male'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "dy": 11,
+            "baseline": "middle",
+            "font": "Arial",
+            "fontSize": 13,
+            "color": "#6558b2"
+          },
+          "encoding": {
+            "y": {
+              "field": "Animal",
+              "type": "nominal",
+              "sort": [
+                "Grizzly Bear",
+                "Lion",
+                "Elephant",
+                "Gorilla",
+                "Crocodile",
+                "Wolf",
+                "Kangaroo",
+                "Chimpanzee",
+                "King Cobra",
+                "Large dog",
+                "Eagle",
+                "Medium sized dog",
+                "Goose",
+                "House cat",
+                "Rat"
+              ]
+            },
+            "x": {
+              "field": "Percent",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  0,
+                  80
+                ],
+                "nice": false
+              }
+            },
+            "text": {
+              "field": "Percent",
+              "type": "quantitative",
+              "format": ".0f"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "height": 36,
+      "data": {
+        "values": [
+          {
+            "note": "Source: YouGov · Survey conducted April 12–13, 2021 · Values shown as percentages."
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "font": "Arial",
+        "fontSize": 12,
+        "color": "#555555"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 18
+        },
+        "text": {
+          "field": "note"
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    }
+  }
+}

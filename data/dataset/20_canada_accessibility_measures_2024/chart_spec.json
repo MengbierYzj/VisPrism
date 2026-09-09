@@ -1,0 +1,148 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Housing, Infrastructure and Communities Canada 2024 accessibility-plan measures by status. Public source: https://housing-infrastructure.canada.ca/accessibility-accessibilite/progress-reports-rapports-etape/2024-prog-rep-rapp-etape-eng.html",
+  "background": "#ffffff",
+  "width": 560,
+  "height": 400,
+  "padding": {
+    "left": 20,
+    "right": 20,
+    "top": 10,
+    "bottom": 10
+  },
+  "data": {
+    "values": [
+      {
+        "Category": "Completed",
+        "Count": 24,
+        "Share (%)": 38.71
+      },
+      {
+        "Category": "Ongoing",
+        "Count": 25,
+        "Share (%)": 40.32
+      },
+      {
+        "Category": "In progress",
+        "Count": 10,
+        "Share (%)": 16.13
+      },
+      {
+        "Category": "On hold",
+        "Count": 3,
+        "Share (%)": 4.84
+      }
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "arc",
+        "innerRadius": 86,
+        "outerRadius": 176,
+        "stroke": "#ffffff",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "theta": {
+          "field": "Count",
+          "type": "quantitative",
+          "stack": true
+        },
+        "color": {
+          "field": "Category",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Completed",
+              "Ongoing",
+              "In progress",
+              "On hold"
+            ],
+            "range": [
+              "#1f3b6d",
+              "#4b98bd",
+              "#7130ad",
+              "#9aa3ab"
+            ]
+          },
+          "legend": {
+            "title": null,
+            "orient": "right",
+            "labelFont": "Arial",
+            "labelFontSize": 22,
+            "symbolType": "square",
+            "symbolSize": 150,
+            "offset": 16
+          }
+        },
+        "order": {
+          "field": "Category",
+          "type": "nominal",
+          "sort": [
+            "Completed",
+            "Ongoing",
+            "In progress",
+            "On hold"
+          ]
+        },
+        "tooltip": [
+          {
+            "field": "Category",
+            "type": "nominal",
+            "title": "Status"
+          },
+          {
+            "field": "Count",
+            "type": "quantitative",
+            "title": "Measures"
+          },
+          {
+            "field": "Share (%)",
+            "type": "quantitative",
+            "title": "Share",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "radius": 199,
+        "font": "Arial",
+        "fontSize": 24,
+        "fontWeight": "normal",
+        "color": "#333333"
+      },
+      "encoding": {
+        "theta": {
+          "field": "Count",
+          "type": "quantitative",
+          "stack": true
+        },
+        "text": {
+          "field": "Count",
+          "type": "quantitative"
+        },
+        "order": {
+          "field": "Category",
+          "type": "nominal",
+          "sort": [
+            "Completed",
+            "Ongoing",
+            "In progress",
+            "On hold"
+          ]
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "Arial",
+    "view": {
+      "stroke": null
+    }
+  }
+}
+

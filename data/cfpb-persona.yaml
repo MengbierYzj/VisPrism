@@ -1,0 +1,108 @@
+# ==============================================================
+# CFPB Institutional Design Persona
+# Representation theory: McAdams three-layer personality model
+#   (layer criteria documented in the bbc-persona.yaml header note)
+# Source: vizguide/Consumer Financial Protection Bureau.md (federal agency dataviz guide, 172 lines)
+# Genre traits: government accessibility compliance — many quantifiable hard
+#   constraints ("max 5 data types", "descriptive title ≤95 chars",
+#   "alt text ≤250 chars"); palette hex values live on the official
+#   Data visualization color palettes page the guide cites (L65-75), recorded
+#   here from cfpb.github.io/design-system/foundation/color (marked external)
+# ==============================================================
+
+institution: { id: cfpb, name: CFPB, domain: government, source: vizguide/Consumer Financial Protection Bureau.md }
+
+# ---------- Applicability (src: L8, L44-54, L147) ----------
+applicability:
+  suits:
+    - "Government / public-policy data releases (compliance-grade accessibility)"
+    - "Financial and consumer data for the general public"
+    - "Explanatory charts with one clear main point"
+    - "Formal publications that ship downloadable data and alternative text"
+  promises: ["Accessibility compliance (palette + pattern dual channel)", "A main point the public reads at a glance", "Consistent agency branding (CFPB Green leads the color order)"]
+
+# ---------- L1 signature (unconditional: tokens + must/never rules) ----------
+L1_signature:
+  tokens:
+    color:
+      # Categorical order (the official page states "start with CFPB Green, Navy second";
+      # cited by guide L65-69, hex values recorded externally)
+      cfpb-green: "#20aa3f"     # brand green, category 1
+      navy: "#254b87"           # category 2
+      pacific-60: "#7eb7e8"     # category 3
+      gold-80: "#ffb858"        # category 4
+      purple-80: "#c55998"      # category 5
+      teal: "#257675"           # pro/positive (teal/red replaces green/red for red-green colorblindness)
+      red: "#d14124"            # con/negative
+      pacific: "#0072ce"        # high-contrast supplement
+      gray: "#5a5d61"           # neutral
+      max_categories: 5         # per-chart data-type cap (L57-59)
+    palette:
+      categorical: [cfpb-green, navy, pacific-60, gold-80, purple-80]
+      procon: [teal, red]
+    patterns: [square-dot, round-dot, dash, long-dash]   # patterns built into CMS/Excel templates (L77-79)
+
+  rules:   # unconditional rules
+    - { id: s-color-cap, rule: "No more than 5 data types per chart (≤5 lines, ≤5 pie slices); beyond that, split into multiple smaller charts",
+        strength: never-exceed, check: programmatic, story: n-limited, src: [L57-59] }
+    - { id: s-title-descriptive, rule: "Titles are as descriptive as possible (fit one desktop line, roughly ≤95 characters)",
+        strength: must, check: llm, story: n-title, src: [L83-89] }
+    - { id: s-source, rule: "Cite the data source (link the original wherever possible) to build trust and validity",
+        strength: should, check: programmatic, story: n-trust, src: [L131-133] }
+    - { id: s-house-palette, rule: "Take colors in the official dataviz palette order (CFPB Green first, Navy second)",
+        strength: must, check: programmatic, story: n-brand, src: [L65-75],
+        alignment: "Guide L69 cites the official Data visualization color palettes page; hex values recorded from cfpb.github.io/design-system/foundation/color" }
+    - { id: s-accessibility, rule: "Palettes must pass accessibility checks; beyond color, distinguish data with a second channel such as patterns",
+        strength: must, check: programmatic, story: n-a11y, src: [L61-79, L147-155] }
+    - { id: s-axis-labels, rule: "Every chart labels one X axis and one Y axis (including axis titles)",
+        strength: must, check: llm, story: n-required, src: [L91-93] }
+    - { id: s-alt-text, rule: "Provide alt text: chart type + data type + main takeaway (≤250 characters) for screen readers",
+        strength: must, check: llm, story: n-a11y, src: [L107-117] }
+    - { id: s-download-data, rule: "Provide downloadable source data (Excel/CSV with proper headers) plus a short download blurb",
+        strength: should, check: llm, story: n-required, src: [L95-105] }
+
+# ---------- L2 adaptations ----------
+L2_adaptations:
+  - { id: a-split-when-many, when: { category_count: { gt: 5 } },
+      then: { enforce: "split into multiple smaller charts (small multiples) so each stays ≤5 categories" },
+      strength: must, check: programmatic, story: n-limited, src: [L59] }
+  - { id: a-pattern-series,  when: { series_count: { gte: 3 } },
+      then: { enforce: "layer patterns on top of color to distinguish series (square dot / round dot / dash / long dash)" },
+      strength: must, check: programmatic, story: n-patterns, src: [L77-79] }
+  - { id: a-chart-comparison, when: { intent: comparison },
+      then: { prefer: chart.type, to: bar },
+      strength: should, check: llm, story: n-chartfit, src: [L50] }
+  - { id: a-chart-trend,     when: { intent: trend },
+      then: { prefer: chart.type, to: line },
+      strength: should, check: llm, story: n-chartfit, src: [L50] }
+  - { id: a-procon-tealred,  when: { data_role: "two-sided positive/negative or pro/con comparison" },
+      then: { set: color.range, to: "{palette.procon}" },
+      strength: should, check: llm, story: n-a11y, src: [L61-75],
+      alignment: "teal/red replacing green/red comes from the official palette page the guide cites (red-green colorblindness care + brand green reserved for the agency itself)" }
+  - { id: a-intro-takeaway,  when: { task: "the reader needs guidance on what to look for" },
+      then: { enforce: "add 1-3 lines of intro text above the chart calling out the key takeaway and trend (≤250 characters)" },
+      strength: may, check: llm, story: n-takeaway, src: [L125-129] }
+
+# ---------- L3 narrative identity ----------
+L3_narrative:
+  philosophy:
+    - { id: p-audience, title: "Audience and impact",
+        quote: "Consider who their audience is, and the impacts of what they include in a title, some basics for accessibility, as well as keeping everything feeling like CFPB.", src: L8 }
+    - { id: p-mainpoint, title: "One recognizable main point",
+        quote: "Ensure your data visualization communicates a main point that users can easily recognize and walk away with.", src: L54 }
+    - { id: p-format, title: "Visualization is not always the answer",
+        quote: "Sometimes data visualization isn't the best approach, and a well-crafted sentence or table may actually be more impactful in conveying a specific point.", src: L48 }
+    - { id: p-public, title: "Serve the entire public",
+        quote: "Enabling all users to comprehend data visualizations is a key part of being a government agency that serves the entire American public.", src: L147 }
+  stories:
+    - { id: n-limited,  story: "Include no more than five data types to ensure it will be readable and accessible; if you need more, break your chart into multiple smaller charts", src: [L59] }
+    - { id: n-title,    story: "The title should be as descriptive as possible to give users a sense of what the chart will be about", src: [L85] }
+    - { id: n-trust,    story: "Cite where the data is from—this helps to promote trust and validity", src: [L133] }
+    - { id: n-brand,    story: "Color maintains a consistent brand voice; used poorly it can overwhelm the user and break with brand standards", src: [L63] }
+    - { id: n-a11y,     story: "Color and patterns together clarify relationships; alt text should include the chart type, type of data, and main takeaway", src: [L63, L109] }
+    - { id: n-patterns, story: "Patterns built into CMS and Excel templates: square dot, round dot, dash, and long dash", src: [L79] }
+    - { id: n-chartfit, story: "Bar charts are good at showing comparisons whereas line charts are good at showing a change over time", src: [L50] }
+    - { id: n-required, story: "Required information: a chart title, alt text, downloadable source data, download text, and axis labels", src: [L149-155] }
+    - { id: n-takeaway, story: "Intro text can call out key takeaways and trends in the chart data, helping a user understand why they may want to explore it", src: [L125-127] }
+  exemplars:
+    - "Alt text exemplar: \"Line chart showing average credit card debt between June 2018 and September 2019 stayed relatively stable across respondents…\" (L117)"

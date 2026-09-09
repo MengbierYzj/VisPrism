@@ -1,0 +1,275 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Share of U.S. adults who say it is morally unacceptable to eat selected animals under normal circumstances.",
+  "background": "#eef3f7",
+  "padding": {
+    "left": 28,
+    "right": 28,
+    "top": 24,
+    "bottom": 20
+  },
+  "title": {
+    "text": [
+      "One in Four Americans Say",
+      "It’s Wrong To Eat an Octopus"
+    ],
+    "subtitle": [
+      "Share of U.S. adults who say it is morally unacceptable to",
+      "eat the following animals under normal circumstances (in %)"
+    ],
+    "anchor": "start",
+    "color": "#102a43",
+    "font": "Arial",
+    "fontSize": 48,
+    "fontWeight": "bold",
+    "lineHeight": 54,
+    "subtitleColor": "#486581",
+    "subtitleFont": "Arial",
+    "subtitleFontSize": 24,
+    "subtitleFontWeight": "normal",
+    "subtitleLineHeight": 30,
+    "offset": 30
+  },
+  "spacing": 14,
+  "vconcat": [
+    {
+      "width": 1000,
+      "height": 540,
+      "data": {
+        "values": [
+          {
+            "Animal": "Chimpanzee",
+            "Share": 75,
+            "Male": 68,
+            "Female": 82
+          },
+          {
+            "Animal": "Dog",
+            "Share": 73,
+            "Male": 67,
+            "Female": 78
+          },
+          {
+            "Animal": "Cat",
+            "Share": 70,
+            "Male": 62,
+            "Female": 78
+          },
+          {
+            "Animal": "Dolphin",
+            "Share": 62,
+            "Male": 51,
+            "Female": 74
+          },
+          {
+            "Animal": "Horse",
+            "Share": 55,
+            "Male": 45,
+            "Female": 63
+          },
+          {
+            "Animal": "Octopus",
+            "Share": 24,
+            "Male": 22,
+            "Female": 26
+          },
+          {
+            "Animal": "Deer",
+            "Share": 20,
+            "Male": 20,
+            "Female": 19
+          },
+          {
+            "Animal": "Salmon",
+            "Share": 12,
+            "Male": 16,
+            "Female": 9
+          },
+          {
+            "Animal": "Cow",
+            "Share": 11,
+            "Male": 12,
+            "Female": 10
+          },
+          {
+            "Animal": "Chicken",
+            "Share": 7,
+            "Male": 7,
+            "Female": 8
+          }
+        ]
+      },
+      "transform": [
+        {
+          "calculate": "datum.Animal === 'Chimpanzee' ? 'Chimp' : datum.Animal",
+          "as": "AnimalLabel"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "tooltip": true
+          },
+          "encoding": {
+            "x": {
+              "field": "AnimalLabel",
+              "type": "nominal",
+              "sort": [
+                "Chimp",
+                "Dog",
+                "Cat",
+                "Dolphin",
+                "Horse",
+                "Octopus",
+                "Deer",
+                "Salmon",
+                "Cow",
+                "Chicken"
+              ],
+              "scale": {
+                "paddingInner": 0.35,
+                "paddingOuter": 0.12
+              },
+              "axis": {
+                "title": null,
+                "labelAngle": 0,
+                "labelColor": "#102a43",
+                "labelFont": "Arial",
+                "labelFontSize": 22,
+                "labelPadding": 10,
+                "ticks": false,
+                "domain": false
+              }
+            },
+            "y": {
+              "field": "Share",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  0,
+                  80
+                ],
+                "nice": false
+              },
+              "axis": null
+            },
+            "color": {
+              "condition": {
+                "test": "datum.Animal === 'Octopus'",
+                "value": "#8c2f05"
+              },
+              "value": "#dc4805"
+            },
+            "tooltip": [
+              {
+                "field": "Animal",
+                "type": "nominal",
+                "title": "Animal"
+              },
+              {
+                "field": "Share",
+                "type": "quantitative",
+                "title": "All adults",
+                "format": ".0f"
+              },
+              {
+                "field": "Male",
+                "type": "quantitative",
+                "title": "Male",
+                "format": ".0f"
+              },
+              {
+                "field": "Female",
+                "type": "quantitative",
+                "title": "Female",
+                "format": ".0f"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "baseline": "top",
+            "dy": 10,
+            "color": "white",
+            "font": "Arial",
+            "fontSize": 23
+          },
+          "encoding": {
+            "x": {
+              "field": "AnimalLabel",
+              "type": "nominal",
+              "sort": [
+                "Chimp",
+                "Dog",
+                "Cat",
+                "Dolphin",
+                "Horse",
+                "Octopus",
+                "Deer",
+                "Salmon",
+                "Cow",
+                "Chicken"
+              ]
+            },
+            "y": {
+              "field": "Share",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "Share",
+              "type": "quantitative",
+              "format": ".0f"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "width": 1000,
+      "height": 62,
+      "data": {
+        "values": [
+          {
+            "note": "1,000 U.S. adults (18+ y/o) surveyed online April 5–7, 2023.\nSource: YouGov"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "font": "Arial",
+        "fontSize": 20,
+        "lineBreak": "\n",
+        "lineHeight": 28,
+        "color": "#486581"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 0
+        },
+        "text": {
+          "field": "note"
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "concat": {
+      "spacing": 14
+    },
+    "axis": {
+      "grid": false
+    }
+  }
+}

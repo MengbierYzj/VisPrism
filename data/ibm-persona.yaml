@@ -1,0 +1,120 @@
+# ==============================================================
+# IBM Institutional Design Persona
+# Representation theory: McAdams three-level model (layer criteria: see bbc-persona.yaml header)
+# Source: vizguide/IBM.md (IBM Design Language · Data visualization, 226 lines)
+# Genre notes: enterprise design language — five-principle manifesto, task-goal
+#   chart recommendation tables (Comparisons/Trends/Part-to-whole/Correlations…),
+#   a strictly ordered 14-color categorical palette, alert colors, texture as an
+#   accessibility substitute. No typography chapter (coverage gaps are research
+#   evidence in themselves; we do not fabricate to fill them)
+# ==============================================================
+
+institution: { id: ibm, name: IBM, domain: technology, source: vizguide/IBM.md }
+
+# ---------- Applicability (inferred from the five principles and chart-recommendation structure) ----------
+applicability:
+  suits:
+    - "Enterprise products and analytics dashboards"
+    - "Complex multi-series, multi-category data (14-color categorical palette)"
+    - "Situations needing chart-type guidance by task goal (comparison/trend/composition/correlation)"
+    - "Status/alert monitoring data"
+  promises: ["High-contrast 14-color ordered palette", "Task-driven chart recommendations", "Restrained emphasis with grey supporting data"]
+
+# ---------- L1 dispositional signature (unconditional: tokens + must/never rules) ----------
+L1_signature:
+  tokens:
+    color:
+      purple-70: "#6929c4"     # categorical order 1 (L64)
+      cyan-50: "#1192e8"       # categorical order 2 (L65)
+      teal-70: "#005d5d"       # categorical order 3 (L66)
+      magenta-70: "#9f1853"    # categorical order 4 (L67)
+      red-50: "#fa4d56"        # categorical order 5 (L68)
+      red-90: "#570408"        # categorical order 6 (L69)
+      green-60: "#198038"      # categorical order 7; also alert normal/success (L70, L224)
+      blue-80: "#002d9c"       # categorical order 8 (L71)
+      magenta-50: "#ee538b"    # categorical order 9 (L72)
+      yellow-50: "#b28600"     # categorical order 10 (L73)
+      teal-50: "#009d9a"       # categorical order 11 (L74)
+      cyan-90: "#012749"       # categorical order 12 (L75)
+      orange-70: "#8a3800"     # categorical order 13 (L76)
+      purple-50: "#a56eff"     # categorical order 14 (L77)
+      blue-60: "#0f62fe"       # IBM blue (sequential Blue 60; strong accent for emphasis; L102)
+      alert-red: "#da1e28"     # danger/error (L221)
+      alert-orange: "#ff832b"  # serious warning (L222)
+      alert-yellow: "#f1c21b"  # regular warning (L223)
+    palette:
+      categorical: [purple-70, cyan-50, teal-70, magenta-70, red-50, red-90, green-60,
+                    blue-80, magenta-50, yellow-50, teal-50, cyan-90, orange-70, purple-50]   # strict order (L62-77)
+      sequential-blue: ["#edf5ff", "#d0e2ff", "#a6c8ff", "#78a9ff", "#4589ff", "#0f62fe", "#0043ce", "#002d9c", "#001d6c", "#001141"]   # L97-106
+      alert: [alert-red, alert-orange, alert-yellow, green-60]   # L220-224
+
+  rules:   # Unconditional rules
+    - { id: s-house-palette, rule: "Apply categorical colors strictly in the documented 14-color sequence (neighboring contrast is curated; never cherry-pick out of order)",
+        strength: must, check: programmatic, story: n-sequence, src: [L62-77] }
+    - { id: s-title-descriptive, rule: "Title reflects the main insight the data reveals, while staying concise—never long or over-descriptive",
+        strength: should, check: llm, story: n-glance, src: [L31] }
+    - { id: s-legend-bottom, rule: "Legends are positioned at the bottom of a chart by default",
+        strength: should, check: programmatic, story: n-legend,
+        then: { set: legend.orient, to: bottom }, src: [L35-36] }
+    - { id: s-legend-direct-label, rule: "When space allows, avoid a legend and label data directly; remove the legend when only one data category is shown",
+        strength: should, check: programmatic, story: n-legend,
+        then: { set: labels.direct, to: on }, src: [L34] }
+    - { id: s-declutter, rule: "Keep the right density of axes, ticks, and gridlines; don't fill the chart frame with too many elements",
+        strength: should, check: llm, story: n-glance, src: [L32] }
+    - { id: s-integrity, rule: "Each visual representation must correspond to the relative numerical quantity; watch proportions and scale, never misrepresent data",
+        strength: must, check: llm, story: n-integrity, src: [L7] }
+    - { id: s-accessibility, rule: "Guarantee readable contrast (including low light / pale greys); use texture and markers as a substitute for color when needed",
+        strength: must, check: programmatic, story: n-texture, src: [L57, L226] }
+
+# ---------- L2 characteristic adaptations (chart recommendation = IBM's signature layer) ----------
+L2_adaptations:
+  - { id: a-chart-comparison, when: { intent: comparison },
+      then: { prefer: chart.type, to: bar },
+      strength: should, check: llm, story: n-model, src: [L11-13] }
+  - { id: a-chart-trend,      when: { intent: trend },
+      then: { prefer: chart.type, to: line },
+      strength: should, check: llm, story: n-model, src: [L14-16] }
+  - { id: a-chart-composition, when: { intent: composition },
+      then: { prefer: chart.type, to: donut },
+      strength: may, check: llm, story: n-model, src: [L17-19] }
+  - { id: a-chart-correlation, when: { intent: correlation },
+      then: { prefer: chart.type, to: scatterplot },
+      strength: may, check: llm, story: n-model, src: [L20-22] }
+  - { id: a-emphasis,         when: { intent: "focus attention on one key metric/series" },
+      then: { set: emphasized-mark.color, to: "{color.blue-60}" },
+      strength: should, check: llm, story: n-grey, src: [L56] }
+  - { id: a-zero-baseline,    when: { comparison: "magnitude comparison in bar/area charts" },
+      then: { set: axis.zero, to: on },
+      strength: must, check: llm, story: n-zero, src: [L42-43] }
+  - { id: a-crop-for-trend,   when: { task: "direction of change matters more than absolute size (line/scatter)" },
+      then: { enforce: "Cropping the Y axis is allowed to help users identify the direction of change" },
+      strength: may, check: llm, story: n-zero, src: [L44] }
+  - { id: a-alert-status,     when: { data_role: "status/alert data" },
+      then: { override: color.palette, to: "{palette.alert}" },
+      strength: may, check: llm, story: n-alert, src: [L220-224] }
+
+# ---------- L3 narrative identity ----------
+L3_narrative:
+  philosophy:
+    - { id: p-understandable, title: "Understandable",
+        quote: "An IBM data visualization should communicate a message at a glance, in a clear, concise and easy-to-understand way. Less is more.", src: [L4] }
+    - { id: p-essential,      title: "Essential",
+        quote: "Design is an exercise in decision-making. Choose the visual model that best conveys the message.", src: [L5] }
+    - { id: p-impactful,      title: "Impactful",
+        quote: "Enable the user to reach the goal and explore the topic in detail... We embrace a love for details and multiple layers of information.", src: [L6] }
+    - { id: p-consistent,     title: "Consistent",
+        quote: "Ensure each visual representation corresponds to the relative numerical quantity... A misrepresentation of data could lead to a misinterpretation of reality.", src: [L7] }
+    - { id: p-contextual,     title: "Contextual",
+        quote: "A visualization should be crafted based on the environment of the audience and its constraints.", src: [L8] }
+  stories:
+    - { id: n-sequence,  story: "The sequence is carefully curated to maximize contrast between neighboring colors to help with visual differentiation", src: [L62] }
+    - { id: n-glance,    story: "Communicate a message at a glance; remove anything gratuitous and avoid ambiguity or unnecessary embellishments", src: [L4] }
+    - { id: n-model,     story: "Charts are divided by goals—comparisons rely on the eye identifying longer or bigger shapes; trends rely on direction over time", src: [L11-16] }
+    - { id: n-grey,      story: "Shades of grey ensure data points are visible while not distracting from the key insights; every color should have a reason for being there", src: [L56] }
+    - { id: n-zero,      story: "When an axis starts at non-zero, percentage differences between bars are exaggerated", src: [L43] }
+    - { id: n-legend,    story: "When possible, avoid using a legend and label data representations directly; legends rely on visual association", src: [L34] }
+    - { id: n-integrity, story: "Be a good storyteller—pay attention to the proportions and scale of the elements to keep the integrity of the data", src: [L7] }
+    - { id: n-texture,   story: "IBM employs different shades of black, together with patterns and markers, as a valid substitute for color", src: [L59, L226] }
+    - { id: n-alert,     story: "Red represents danger or error; orange a serious warning; yellow a regular warning; green normal or success", src: [L220-224] }
+  exemplars:
+    - TODO: "Carbon Charts exemplars (comparison → simple bar, trend → line, composition → donut)"

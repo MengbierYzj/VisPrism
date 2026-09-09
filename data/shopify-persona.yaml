@@ -1,0 +1,126 @@
+# ==============================================================
+# Shopify Institutional Design Persona
+# Representation theory: McAdams three-layer personality model
+#   (layer criteria documented in the bbc-persona.yaml header note)
+# Source: vizguide/Shopify.md (Polaris · Data visualizations, 157 lines)
+# Genre traits: merchant product guide — the five-trait tradeoff framework
+#   (accuracy/intuitiveness/engagement/focus/granularity), threshold-driven
+#   chart choice (>6 categories → table, >30 points → line), a strict
+#   "all bars one color" discipline, and role-based color (current purple /
+#   past grey / positive green / negative red). The mirror page lacks hex
+#   values (L56-70 describes roles only); values recorded from the classic
+#   Polaris palette (marked external/derived)
+# ==============================================================
+
+institution: { id: shopify, name: Shopify, domain: e-commerce, source: vizguide/Shopify.md }
+
+# ---------- Applicability (inferred from the five traits and chart-type thresholds) ----------
+applicability:
+  suits:
+    - "Merchant operations metrics (sales / orders / traffic)"
+    - "Fine-grained time series (hourly / daily / weekly / monthly)"
+    - "Mobile dashboards and embedded small charts"
+    - "Business data compared against the same period in the past"
+  promises: ["Single-color bar discipline (no rainbow bars)", "Threshold-driven chart choice", "Multi-format accessibility (chart + data table)"]
+
+# ---------- L1 signature (unconditional: tokens + must/never rules) ----------
+L1_signature:
+  tokens:
+    color:
+      # The guide (L56-70) defines roles (single series / compare-to-past = current purple +
+      # past grey / multiseries down the list / positive-negative bias); the mirror page has
+      # no hex values — recorded from the classic Polaris palette (external), order derived from roles
+      viz-purple: "#9c6ade"     # single-series primary / "current" in comparisons (L60-64)
+      past-grey: "#c4cdd5"      # "past" in comparisons (L63-64)
+      teal: "#47c1bf"           # multiseries color 2 (L66-67)
+      indigo: "#5c6ac4"         # multiseries color 3 (L66-67)
+      blue: "#006fbb"           # multiseries color 4 (L66-67)
+      orange: "#f49342"         # multiseries color 5 (L66-67)
+      positive: "#50b83c"       # positive bias (L69-70)
+      negative: "#de3618"       # negative bias (L69-70)
+    palette:
+      categorical: [viz-purple, teal, indigo, blue, orange]   # "Go down the list as the number of datasets increase" (L67)
+      compare-past: [viz-purple, past-grey]
+      biased: [positive, negative]
+
+  rules:   # unconditional rules
+    - { id: s-axis-labeled, rule: "Both axes of a quantitative chart are labeled; labels sit outside the data area in short, plain language",
+        strength: must, check: llm, story: n-outside, src: [L26-29] }
+    - { id: s-axis-unobtrusive, rule: "Axis lines exist as a guide but stay unobtrusive",
+        strength: should, check: llm, story: n-outside, src: [L32-33] }
+    - { id: s-axis-abbrev, rule: "X axis uses standard abbreviations (Sun/Mon, Feb/Mar, 12am/6pm, 10 Apr, Apr 2011); Y axis uses standard monetary abbreviations",
+        strength: should, check: llm, story: n-abbrev, src: [L38-48] }
+    - { id: s-bar-labels, rule: "Label each bar with what it displays and its value; if the bar is too small, place the label outside it",
+        strength: should, check: programmatic, story: n-barlabel,
+        then: { set: labels.values, to: on }, src: [L83-88] }
+    - { id: s-bar-proportion, rule: "Bars are proportional in width — roughly twice as wide as the space between them; never skinny bars",
+        strength: should, check: programmatic, story: n-proportion,
+        then: { set: bar.spacing, to: bars-2x-gap }, src: [L95-98] }
+    - { id: s-house-palette, rule: "Colors come from the dataviz palette with explicit role semantics (single series / comparison / bias)",
+        strength: must, check: programmatic, story: n-list, src: [L56-58],
+        alignment: "The mirror page describes color roles without hex values; recorded from the classic Polaris palette, pending re-check against official swatches" }
+    - { id: s-accessibility, rule: "Text and graphics keep sufficient contrast against each other and the background; never require color vision to read the chart",
+        strength: must, check: programmatic, story: n-contrast, src: [L146-155] }
+    - { id: s-alt-format, rule: "Always provide data in multiple formats (a discoverable data table alongside the chart)",
+        strength: should, check: llm, story: n-multiformat, src: [L131-144] }
+
+# ---------- L2 adaptations (threshold-driven chart choice = Shopify's signature layer) ----------
+L2_adaptations:
+  - { id: a-bar-onecolor,   when: { series_count: 1 },
+      then: { set: mark.color, to: "{color.viz-purple}" },
+      strength: must, check: programmatic, story: n-onecolor, src: [L60-61, L90-93, L109-110] }
+  - { id: a-bar-horizontal, when: { intent: "comparing discrete categories (not change over time)" },
+      then: { set: orientation, to: horizontal },
+      strength: should, check: llm, story: n-horizontal, src: [L74-78] }
+  - { id: a-multi-list,     when: { series_count: { gte: 2 } },
+      then: { set: color.range, to: "{palette.categorical}" },
+      strength: should, check: programmatic, story: n-list, src: [L66-67] }
+  - { id: a-compare-past,   when: { comparison: "against the same period in the past (this year vs last year)" },
+      then: { set: color.range, to: "{palette.compare-past}" },
+      strength: should, check: llm, story: n-past, src: [L63-64] }
+  - { id: a-biased,         when: { data_role: "positive/negative change relative to a reference value" },
+      then: { set: color.range, to: "{palette.biased}" },
+      strength: may, check: llm, story: n-biased, src: [L69-70] }
+  - { id: a-table-when-many, when: { category_count: { gt: 6 } },
+      then: { enforce: "don't use a bar chart beyond 6 discrete categories — use a table" },
+      strength: must, check: programmatic, story: n-threshold, src: [L80-81] }
+  - { id: a-line-when-dense, when: { row_count: { gt: 30 } },
+      then: { prefer: chart.type, to: line },
+      strength: should, check: programmatic, story: n-threshold, src: [L101, L107, L116] }
+  - { id: a-negative-opacity, when: { data_role: "negative-value bars" },
+      then: { set: bar.style, to: { opacity: 0.6 } },
+      strength: may, check: llm, story: n-onecolor, src: [L92] }
+  - { id: a-emphasis,       when: { intent: "surface a single trend/pattern" },
+      then: { set: emphasized-mark.color, to: "{color.viz-purple}" },
+      strength: should, check: llm, story: n-focus, src: [L18-19],
+      derived: true }   # operationalised from the Focus trait (high focus lowers cognitive load)
+
+# ---------- L3 narrative identity ----------
+L3_narrative:
+  philosophy:
+    - { id: p-balance,     title: "Balance the five traits",
+        quote: "An effective data visualization strikes the right balance between the five core traits: accuracy, intuitiveness, engagement, focus, and data granularity.", src: [L7] }
+    - { id: p-accuracy,    title: "Accuracy",
+        quote: "Accuracy is about how faithfully the visualization matches the original data set. A high level of accuracy may not always be needed to convey a trend or a pattern.", src: [L9-10] }
+    - { id: p-intuitive,   title: "Intuitiveness",
+        quote: "Will merchants immediately understand what's being represented, or will they need instructions? More intuitive is usually better.", src: [L12-13] }
+    - { id: p-focus,       title: "Focus",
+        quote: "Highly focused visualizations decrease cognitive overload, but restrict the breadth of the message you are able to convey.", src: [L18-19] }
+    - { id: p-granularity, title: "Data granularity",
+        quote: "The right level of data granularity depends entirely on the specific question you're trying to answer and the audience you're communicating to.", src: [L21-22] }
+  stories:
+    - { id: n-onecolor,    story: "Use one color for all bars; don't use multiple colors for the bars—give negative bars 60% opacity", src: [L91-93] }
+    - { id: n-list,        story: "The data visualization color palette provides specific colors used alone or in a group depending on the intent; go down the list as datasets increase", src: [L58, L67] }
+    - { id: n-past,        story: "When comparing to past values, the current value will be purple and the past value will be grey", src: [L64] }
+    - { id: n-biased,      story: "Use biased colors when data is displayed in a positive or negative light relative to a reference value", src: [L69-70] }
+    - { id: n-threshold,   story: "Don't use bar charts when data points can exceed 6 (use a table); use line charts when data points exceed 30", src: [L81, L107, L116] }
+    - { id: n-outside,     story: "Labelling should be outside and separate from the data area, so users understand the range without losing focus on the data", src: [L28] }
+    - { id: n-abbrev,      story: "Standard abbreviations for months and weekdays reduce clutter (Sun, Mon; Feb, Mar; 12am, 6pm)", src: [L39-45] }
+    - { id: n-barlabel,    story: "Label each bar with what it's displaying, as well as the value; if the bar is too small, include it outside", src: [L84-86] }
+    - { id: n-proportion,  story: "Make the width of each bar about twice as wide as the space between them; don't make the bars too skinny", src: [L96-98] }
+    - { id: n-horizontal,  story: "Horizontal bar charts compare discrete categories, like products vs sales; vertical columns show change over time", src: [L74-78, L100-101] }
+    - { id: n-multiformat, story: "Let merchants access their data in multiple formats—offer the same content in a data table that's easy to discover", src: [L141] }
+    - { id: n-contrast,    story: "Ensure text, line, bar colors have sufficient contrast; never require merchants to see color to understand the chart", src: [L150-155] }
+    - { id: n-focus,       story: "Highly focused visualizations decrease cognitive overload", src: [L19] }
+  exemplars:
+    - TODO: "Shopify Admin analytics exemplars (single-color bars + this-year purple / last-year grey comparison)"

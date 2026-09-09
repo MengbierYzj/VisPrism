@@ -1,0 +1,1697 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#ffffff",
+  "padding": 20,
+  "spacing": 8,
+  "title": {
+    "text": "Worldwide Impact",
+    "subtitle": "Cumulative volume of US semiautomatic firearm exports, 2005–2022",
+    "anchor": "start",
+    "font": "Arial",
+    "fontSize": 22,
+    "fontWeight": "bold",
+    "subtitleFont": "Arial",
+    "subtitleFontSize": 16,
+    "subtitleFontWeight": "normal",
+    "offset": 18
+  },
+  "vconcat": [
+    {
+      "width": 760,
+      "height": 620,
+      "data": {
+        "values": [
+          {
+            "Rank": 1,
+            "Country": "Thailand",
+            "Cumulative Volume": 795454,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 2,
+            "Country": "Canada",
+            "Cumulative Volume": 545000,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 3,
+            "Country": "Philippines",
+            "Cumulative Volume": 327951,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 4,
+            "Country": "Saudi Arabia",
+            "Cumulative Volume": 135876,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 5,
+            "Country": "Belgium",
+            "Cumulative Volume": 134036,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 6,
+            "Country": "Mexico",
+            "Cumulative Volume": 125394,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 7,
+            "Country": "Italy",
+            "Cumulative Volume": 83127,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 8,
+            "Country": "Germany",
+            "Cumulative Volume": 80397,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 9,
+            "Country": "Guatemala",
+            "Cumulative Volume": 75795,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 10,
+            "Country": "Brazil",
+            "Cumulative Volume": 75024,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 11,
+            "Country": "Israel",
+            "Cumulative Volume": 74316,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 12,
+            "Country": "Australia",
+            "Cumulative Volume": 73346,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 13,
+            "Country": "France",
+            "Cumulative Volume": 69715,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 14,
+            "Country": "United Arab Emirates",
+            "Cumulative Volume": 66718,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 15,
+            "Country": "South Africa",
+            "Cumulative Volume": 50327,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 16,
+            "Country": "Switzerland",
+            "Cumulative Volume": 48264,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 17,
+            "Country": "Peru",
+            "Cumulative Volume": 46532,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 18,
+            "Country": "Costa Rica",
+            "Cumulative Volume": 44557,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 19,
+            "Country": "India",
+            "Cumulative Volume": 42848,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 20,
+            "Country": "Turkey",
+            "Cumulative Volume": 42082,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 21,
+            "Country": "Tunisia",
+            "Cumulative Volume": 40921,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 22,
+            "Country": "Ukraine",
+            "Cumulative Volume": 38944,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 23,
+            "Country": "El Salvador",
+            "Cumulative Volume": 38281,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 24,
+            "Country": "Paraguay",
+            "Cumulative Volume": 37107,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 25,
+            "Country": "Poland",
+            "Cumulative Volume": 37085,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 26,
+            "Country": "Colombia",
+            "Cumulative Volume": 32620,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 27,
+            "Country": "Lebanon",
+            "Cumulative Volume": 32475,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 28,
+            "Country": "Jamaica",
+            "Cumulative Volume": 31854,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 29,
+            "Country": "Pakistan",
+            "Cumulative Volume": 29512,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 30,
+            "Country": "Indonesia",
+            "Cumulative Volume": 28765,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 31,
+            "Country": "Afghanistan",
+            "Cumulative Volume": 22831,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 32,
+            "Country": "Trinidad and Tobago",
+            "Cumulative Volume": 22729,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 33,
+            "Country": "Czech Republic",
+            "Cumulative Volume": 22337,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 34,
+            "Country": "Georgia",
+            "Cumulative Volume": 16582,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 35,
+            "Country": "New Zealand",
+            "Cumulative Volume": 16441,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 36,
+            "Country": "Spain",
+            "Cumulative Volume": 16018,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 37,
+            "Country": "Bangladesh",
+            "Cumulative Volume": 15731,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 38,
+            "Country": "Argentina",
+            "Cumulative Volume": 14412,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 39,
+            "Country": "Oman",
+            "Cumulative Volume": 13878,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 40,
+            "Country": "Norway",
+            "Cumulative Volume": 12930,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 41,
+            "Country": "Iraq",
+            "Cumulative Volume": 12171,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 42,
+            "Country": "Jordan",
+            "Cumulative Volume": 11706,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 43,
+            "Country": "Austria",
+            "Cumulative Volume": 11480,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 44,
+            "Country": "Chile",
+            "Cumulative Volume": 11268,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 45,
+            "Country": "Sweden",
+            "Cumulative Volume": 11232,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 46,
+            "Country": "Denmark",
+            "Cumulative Volume": 11021,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 47,
+            "Country": "United Kingdom",
+            "Cumulative Volume": 10923,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 48,
+            "Country": "Finland",
+            "Cumulative Volume": 10771,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 49,
+            "Country": "Bolivia",
+            "Cumulative Volume": 10353,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 50,
+            "Country": "Dominican Republic",
+            "Cumulative Volume": 10347,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 51,
+            "Country": "Honduras",
+            "Cumulative Volume": 10212,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 52,
+            "Country": "Malaysia",
+            "Cumulative Volume": 9174,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 53,
+            "Country": "Panama",
+            "Cumulative Volume": 8020,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 54,
+            "Country": "Japan",
+            "Cumulative Volume": 7706,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 55,
+            "Country": "Taiwan",
+            "Cumulative Volume": 7691,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 56,
+            "Country": "Cote d'Ivoire",
+            "Cumulative Volume": 7508,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 57,
+            "Country": "Nicaragua",
+            "Cumulative Volume": 6780,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 58,
+            "Country": "Kosovo",
+            "Cumulative Volume": 6382,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 59,
+            "Country": "Kuwait",
+            "Cumulative Volume": 5950,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 60,
+            "Country": "Slovakia",
+            "Cumulative Volume": 5104,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 61,
+            "Country": "Bulgaria",
+            "Cumulative Volume": 3696,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 62,
+            "Country": "Namibia",
+            "Cumulative Volume": 3627,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 63,
+            "Country": "Suriname",
+            "Cumulative Volume": 3587,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 64,
+            "Country": "Uruguay",
+            "Cumulative Volume": 3459,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 65,
+            "Country": "Belize",
+            "Cumulative Volume": 3100,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 66,
+            "Country": "Kenya",
+            "Cumulative Volume": 3073,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 67,
+            "Country": "Portugal",
+            "Cumulative Volume": 2940,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 68,
+            "Country": "Serbia",
+            "Cumulative Volume": 2923,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 69,
+            "Country": "Russia",
+            "Cumulative Volume": 2867,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 70,
+            "Country": "Netherlands",
+            "Cumulative Volume": 2147,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 71,
+            "Country": "Bahamas",
+            "Cumulative Volume": 1950,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 72,
+            "Country": "Greece",
+            "Cumulative Volume": 1899,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 73,
+            "Country": "Zambia",
+            "Cumulative Volume": 1864,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 74,
+            "Country": "Armenia",
+            "Cumulative Volume": 1685,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 75,
+            "Country": "Singapore",
+            "Cumulative Volume": 1558,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 76,
+            "Country": "Korea, South",
+            "Cumulative Volume": 1407,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 77,
+            "Country": "Kazakhstan",
+            "Cumulative Volume": 1395,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 78,
+            "Country": "Egypt",
+            "Cumulative Volume": 1389,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 79,
+            "Country": "Guyana",
+            "Cumulative Volume": 1307,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 80,
+            "Country": "Bahrain",
+            "Cumulative Volume": 1224,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 81,
+            "Country": "Yemen",
+            "Cumulative Volume": 1210,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 82,
+            "Country": "Haiti",
+            "Cumulative Volume": 1199,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 83,
+            "Country": "Malta",
+            "Cumulative Volume": 1173,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 84,
+            "Country": "Latvia",
+            "Cumulative Volume": 1170,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 85,
+            "Country": "Hungary",
+            "Cumulative Volume": 1161,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 86,
+            "Country": "Vietnam",
+            "Cumulative Volume": 1052,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 87,
+            "Country": "Lithuania",
+            "Cumulative Volume": 1043,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 88,
+            "Country": "Estonia",
+            "Cumulative Volume": 1012,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 89,
+            "Country": "Bosnia and Herzegovina",
+            "Cumulative Volume": 912,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 90,
+            "Country": "Ecuador",
+            "Cumulative Volume": 831,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 91,
+            "Country": "Senegal",
+            "Cumulative Volume": 817,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 92,
+            "Country": "Tanzania",
+            "Cumulative Volume": 808,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 93,
+            "Country": "Kyrgyzstan",
+            "Cumulative Volume": 802,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 94,
+            "Country": "Antigua and Barbuda",
+            "Cumulative Volume": 755,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 95,
+            "Country": "Moldova",
+            "Cumulative Volume": 738,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 96,
+            "Country": "Uganda",
+            "Cumulative Volume": 670,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 97,
+            "Country": "New Caledonia",
+            "Cumulative Volume": 654,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 98,
+            "Country": "Slovenia",
+            "Cumulative Volume": 632,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 99,
+            "Country": "Nigeria",
+            "Cumulative Volume": 625,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 100,
+            "Country": "Cambodia",
+            "Cumulative Volume": 622,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 101,
+            "Country": "Romania",
+            "Cumulative Volume": 607,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 102,
+            "Country": "Ghana",
+            "Cumulative Volume": 572,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 103,
+            "Country": "Ireland",
+            "Cumulative Volume": 555,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 103,
+            "Country": "Sri Lanka",
+            "Cumulative Volume": 555,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 105,
+            "Country": "Qatar",
+            "Cumulative Volume": 544,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 106,
+            "Country": "Timor-Leste",
+            "Cumulative Volume": 526,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 107,
+            "Country": "Hong Kong",
+            "Cumulative Volume": 512,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 108,
+            "Country": "Niger",
+            "Cumulative Volume": 486,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 109,
+            "Country": "Macedonia",
+            "Cumulative Volume": 433,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 110,
+            "Country": "St Kitts and Nevis",
+            "Cumulative Volume": 425,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 111,
+            "Country": "Liberia",
+            "Cumulative Volume": 420,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 112,
+            "Country": "Barbados",
+            "Cumulative Volume": 406,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 113,
+            "Country": "Albania",
+            "Cumulative Volume": 400,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 114,
+            "Country": "St Vincent and the Grenadines",
+            "Cumulative Volume": 380,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 115,
+            "Country": "St Lucia",
+            "Cumulative Volume": 372,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 116,
+            "Country": "Cameroon",
+            "Cumulative Volume": 342,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 117,
+            "Country": "Cayman Islands",
+            "Cumulative Volume": 336,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 118,
+            "Country": "Croatia",
+            "Cumulative Volume": 254,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 119,
+            "Country": "Laos",
+            "Cumulative Volume": 229,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 120,
+            "Country": "Grenada",
+            "Cumulative Volume": 228,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 121,
+            "Country": "Somalia",
+            "Cumulative Volume": 224,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 122,
+            "Country": "Uzbekistan",
+            "Cumulative Volume": 219,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 123,
+            "Country": "Aruba",
+            "Cumulative Volume": 217,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 124,
+            "Country": "Mauritania",
+            "Cumulative Volume": 207,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 125,
+            "Country": "Papua New Guinea",
+            "Cumulative Volume": 194,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 126,
+            "Country": "Mali",
+            "Cumulative Volume": 192,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 127,
+            "Country": "Luxembourg",
+            "Cumulative Volume": 183,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 128,
+            "Country": "Greenland",
+            "Cumulative Volume": 142,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 129,
+            "Country": "Mongolia",
+            "Cumulative Volume": 140,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 130,
+            "Country": "Burkina Faso",
+            "Cumulative Volume": 135,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 131,
+            "Country": "Tajikistan",
+            "Cumulative Volume": 128,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 132,
+            "Country": "Morocco",
+            "Cumulative Volume": 109,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 133,
+            "Country": "Botswana",
+            "Cumulative Volume": 106,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 133,
+            "Country": "Iceland",
+            "Cumulative Volume": 106,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 135,
+            "Country": "Turks and Caicos Islands",
+            "Cumulative Volume": 103,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 136,
+            "Country": "Vatican City",
+            "Cumulative Volume": 94,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 137,
+            "Country": "Bermuda",
+            "Cumulative Volume": 78,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 138,
+            "Country": "Dominica",
+            "Cumulative Volume": 65,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 138,
+            "Country": "Bhutan",
+            "Cumulative Volume": 65,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 140,
+            "Country": "Djibouti",
+            "Cumulative Volume": 57,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 141,
+            "Country": "South Sudan",
+            "Cumulative Volume": 52,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 142,
+            "Country": "Fiji",
+            "Cumulative Volume": 50,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 143,
+            "Country": "Eswatini",
+            "Cumulative Volume": 48,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 144,
+            "Country": "Curacao",
+            "Cumulative Volume": 46,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 145,
+            "Country": "Chad",
+            "Cumulative Volume": 32,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 145,
+            "Country": "British Virgin Islands",
+            "Cumulative Volume": 32,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 147,
+            "Country": "Congo (Kinshasa)",
+            "Cumulative Volume": 30,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 148,
+            "Country": "French Polynesia",
+            "Cumulative Volume": 29,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 149,
+            "Country": "Andorra",
+            "Cumulative Volume": 26,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 150,
+            "Country": "Montenegro",
+            "Cumulative Volume": 25,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 151,
+            "Country": "Malawi",
+            "Cumulative Volume": 23,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 152,
+            "Country": "Anguilla",
+            "Cumulative Volume": 16,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 152,
+            "Country": "Angola",
+            "Cumulative Volume": 16,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 154,
+            "Country": "Zimbabwe",
+            "Cumulative Volume": 15,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 155,
+            "Country": "Netherlands Antilles (through Apr 2011)",
+            "Cumulative Volume": 12,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 156,
+            "Country": "Mauritius",
+            "Cumulative Volume": 8,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 157,
+            "Country": "Kiribati",
+            "Cumulative Volume": 7,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 158,
+            "Country": "China",
+            "Cumulative Volume": 6,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 158,
+            "Country": "Azerbaijan",
+            "Cumulative Volume": 6,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 158,
+            "Country": "Venezuela",
+            "Cumulative Volume": 6,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 161,
+            "Country": "Mozambique",
+            "Cumulative Volume": 2,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 162,
+            "Country": "Central African Republic",
+            "Cumulative Volume": 1,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 162,
+            "Country": "Ethiopia",
+            "Cumulative Volume": 1,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "St Helena",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Cyprus",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Liechtenstein",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Heard and McDonald Islands",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Benin",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "St Pierre and Miquelon",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "French Southern and Antarctic Lands",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Cocos (Keeling) Islands",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "San Marino",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Eritrea",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Falkland Islands (Islas Malvinas)",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Seychelles",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Nepal",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Ethiopia (through Jun 1993)",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Iran",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Belarus",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "International Organizations",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "British Indian Ocean Territories",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Wallis and Futuna",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Sao Tome and Principe",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Niue",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Nauru",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Czechoslovakia (through Dec 1992)",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Sudan",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Turkmenistan",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Mayotte",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Solomon Islands",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Serbia (Jan 2007 - Dec 2008)",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Equatorial Guinea",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Marshall Islands",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Yugoslavia (through May 1992)",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Libya",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Palau",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Burundi",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Rwanda",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Gambia",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Madagascar",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Western Sahara (through Dec 2020)",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Sierra Leone",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Gabon",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Sudan (through Jul 2011)",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Monaco",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Brunei",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Pitcairn Islands",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "West Bank Administered by Israel",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Iraqi-Saudi Arabia Neutral Zone (through Dec 1992)",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Guinea",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Tuvalu",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Congo (Brazzaville)",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Gaza Strip Administered by Israel",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Cabo Verde",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Maldives",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Svalbard, Jan Mayen Island",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Tokelau",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Togo",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Cuba",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Cook Islands",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Soviet Union (through Jun 1992)",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Puerto to US",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Reunion",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "French Guiana",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Norfolk Island",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Tonga",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Vanuatu",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Guinea-Bissau",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Montserrat",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Faroe Islands",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Martinique",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Lesotho",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Syria",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Guadeloupe",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Christmas Island",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Samoa",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Gibraltar",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Algeria",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Korea, North",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Comoros",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Unidentified Countries",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Macau",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Burma",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Serbia and Montenegro (Aug 2003 - Dec 2006)",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Micronesia",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          },
+          {
+            "Rank": 164,
+            "Country": "Sint Maarten",
+            "Cumulative Volume": 0,
+            "Description": "Cumulative volume of US semiautomatic firearm exports, 2005-2022"
+          }
+        ]
+      },
+      "transform": [
+        {
+          "filter": "datum['Cumulative Volume'] > 0"
+        },
+        {
+          "calculate": "datum.Rank <= 25 ? 'Top 25 destinations' : 'Other destinations'",
+          "as": "Destination group"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "arc",
+            "innerRadius": 86,
+            "stroke": "#ffffff",
+            "strokeWidth": 0.35,
+            "cornerRadius": 0.5
+          },
+          "encoding": {
+            "theta": {
+              "field": "Country",
+              "type": "nominal",
+              "sort": "ascending",
+              "scale": {
+                "range": [
+                  -1.5708,
+                  4.7124
+                ]
+              },
+              "title": null
+            },
+            "radius": {
+              "field": "Cumulative Volume",
+              "type": "quantitative",
+              "scale": {
+                "type": "sqrt",
+                "domain": [
+                  0,
+                  795454
+                ],
+                "range": [
+                  90,
+                  300
+                ]
+              },
+              "title": null
+            },
+            "color": {
+              "field": "Destination group",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "Top 25 destinations",
+                  "Other destinations"
+                ],
+                "range": [
+                  "#ff003f",
+                  "#d7d9dc"
+                ]
+              },
+              "legend": {
+                "title": null,
+                "orient": "bottom",
+                "direction": "horizontal",
+                "symbolType": "square",
+                "labelFont": "Arial",
+                "labelFontSize": 12,
+                "labelLimit": 190,
+                "columns": 2
+              }
+            },
+            "tooltip": [
+              {
+                "field": "Rank",
+                "type": "ordinal",
+                "title": "Rank"
+              },
+              {
+                "field": "Country",
+                "type": "nominal",
+                "title": "Country"
+              },
+              {
+                "field": "Cumulative Volume",
+                "type": "quantitative",
+                "title": "Cumulative exports",
+                "format": ","
+              },
+              {
+                "field": "Description",
+                "type": "nominal",
+                "title": "Measure"
+              }
+            ]
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "arc",
+            "outerRadius": 82,
+            "color": "#ffffff"
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "label": "3.7M"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "font": "Arial",
+            "fontSize": 30,
+            "fontWeight": "normal",
+            "color": "#111111",
+            "dy": -8
+          },
+          "encoding": {
+            "text": {
+              "field": "label"
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "label": "US EXPORTS"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "font": "Arial",
+            "fontSize": 13,
+            "color": "#111111",
+            "dy": 20
+          },
+          "encoding": {
+            "text": {
+              "field": "label"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "height": 42,
+      "data": {
+        "values": [
+          {
+            "note": "Sources: US Census Bureau, Statistics Canada · Hover over a spoke for country details."
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "font": "Arial",
+        "fontSize": 12,
+        "color": "#333333"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 20
+        },
+        "text": {
+          "field": "note"
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "grid": false,
+      "domain": false,
+      "ticks": false,
+      "labels": false
+    }
+  }
+}

@@ -1,0 +1,76 @@
+<<<<<<< HEAD
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.env
+.venv
+venv/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 前端（后续补充）
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+frontend/.env.*.local
+
+# 日志与本地配置
+*.log
+.env.local
+*.local
+
+# 系统
+.DS_Store
+Thumbs.db
+
+.cursor
+
+# 本地个人后端文档（不提交）
+docs/backend-local/
+
+# 后端运行时产物（不提交）
+backend/storage/
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# 测试缓存（不提交）
+.pytest_cache/
+backend/.pytest_cache/
+=======
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+>>>>>>> 16248ac (Initial commit: 传播模拟与偏移分析前端)

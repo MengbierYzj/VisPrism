@@ -1,0 +1,100 @@
+# ==============================================================
+# eBay Institutional Design Persona
+# Representation theory: McAdams three-level model (layer criteria: see bbc-persona.yaml header)
+# Source: vizguide/Ebay.md (eBay Evo · Data visualization, 146 lines)
+# Genre notes: e-commerce design system — very strong copy rules (sentence case,
+#   no ending punctuation, 1-2 word titles) and semantic color tokens
+#   (accent/attention/success). The guide references color.core.* token names
+#   throughout without hex values (L44-65); core values are backfilled from the
+#   Evo token library (marked external; only the few core colors needed for the
+#   semantic roles)
+# ==============================================================
+
+institution: { id: ebay, name: eBay, domain: e-commerce, source: vizguide/Ebay.md }
+
+# ---------- Applicability (inferred from L3 philosophy and anatomy structure) ----------
+applicability:
+  suits:
+    - "E-commerce business metric dashboards (sales/GMV/conversion)"
+    - "Mobile-first charts that must scale across screen sizes"
+    - "Single key-number narratives (primary metric + supporting chart)"
+    - "Product surfaces with strict copy standards"
+  promises: ["Minimal, exacting title copy", "Semantic up/down and alert colors", "Accessibility-vetted palette"]
+
+# ---------- L1 dispositional signature (unconditional: tokens + must/never rules) ----------
+L1_signature:
+  tokens:
+    color:
+      # The guide (L44-65) maps roles to color.core.* token names without hex values;
+      # core values backfilled from the eBay Evo token library (external)
+      accent: "#3665f3"          # color.foreground.accent → core.blue.500 (L52)
+      attention: "#e0103a"       # color.foreground.attention → core.red.600 (L53)
+      warning: "#f7b100"         # color.foreground.warning → core.yellow.550 (L54)
+      success: "#05823f"         # color.foreground.success → core.kiwi.600 (L55)
+      text-primary: "#191919"    # color.foreground.primary → core.neutral.800 (L49)
+      text-secondary: "#707070"  # color.foreground.secondary → core.neutral.600 (L50)
+      border: "#c7c7c7"          # color.border.subtle approx → core.neutral.300 (L70)
+      surface: "#f7f7f7"         # light surface (Evo, backfilled)
+    palette:
+      categorical: [accent, success, warning, attention, text-secondary]
+      # Order derived from semantic roles (the guide gives role tokens, not a categorical sequence) — derived
+      updown: [success, attention]
+
+  rules:   # Unconditional rules
+    - { id: s-title-case, rule: "Titles/subtitles/axis labels/tooltips all use sentence case with no ending punctuation",
+        strength: must, check: llm, story: n-exacting, src: [L14-15, L20-21, L34-35, L39-40] }
+    - { id: s-title-brief, rule: "Titles only name the data being visualized, in exacting language, aiming for 1-2 words; context belongs in the subtitle, which never restates the title",
+        strength: must, check: llm, story: n-exacting, src: [L13, L16, L19] }
+    - { id: s-axis-zero, rule: "Start the Y-axis at 0 for accurate proportions; mark significant anchor points on the X-axis (financial quarters, days of week)",
+        strength: must, check: programmatic, story: n-proportion,
+        then: { set: axis.zero, to: on }, src: [L33] }
+    - { id: s-axis-spacing, rule: "Choose tick intervals that avoid overcrowding (never all 365 days of a year); keep at least 16px between labels",
+        strength: should, check: programmatic, story: n-overcrowd,
+        then: { set: axis.tick-density, to: 8 }, src: [L31-33] }   # "avoid overcrowding" operationalized as ≤8 x ticks
+    - { id: s-accessibility, rule: "All data visualization colors are vetted for accessibility",
+        strength: must, check: programmatic, story: n-a11y, src: [L46] }
+
+# ---------- L2 characteristic adaptations ----------
+L2_adaptations:
+  - { id: a-color-single,   when: { series_count: 1 },
+      then: { set: mark.color, to: "{color.accent}" },
+      strength: should, check: programmatic, story: n-a11y, src: [L46, L52],
+      derived: true }   # single series takes the accent blue: operationalized from the semantic token role (accent = emphasized foreground)
+  - { id: a-emphasis,      when: { intent: "highlight a key data point/series" },
+      then: { set: emphasized-mark.color, to: "{color.accent}" },
+      strength: should, check: llm, story: n-sentence, src: [L52, L6-7] }
+  - { id: a-color-updown,   when: { data_role: "gain/loss or positive/negative change" },
+      then: { set: color.range, to: "{palette.updown}" },
+      strength: should, check: llm, story: n-semantic, src: [L53-55] }
+  - { id: a-primary-metric, when: { intent: "one number is the main takeaway" },
+      then: { enforce: "Present that number as a large primary metric with the chart in a supporting role; never use when multiple values are equally important" },
+      strength: should, check: llm, story: n-takeaway, src: [L24-25] }
+  - { id: a-progressive,    when: { category_count: { gt: 6 } },
+      then: { enforce: "Progressive disclosure: show a summary view first and reveal breakdowns through interaction" },
+      strength: should, check: programmatic, story: n-simple, src: [L4-5],
+      derived: true }   # operationalized threshold for the "Keep it simple / progressive disclosure" philosophy
+  - { id: a-tooltip-time,   when: { medium: digital },
+      then: { enforce: "Tooltip titles name the date/time of the data point; the body gives precise values" },
+      strength: may, check: llm, story: n-explore, src: [L37-38] }
+
+# ---------- L3 narrative identity ----------
+L3_narrative:
+  philosophy:
+    - { id: p-simple, title: "Keep it simple",
+        quote: "Progressive disclosure is key—ensure you are using data visualization as a tool to aid in understanding, not to overwhelm users with too much information all at once.", src: [L4-5] }
+    - { id: p-story,  title: "Tell a story",
+        quote: "Focus on what you want to communicate and who you're communicating to. Think about how you would tell the story in a sentence.", src: [L6-7] }
+    - { id: p-scale,  title: "Scale thoughtfully",
+        quote: "Our charts scale seamlessly for all screen sizes and users. Use designated colors, interactive states, and scaling behaviors to ensure they are simple and accessible in all contexts.", src: [L8-9] }
+  stories:
+    - { id: n-exacting,   story: "Titles name the data being visualized—use exacting language, sentence case, no ending punctuation, aim for 1-2 words", src: [L13-16] }
+    - { id: n-sentence,   story: "Understanding data is much easier when there is a human narrative; think about how you would tell the story in a sentence", src: [L7] }
+    - { id: n-proportion, story: "Start the Y-axis at 0 for accurate proportions, and mark significant time points on the X-axis", src: [L33] }
+    - { id: n-overcrowd,  story: "Choose intervals that avoid overcrowding—if the chart covers a full year of daily data, don't display all 365 days", src: [L31] }
+    - { id: n-a11y,       story: "All of the colors we use in our data visualization patterns have been vetted for accessibility", src: [L46] }
+    - { id: n-semantic,   story: "Foreground roles carry meaning: accent for focus, attention for urgency, success for positive outcomes", src: [L52-55] }
+    - { id: n-takeaway,   story: "Use a primary metric when one number is the main takeaway and the chart exists to support it", src: [L25] }
+    - { id: n-simple,     story: "Aid understanding, not overwhelm users with too much information all at once", src: [L5] }
+    - { id: n-explore,    story: "Tooltips reveal precise data values, letting users explore specific data points", src: [L38] }
+  exemplars:
+    - TODO: "eBay Seller Hub Sales/Traffic dashboard chart exemplars"

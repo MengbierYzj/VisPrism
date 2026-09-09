@@ -1,0 +1,192 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 450,
+  "background": "#ffffff",
+  "padding": {"top": 90, "right": 20, "bottom": 30, "left": 10},
+  "title": {
+    "text": "Deaths not involving COVID-19 remained below the five-year average in Week 47",
+    "anchor": "start",
+    "fontSize": 18,
+    "fontWeight": "bold",
+    "color": "#333333",
+    "offset": 75
+  },
+  "data": {
+    "values": [
+      {"w": 1, "nc": 12254, "avg": 12175, "c": 0},
+      {"w": 2, "nc": 14058, "avg": 13822, "c": 0},
+      {"w": 3, "nc": 12990, "avg": 13216, "c": 0},
+      {"w": 4, "nc": 11856, "avg": 12760, "c": 0},
+      {"w": 5, "nc": 11612, "avg": 12206, "c": 0},
+      {"w": 6, "nc": 10986, "avg": 11925, "c": 0},
+      {"w": 7, "nc": 10944, "avg": 11627, "c": 0},
+      {"w": 8, "nc": 10841, "avg": 11548, "c": 0},
+      {"w": 9, "nc": 10816, "avg": 11183, "c": 0},
+      {"w": 10, "nc": 10895, "avg": 11498, "c": 0},
+      {"w": 11, "nc": 11014, "avg": 11205, "c": 5},
+      {"w": 12, "nc": 10542, "avg": 10573, "c": 103},
+      {"w": 13, "nc": 10602, "avg": 10130, "c": 539},
+      {"w": 14, "nc": 12912, "avg": 10305, "c": 3475},
+      {"w": 15, "nc": 12303, "avg": 10520, "c": 6213},
+      {"w": 16, "nc": 13593, "avg": 10497, "c": 8758},
+      {"w": 17, "nc": 13760, "avg": 10458, "c": 8237},
+      {"w": 18, "nc": 11918, "avg": 9941, "c": 6035},
+      {"w": 19, "nc": 8727, "avg": 9576, "c": 3930},
+      {"w": 20, "nc": 10763, "avg": 10188, "c": 3810},
+      {"w": 21, "nc": 9699, "avg": 9940, "c": 2589},
+      {"w": 22, "nc": 8002, "avg": 8171, "c": 1822},
+      {"w": 23, "nc": 9121, "avg": 9977, "c": 1588},
+      {"w": 24, "nc": 8862, "avg": 9417, "c": 1114},
+      {"w": 25, "nc": 8556, "avg": 9404, "c": 783},
+      {"w": 26, "nc": 8373, "avg": 9293, "c": 606},
+      {"w": 27, "nc": 8608, "avg": 9183, "c": 532},
+      {"w": 28, "nc": 8324, "avg": 9250, "c": 366},
+      {"w": 29, "nc": 8528, "avg": 9093, "c": 295},
+      {"w": 30, "nc": 8674, "avg": 9052, "c": 217},
+      {"w": 31, "nc": 8753, "avg": 9036, "c": 193},
+      {"w": 32, "nc": 8793, "avg": 9102, "c": 152},
+      {"w": 33, "nc": 9253, "avg": 9085, "c": 139},
+      {"w": 34, "nc": 9493, "avg": 9157, "c": 138},
+      {"w": 35, "nc": 8931, "avg": 8241, "c": 101},
+      {"w": 36, "nc": 7661, "avg": 9182, "c": 78},
+      {"w": 37, "nc": 9712, "avg": 9306, "c": 99},
+      {"w": 38, "nc": 9384, "avg": 9264, "c": 139},
+      {"w": 39, "nc": 9419, "avg": 9377, "c": 215},
+      {"w": 40, "nc": 9624, "avg": 9555, "c": 321},
+      {"w": 41, "nc": 9516, "avg": 9811, "c": 438},
+      {"w": 42, "nc": 9864, "avg": 9865, "c": 670},
+      {"w": 43, "nc": 9761, "avg": 9759, "c": 978},
+      {"w": 44, "nc": 9508, "avg": 9891, "c": 1379},
+      {"w": 45, "nc": 9875, "avg": 10331, "c": 1937},
+      {"w": 46, "nc": 9788, "avg": 10350, "c": 2466},
+      {"w": 47, "nc": 9838, "avg": 10380, "c": 2697}
+    ]
+  },
+  "resolve": {"scale": {"color": "independent"}},
+  "encoding": {
+    "x": {
+      "field": "w",
+      "type": "ordinal",
+      "axis": {
+        "title": "Week ending",
+        "titleAlign": "right",
+        "titleX": 800,
+        "titleY": 25,
+        "titleFontWeight": "normal",
+        "titleColor": "#555",
+        "titleFontSize": 13,
+        "grid": false,
+        "ticks": false,
+        "domain": true,
+        "domainColor": "#cccccc",
+        "domainWidth": 1.5,
+        "labelAngle": 0,
+        "labelPadding": 8,
+        "labelFontSize": 13,
+        "labelColor": "#222222",
+        "values": [1, 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 47],
+        "labelExpr": "datum.value == 1 ? '03 Jan' : datum.value == 5 ? '31 Jan' : datum.value == 9 ? '28 Feb' : datum.value == 13 ? '27 Mar' : datum.value == 17 ? '24 Apr' : datum.value == 21 ? '22 May' : datum.value == 25 ? '19 Jun' : datum.value == 29 ? '17 Jul' : datum.value == 33 ? '14 Aug' : datum.value == 37 ? '11 Sep' : datum.value == 41 ? '09 Oct' : datum.value == 47 ? '20 Nov' : ''"
+      }
+    }
+  },
+  "layer": [
+    {
+      "description": "Stacked bars layer",
+      "transform": [
+        {"fold": ["nc", "c"], "as": ["cause_raw", "deaths"]},
+        {
+          "calculate": "datum.cause_raw === 'nc' ? 'Deaths not involving COVID-19' : 'Deaths involving COVID-19'",
+          "as": "cause"
+        }
+      ],
+      "mark": {"type": "bar", "width": {"band": 0.85}},
+      "encoding": {
+        "y": {
+          "field": "deaths",
+          "type": "quantitative",
+          "axis": {
+            "title": "Weekly deaths",
+            "titleAlign": "left",
+            "titleY": -15,
+            "titleX": -45,
+            "titleAngle": 0,
+            "titleFontSize": 14,
+            "titleFontWeight": "normal",
+            "titleColor": "#555",
+            "values": [0, 5000, 10000, 15000, 20000, 25000],
+            "format": ",.0f",
+            "grid": true,
+            "gridColor": "#dddddd",
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 8,
+            "labelFontSize": 13
+          },
+          "scale": {"domain": [0, 25000]}
+        },
+        "color": {
+          "field": "cause",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Deaths not involving COVID-19",
+              "Deaths involving COVID-19"
+            ],
+            "range": ["#34a58b", "#29638f"]
+          },
+          "legend": {
+            "title": null,
+            "orient": "none",
+            "legendX": 250,
+            "legendY": -45,
+            "direction": "horizontal",
+            "columnPadding": 30,
+            "labelFontSize": 13,
+            "labelColor": "#444",
+            "labelLimit": 500,
+            "symbolType": "square",
+            "symbolSize": 200
+          }
+        },
+        "order": {"field": "cause_raw", "sort": "descending"}
+      }
+    },
+    {
+      "description": "Five-year average ticks layer",
+      "transform": [
+        {"calculate": "'All deaths - Five-year average'", "as": "avg_label"}
+      ],
+      "mark": {
+        "type": "tick",
+        "thickness": 2.5,
+        "width": 14,
+        "strokeDash": [3, 2]
+      },
+      "encoding": {
+        "y": {"field": "avg", "type": "quantitative"},
+        "color": {
+          "field": "avg_label",
+          "type": "nominal",
+          "scale": {
+            "domain": ["All deaths - Five-year average"],
+            "range": ["#111111"]
+          },
+          "legend": {
+            "title": null,
+            "orient": "none",
+            "legendX": -40,
+            "legendY": -45,
+            "symbolType": "stroke",
+            "symbolStrokeWidth": 3,
+            "symbolDash": [4, 2],
+            "labelFontSize": 13,
+            "labelColor": "#444",
+            "labelLimit": 500
+          }
+        }
+      }
+    }
+  ],
+  "config": {"view": {"stroke": "transparent"}}
+}

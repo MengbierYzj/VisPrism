@@ -1,0 +1,71 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+/*
+ * Desktop-responsive layout
+ *
+ * The three main panels are percentage-sized by react-resizable-panels.
+ * These rules keep vertical density and proposal layout proportional across
+ * common laptop and desktop viewport sizes without scaling the whole UI.
+ */
+.viz-app {
+  --viz-space: clamp(0.5rem, 0.8vw, 1rem);
+  --viz-panel-header-height: clamp(2.75rem, 5.5vh, 3.5rem);
+}
+
+.viz-topbar {
+  height: clamp(2.5rem, 4.5vh, 2.75rem);
+  padding-inline: clamp(0.75rem, 1.25vw, 1.25rem);
+}
+
+.viz-panel-header {
+  height: var(--viz-panel-header-height);
+  min-height: var(--viz-panel-header-height);
+  padding-inline: clamp(0.75rem, 1.25vw, 1.25rem);
+}
+
+.viz-spec-editor {
+  height: clamp(8.5rem, 22vh, 12rem);
+}
+
+.proposal-gallery {
+  container-type: inline-size;
+  container-name: proposal-gallery;
+}
+
+.viz-gallery-scroll {
+  padding: var(--viz-space);
+}
+
+.viz-proposal-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(0.5rem, 0.8vw, 0.75rem);
+}
+
+.viz-proposal-card {
+  min-width: 0;
+}
+
+/* 提案默认双列并列；仅极窄面板时退化为单列 */
+@container proposal-gallery (min-width: 24rem) {
+  .viz-proposal-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-height: 48rem) {
+  .viz-spec-editor {
+    height: 8.5rem;
+  }
+
+  .viz-panel-header {
+    --viz-panel-header-height: 2.75rem;
+  }
+}
+
+@media (max-width: 68rem) {
+  .viz-topbar > div:first-child > span:last-child {
+    display: none;
+  }
+}

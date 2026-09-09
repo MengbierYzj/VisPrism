@@ -1,0 +1,1992 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "NJDOT FY 2024 Sources of Funds reconstructed as a perspective 3D pie with an elliptical top, front-facing extruded side walls, shadow, fixed labels, leader lines, and slice order matching the public original.",
+  "background": "#ffffff",
+  "width": 1000,
+  "height": 560,
+  "padding": {
+    "left": 10,
+    "right": 10,
+    "top": 12,
+    "bottom": 12
+  },
+  "title": {
+    "text": "Sources of Funds",
+    "subtitle": "($ in Millions)",
+    "anchor": "middle",
+    "font": "Arial",
+    "fontSize": 34,
+    "fontWeight": "bold",
+    "subtitleFont": "Arial",
+    "subtitleFontSize": 23,
+    "subtitleFontWeight": "bold",
+    "offset": 22
+  },
+  "projection": {
+    "type": "identity",
+    "reflectY": false,
+    "scale": 1,
+    "translate": [
+      0,
+      0
+    ]
+  },
+  "data": {
+    "values": [
+      {
+        "Part": "shadow",
+        "Category": "Shadow",
+        "Shape": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                716,
+                333
+              ],
+              [
+                715.5,
+                342.1
+              ],
+              [
+                713.9,
+                351.1
+              ],
+              [
+                711.3,
+                360
+              ],
+              [
+                707.6,
+                368.8
+              ],
+              [
+                703,
+                377.5
+              ],
+              [
+                697.3,
+                385.9
+              ],
+              [
+                690.7,
+                394
+              ],
+              [
+                683.2,
+                401.9
+              ],
+              [
+                674.7,
+                409.4
+              ],
+              [
+                665.5,
+                416.6
+              ],
+              [
+                655.4,
+                423.3
+              ],
+              [
+                644.5,
+                429.6
+              ],
+              [
+                633,
+                435.4
+              ],
+              [
+                620.8,
+                440.8
+              ],
+              [
+                608,
+                445.6
+              ],
+              [
+                594.7,
+                449.8
+              ],
+              [
+                580.9,
+                453.5
+              ],
+              [
+                566.7,
+                456.6
+              ],
+              [
+                552.3,
+                459.1
+              ],
+              [
+                537.5,
+                461
+              ],
+              [
+                522.6,
+                462.3
+              ],
+              [
+                507.5,
+                462.9
+              ],
+              [
+                492.5,
+                462.9
+              ],
+              [
+                477.4,
+                462.3
+              ],
+              [
+                462.5,
+                461
+              ],
+              [
+                447.7,
+                459.1
+              ],
+              [
+                433.3,
+                456.6
+              ],
+              [
+                419.1,
+                453.5
+              ],
+              [
+                405.3,
+                449.8
+              ],
+              [
+                392,
+                445.6
+              ],
+              [
+                379.2,
+                440.8
+              ],
+              [
+                367,
+                435.4
+              ],
+              [
+                355.5,
+                429.6
+              ],
+              [
+                344.6,
+                423.3
+              ],
+              [
+                334.5,
+                416.6
+              ],
+              [
+                325.3,
+                409.4
+              ],
+              [
+                316.8,
+                401.9
+              ],
+              [
+                309.3,
+                394
+              ],
+              [
+                302.7,
+                385.9
+              ],
+              [
+                297,
+                377.5
+              ],
+              [
+                292.4,
+                368.8
+              ],
+              [
+                288.7,
+                360
+              ],
+              [
+                286.1,
+                351.1
+              ],
+              [
+                284.5,
+                342.1
+              ],
+              [
+                284,
+                333
+              ],
+              [
+                284.5,
+                323.9
+              ],
+              [
+                286.1,
+                314.9
+              ],
+              [
+                288.7,
+                306
+              ],
+              [
+                292.4,
+                297.2
+              ],
+              [
+                297,
+                288.5
+              ],
+              [
+                302.7,
+                280.1
+              ],
+              [
+                309.3,
+                272
+              ],
+              [
+                316.8,
+                264.1
+              ],
+              [
+                325.3,
+                256.6
+              ],
+              [
+                334.5,
+                249.4
+              ],
+              [
+                344.6,
+                242.7
+              ],
+              [
+                355.5,
+                236.4
+              ],
+              [
+                367,
+                230.6
+              ],
+              [
+                379.2,
+                225.2
+              ],
+              [
+                392,
+                220.4
+              ],
+              [
+                405.3,
+                216.2
+              ],
+              [
+                419.1,
+                212.5
+              ],
+              [
+                433.3,
+                209.4
+              ],
+              [
+                447.7,
+                206.9
+              ],
+              [
+                462.5,
+                205
+              ],
+              [
+                477.4,
+                203.7
+              ],
+              [
+                492.5,
+                203.1
+              ],
+              [
+                507.5,
+                203.1
+              ],
+              [
+                522.6,
+                203.7
+              ],
+              [
+                537.5,
+                205
+              ],
+              [
+                552.3,
+                206.9
+              ],
+              [
+                566.7,
+                209.4
+              ],
+              [
+                580.9,
+                212.5
+              ],
+              [
+                594.7,
+                216.2
+              ],
+              [
+                608,
+                220.4
+              ],
+              [
+                620.8,
+                225.2
+              ],
+              [
+                633,
+                230.6
+              ],
+              [
+                644.5,
+                236.4
+              ],
+              [
+                655.4,
+                242.7
+              ],
+              [
+                665.5,
+                249.4
+              ],
+              [
+                674.7,
+                256.6
+              ],
+              [
+                683.2,
+                264.1
+              ],
+              [
+                690.7,
+                272
+              ],
+              [
+                697.3,
+                280.1
+              ],
+              [
+                703,
+                288.5
+              ],
+              [
+                707.6,
+                297.2
+              ],
+              [
+                711.3,
+                306
+              ],
+              [
+                713.9,
+                314.9
+              ],
+              [
+                715.5,
+                323.9
+              ],
+              [
+                716,
+                333
+              ],
+              [
+                716,
+                333
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "Part": "side",
+        "Category": "Federal - NJDOT",
+        "Source": "Federal",
+        "Recipient": "NJDOT",
+        "Amount ($ millions)": 1600,
+        "Share (%)": 34.96,
+        "Order": 1,
+        "Side": "right",
+        "LabelX": 780,
+        "LabelY": 190,
+        "AnchorX": 682.5,
+        "AnchorY": 223.1,
+        "ElbowX": 735,
+        "ElbowY": 190,
+        "LineX": 768,
+        "Shape": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                705,
+                280
+              ],
+              [
+                704.5,
+                288.7
+              ],
+              [
+                703,
+                297.3
+              ],
+              [
+                700.6,
+                305.9
+              ],
+              [
+                697.1,
+                314.3
+              ],
+              [
+                692.7,
+                322.6
+              ],
+              [
+                687.4,
+                330.7
+              ],
+              [
+                681.2,
+                338.5
+              ],
+              [
+                674.1,
+                346
+              ],
+              [
+                666.2,
+                353.2
+              ],
+              [
+                666.2,
+                395.2
+              ],
+              [
+                674.1,
+                388
+              ],
+              [
+                681.2,
+                380.5
+              ],
+              [
+                687.4,
+                372.7
+              ],
+              [
+                692.7,
+                364.6
+              ],
+              [
+                697.1,
+                356.3
+              ],
+              [
+                700.6,
+                347.9
+              ],
+              [
+                703,
+                339.3
+              ],
+              [
+                704.5,
+                330.7
+              ],
+              [
+                705,
+                322
+              ],
+              [
+                705,
+                280
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "Part": "side",
+        "Category": "Federal - Transit",
+        "Source": "Federal",
+        "Recipient": "Transit",
+        "Amount ($ millions)": 906.9,
+        "Share (%)": 19.81,
+        "Order": 2,
+        "Side": "right",
+        "LabelX": 780,
+        "LabelY": 430,
+        "AnchorX": 565,
+        "AnchorY": 398.6,
+        "ElbowX": 720,
+        "ElbowY": 430,
+        "LineX": 768,
+        "Shape": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                666.2,
+                353.2
+              ],
+              [
+                657.5,
+                360
+              ],
+              [
+                648,
+                366.5
+              ],
+              [
+                637.9,
+                372.5
+              ],
+              [
+                627,
+                378.1
+              ],
+              [
+                615.6,
+                383.2
+              ],
+              [
+                603.7,
+                387.8
+              ],
+              [
+                591.2,
+                392
+              ],
+              [
+                578.3,
+                395.5
+              ],
+              [
+                565,
+                398.6
+              ],
+              [
+                551.4,
+                401
+              ],
+              [
+                537.6,
+                402.9
+              ],
+              [
+                523.6,
+                404.2
+              ],
+              [
+                509.4,
+                404.9
+              ],
+              [
+                495.3,
+                405
+              ],
+              [
+                481.1,
+                404.5
+              ],
+              [
+                467.1,
+                403.4
+              ],
+              [
+                453.2,
+                401.7
+              ],
+              [
+                439.5,
+                399.4
+              ],
+              [
+                439.5,
+                441.4
+              ],
+              [
+                453.2,
+                443.7
+              ],
+              [
+                467.1,
+                445.4
+              ],
+              [
+                481.1,
+                446.5
+              ],
+              [
+                495.3,
+                447
+              ],
+              [
+                509.4,
+                446.9
+              ],
+              [
+                523.6,
+                446.2
+              ],
+              [
+                537.6,
+                444.9
+              ],
+              [
+                551.4,
+                443
+              ],
+              [
+                565,
+                440.6
+              ],
+              [
+                578.3,
+                437.5
+              ],
+              [
+                591.2,
+                434
+              ],
+              [
+                603.7,
+                429.8
+              ],
+              [
+                615.6,
+                425.2
+              ],
+              [
+                627,
+                420.1
+              ],
+              [
+                637.9,
+                414.5
+              ],
+              [
+                648,
+                408.5
+              ],
+              [
+                657.5,
+                402
+              ],
+              [
+                666.2,
+                395.2
+              ],
+              [
+                666.2,
+                353.2
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "Part": "side",
+        "Category": "Other - Transit",
+        "Source": "Other",
+        "Recipient": "Transit",
+        "Amount ($ millions)": 65.8,
+        "Share (%)": 1.44,
+        "Order": 3,
+        "Side": "left",
+        "LabelX": 320,
+        "LabelY": 480,
+        "AnchorX": 430.7,
+        "AnchorY": 397.6,
+        "ElbowX": 370,
+        "ElbowY": 480,
+        "LineX": 332,
+        "Shape": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                439.5,
+                399.4
+              ],
+              [
+                430.7,
+                397.6
+              ],
+              [
+                422,
+                395.6
+              ],
+              [
+                422,
+                437.6
+              ],
+              [
+                430.7,
+                439.6
+              ],
+              [
+                439.5,
+                441.4
+              ],
+              [
+                439.5,
+                399.4
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "Part": "side",
+        "Category": "Trust Fund - NJDOT",
+        "Source": "Trust Fund",
+        "Recipient": "NJDOT",
+        "Amount ($ millions)": 1240,
+        "Share (%)": 27.09,
+        "Order": 4,
+        "Side": "left",
+        "LabelX": 210,
+        "LabelY": 385,
+        "AnchorX": 306,
+        "AnchorY": 320.5,
+        "ElbowX": 275,
+        "ElbowY": 385,
+        "LineX": 222,
+        "Shape": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                422,
+                395.6
+              ],
+              [
+                409.1,
+                392
+              ],
+              [
+                396.5,
+                387.9
+              ],
+              [
+                384.5,
+                383.3
+              ],
+              [
+                373,
+                378.1
+              ],
+              [
+                362.2,
+                372.5
+              ],
+              [
+                352,
+                366.5
+              ],
+              [
+                342.5,
+                360
+              ],
+              [
+                333.8,
+                353.1
+              ],
+              [
+                325.8,
+                345.9
+              ],
+              [
+                318.8,
+                338.4
+              ],
+              [
+                312.5,
+                330.6
+              ],
+              [
+                307.2,
+                322.5
+              ],
+              [
+                302.9,
+                314.3
+              ],
+              [
+                299.4,
+                305.9
+              ],
+              [
+                297,
+                297.3
+              ],
+              [
+                295.5,
+                288.7
+              ],
+              [
+                295,
+                280
+              ],
+              [
+                295,
+                322
+              ],
+              [
+                295.5,
+                330.7
+              ],
+              [
+                297,
+                339.3
+              ],
+              [
+                299.4,
+                347.9
+              ],
+              [
+                302.9,
+                356.3
+              ],
+              [
+                307.2,
+                364.5
+              ],
+              [
+                312.5,
+                372.6
+              ],
+              [
+                318.8,
+                380.4
+              ],
+              [
+                325.8,
+                387.9
+              ],
+              [
+                333.8,
+                395.1
+              ],
+              [
+                342.5,
+                402
+              ],
+              [
+                352,
+                408.5
+              ],
+              [
+                362.2,
+                414.5
+              ],
+              [
+                373,
+                420.1
+              ],
+              [
+                384.5,
+                425.3
+              ],
+              [
+                396.5,
+                429.9
+              ],
+              [
+                409.1,
+                434
+              ],
+              [
+                422,
+                437.6
+              ],
+              [
+                422,
+                395.6
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "Part": "top",
+        "Category": "Federal - NJDOT",
+        "Source": "Federal",
+        "Recipient": "NJDOT",
+        "Amount ($ millions)": 1600,
+        "Share (%)": 34.96,
+        "Order": 1,
+        "Side": "right",
+        "LabelX": 780,
+        "LabelY": 190,
+        "AnchorX": 682.5,
+        "AnchorY": 223.1,
+        "ElbowX": 735,
+        "ElbowY": 190,
+        "LineX": 768,
+        "Shape": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                500,
+                280
+              ],
+              [
+                500,
+                155
+              ],
+              [
+                514.1,
+                155.3
+              ],
+              [
+                528.1,
+                156.2
+              ],
+              [
+                541.9,
+                157.6
+              ],
+              [
+                555.6,
+                159.7
+              ],
+              [
+                569,
+                162.3
+              ],
+              [
+                582.1,
+                165.5
+              ],
+              [
+                594.8,
+                169.2
+              ],
+              [
+                607,
+                173.4
+              ],
+              [
+                618.7,
+                178.1
+              ],
+              [
+                629.9,
+                183.3
+              ],
+              [
+                640.5,
+                189
+              ],
+              [
+                650.4,
+                195.1
+              ],
+              [
+                659.6,
+                201.6
+              ],
+              [
+                668.1,
+                208.4
+              ],
+              [
+                675.7,
+                215.6
+              ],
+              [
+                682.5,
+                223.1
+              ],
+              [
+                688.5,
+                230.9
+              ],
+              [
+                693.6,
+                238.9
+              ],
+              [
+                697.8,
+                247.1
+              ],
+              [
+                701,
+                255.4
+              ],
+              [
+                703.3,
+                263.9
+              ],
+              [
+                704.6,
+                272.4
+              ],
+              [
+                705,
+                281
+              ],
+              [
+                704.4,
+                289.6
+              ],
+              [
+                702.8,
+                298.1
+              ],
+              [
+                700.3,
+                306.5
+              ],
+              [
+                696.9,
+                314.9
+              ],
+              [
+                692.5,
+                323
+              ],
+              [
+                687.2,
+                331
+              ],
+              [
+                681,
+                338.7
+              ],
+              [
+                674,
+                346.1
+              ],
+              [
+                666.2,
+                353.2
+              ],
+              [
+                500,
+                280
+              ],
+              [
+                500,
+                280
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "Part": "top",
+        "Category": "Federal - Transit",
+        "Source": "Federal",
+        "Recipient": "Transit",
+        "Amount ($ millions)": 906.9,
+        "Share (%)": 19.81,
+        "Order": 2,
+        "Side": "right",
+        "LabelX": 780,
+        "LabelY": 430,
+        "AnchorX": 565,
+        "AnchorY": 398.6,
+        "ElbowX": 720,
+        "ElbowY": 430,
+        "LineX": 768,
+        "Shape": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                500,
+                280
+              ],
+              [
+                666.2,
+                353.2
+              ],
+              [
+                657.5,
+                360
+              ],
+              [
+                648,
+                366.5
+              ],
+              [
+                637.9,
+                372.5
+              ],
+              [
+                627,
+                378.1
+              ],
+              [
+                615.6,
+                383.2
+              ],
+              [
+                603.7,
+                387.8
+              ],
+              [
+                591.2,
+                392
+              ],
+              [
+                578.3,
+                395.5
+              ],
+              [
+                565,
+                398.6
+              ],
+              [
+                551.4,
+                401
+              ],
+              [
+                537.6,
+                402.9
+              ],
+              [
+                523.6,
+                404.2
+              ],
+              [
+                509.4,
+                404.9
+              ],
+              [
+                495.3,
+                405
+              ],
+              [
+                481.1,
+                404.5
+              ],
+              [
+                467.1,
+                403.4
+              ],
+              [
+                453.2,
+                401.7
+              ],
+              [
+                439.5,
+                399.4
+              ],
+              [
+                500,
+                280
+              ],
+              [
+                500,
+                280
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "Part": "top",
+        "Category": "Other - Transit",
+        "Source": "Other",
+        "Recipient": "Transit",
+        "Amount ($ millions)": 65.8,
+        "Share (%)": 1.44,
+        "Order": 3,
+        "Side": "left",
+        "LabelX": 320,
+        "LabelY": 480,
+        "AnchorX": 430.7,
+        "AnchorY": 397.6,
+        "ElbowX": 370,
+        "ElbowY": 480,
+        "LineX": 332,
+        "Shape": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                500,
+                280
+              ],
+              [
+                439.5,
+                399.4
+              ],
+              [
+                430.7,
+                397.6
+              ],
+              [
+                422,
+                395.6
+              ],
+              [
+                500,
+                280
+              ],
+              [
+                500,
+                280
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "Part": "top",
+        "Category": "Trust Fund - NJDOT",
+        "Source": "Trust Fund",
+        "Recipient": "NJDOT",
+        "Amount ($ millions)": 1240,
+        "Share (%)": 27.09,
+        "Order": 4,
+        "Side": "left",
+        "LabelX": 210,
+        "LabelY": 385,
+        "AnchorX": 306,
+        "AnchorY": 320.5,
+        "ElbowX": 275,
+        "ElbowY": 385,
+        "LineX": 222,
+        "Shape": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                500,
+                280
+              ],
+              [
+                422,
+                395.6
+              ],
+              [
+                409.3,
+                392.1
+              ],
+              [
+                397,
+                388.1
+              ],
+              [
+                385.2,
+                383.6
+              ],
+              [
+                373.9,
+                378.6
+              ],
+              [
+                363.2,
+                373.1
+              ],
+              [
+                353.1,
+                367.2
+              ],
+              [
+                343.7,
+                360.9
+              ],
+              [
+                335.1,
+                354.2
+              ],
+              [
+                327.2,
+                347.2
+              ],
+              [
+                320.1,
+                339.9
+              ],
+              [
+                313.8,
+                332.3
+              ],
+              [
+                308.4,
+                324.5
+              ],
+              [
+                303.9,
+                316.4
+              ],
+              [
+                300.3,
+                308.2
+              ],
+              [
+                297.6,
+                299.8
+              ],
+              [
+                295.9,
+                291.4
+              ],
+              [
+                295.1,
+                282.9
+              ],
+              [
+                295.2,
+                274.4
+              ],
+              [
+                296.3,
+                265.9
+              ],
+              [
+                298.4,
+                257.5
+              ],
+              [
+                301.3,
+                249.2
+              ],
+              [
+                305.2,
+                241
+              ],
+              [
+                310,
+                233
+              ],
+              [
+                315.7,
+                225.2
+              ],
+              [
+                322.3,
+                217.7
+              ],
+              [
+                500,
+                280
+              ],
+              [
+                500,
+                280
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "Part": "top",
+        "Category": "Trust Fund - Transit",
+        "Source": "Trust Fund",
+        "Recipient": "Transit",
+        "Amount ($ millions)": 760,
+        "Share (%)": 16.61,
+        "Order": 5,
+        "Side": "left",
+        "LabelX": 210,
+        "LabelY": 155,
+        "AnchorX": 396.8,
+        "AnchorY": 172,
+        "ElbowX": 275,
+        "ElbowY": 155,
+        "LineX": 222,
+        "Shape": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                500,
+                280
+              ],
+              [
+                322.3,
+                217.7
+              ],
+              [
+                329.8,
+                210.3
+              ],
+              [
+                338.1,
+                203.3
+              ],
+              [
+                347.3,
+                196.6
+              ],
+              [
+                357.1,
+                190.3
+              ],
+              [
+                367.7,
+                184.5
+              ],
+              [
+                378.9,
+                179.1
+              ],
+              [
+                390.7,
+                174.2
+              ],
+              [
+                403,
+                169.9
+              ],
+              [
+                415.8,
+                166
+              ],
+              [
+                429,
+                162.7
+              ],
+              [
+                442.6,
+                160
+              ],
+              [
+                456.4,
+                157.9
+              ],
+              [
+                470.4,
+                156.3
+              ],
+              [
+                484.6,
+                155.4
+              ],
+              [
+                498.8,
+                155
+              ],
+              [
+                500,
+                280
+              ],
+              [
+                500,
+                280
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "Part": "top",
+        "Category": "Other - NJDOT",
+        "Source": "Other",
+        "Recipient": "NJDOT",
+        "Amount ($ millions)": 4,
+        "Share (%)": 0.09,
+        "Order": 6,
+        "Side": "left",
+        "LabelX": 350,
+        "LabelY": 65,
+        "AnchorX": 499.4,
+        "AnchorY": 155,
+        "ElbowX": 410,
+        "ElbowY": 65,
+        "LineX": 362,
+        "Shape": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                500,
+                280
+              ],
+              [
+                498.8,
+                155
+              ],
+              [
+                499.4,
+                155
+              ],
+              [
+                500,
+                155
+              ],
+              [
+                500,
+                280
+              ],
+              [
+                500,
+                280
+              ]
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "transform": [
+    {
+      "calculate": "'$' + format(datum['Amount ($ millions)'], ',.1f') + 'M  (' + format(datum['Share (%)'], '.2f') + '%)'",
+      "as": "Detail"
+    }
+  ],
+  "layer": [
+    {
+      "transform": [
+        {
+          "filter": "datum.Part === 'shadow'"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "color": "#000000",
+        "opacity": 0.18,
+        "stroke": null
+      },
+      "encoding": {
+        "shape": {
+          "field": "Shape",
+          "type": "geojson"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.Part === 'side'"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#3f3f3f",
+        "strokeWidth": 0.7
+      },
+      "encoding": {
+        "shape": {
+          "field": "Shape",
+          "type": "geojson"
+        },
+        "color": {
+          "field": "Category",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Federal - NJDOT",
+              "Federal - Transit",
+              "Other - Transit",
+              "Trust Fund - Transit",
+              "Trust Fund - NJDOT",
+              "Other - NJDOT"
+            ],
+            "range": [
+              "#a90000",
+              "#142b47",
+              "#a87300",
+              "#554fa4",
+              "#8ea86d",
+              "#b6b6b6"
+            ]
+          },
+          "legend": null
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.Part === 'top'"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#4d4d4d",
+        "strokeWidth": 1.25
+      },
+      "encoding": {
+        "shape": {
+          "field": "Shape",
+          "type": "geojson"
+        },
+        "color": {
+          "field": "Category",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Federal - NJDOT",
+              "Federal - Transit",
+              "Other - Transit",
+              "Trust Fund - Transit",
+              "Trust Fund - NJDOT",
+              "Other - NJDOT"
+            ],
+            "range": [
+              "#f20d18",
+              "#2d4d77",
+              "#f0ad00",
+              "#7f75df",
+              "#c2d897",
+              "#f2f2f2"
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "Category",
+            "type": "nominal",
+            "title": "Funding source"
+          },
+          {
+            "field": "Amount ($ millions)",
+            "type": "quantitative",
+            "title": "Amount ($ millions)",
+            "format": ",.1f"
+          },
+          {
+            "field": "Share (%)",
+            "type": "quantitative",
+            "title": "Share",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.Part === 'top'"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#6d6d6d",
+        "strokeWidth": 1.1
+      },
+      "encoding": {
+        "x": {
+          "field": "AnchorX",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1000
+            ],
+            "range": [
+              0,
+              1000
+            ]
+          },
+          "axis": null
+        },
+        "y": {
+          "field": "AnchorY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              560
+            ],
+            "range": [
+              0,
+              560
+            ]
+          },
+          "axis": null
+        },
+        "x2": {
+          "field": "ElbowX"
+        },
+        "y2": {
+          "field": "ElbowY"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.Part === 'top'"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#6d6d6d",
+        "strokeWidth": 1.1
+      },
+      "encoding": {
+        "x": {
+          "field": "ElbowX",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1000
+            ],
+            "range": [
+              0,
+              1000
+            ]
+          },
+          "axis": null
+        },
+        "y": {
+          "field": "ElbowY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              560
+            ],
+            "range": [
+              0,
+              560
+            ]
+          },
+          "axis": null
+        },
+        "x2": {
+          "field": "LineX"
+        },
+        "y2": {
+          "field": "ElbowY"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.Part === 'top' && datum.Side === 'left'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "dy": -10,
+        "font": "Arial",
+        "fontSize": 15,
+        "fontWeight": "bold",
+        "color": "#111111"
+      },
+      "encoding": {
+        "x": {
+          "field": "LabelX",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1000
+            ],
+            "range": [
+              0,
+              1000
+            ]
+          },
+          "axis": null
+        },
+        "y": {
+          "field": "LabelY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              560
+            ],
+            "range": [
+              0,
+              560
+            ]
+          },
+          "axis": null
+        },
+        "text": {
+          "field": "Category"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.Part === 'top' && datum.Side === 'left'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "dy": 11,
+        "font": "Arial",
+        "fontSize": 14,
+        "fontWeight": "bold",
+        "color": "#111111"
+      },
+      "encoding": {
+        "x": {
+          "field": "LabelX",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1000
+            ],
+            "range": [
+              0,
+              1000
+            ]
+          },
+          "axis": null
+        },
+        "y": {
+          "field": "LabelY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              560
+            ],
+            "range": [
+              0,
+              560
+            ]
+          },
+          "axis": null
+        },
+        "text": {
+          "field": "Detail"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.Part === 'top' && datum.Side === 'right'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dy": -10,
+        "font": "Arial",
+        "fontSize": 15,
+        "fontWeight": "bold",
+        "color": "#111111"
+      },
+      "encoding": {
+        "x": {
+          "field": "LabelX",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1000
+            ],
+            "range": [
+              0,
+              1000
+            ]
+          },
+          "axis": null
+        },
+        "y": {
+          "field": "LabelY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              560
+            ],
+            "range": [
+              0,
+              560
+            ]
+          },
+          "axis": null
+        },
+        "text": {
+          "field": "Category"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.Part === 'top' && datum.Side === 'right'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dy": 11,
+        "font": "Arial",
+        "fontSize": 14,
+        "fontWeight": "bold",
+        "color": "#111111"
+      },
+      "encoding": {
+        "x": {
+          "field": "LabelX",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1000
+            ],
+            "range": [
+              0,
+              1000
+            ]
+          },
+          "axis": null
+        },
+        "y": {
+          "field": "LabelY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              560
+            ],
+            "range": [
+              0,
+              560
+            ]
+          },
+          "axis": null
+        },
+        "text": {
+          "field": "Detail"
+        }
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  },
+  "config": {
+    "font": "Arial",
+    "view": {
+      "stroke": null
+    }
+  }
+}

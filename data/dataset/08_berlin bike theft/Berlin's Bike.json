@@ -1,0 +1,871 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "description": "Berlin's Bike Theft Statistics - Datawrapper replication",
+    "background": "#ffffff",
+    "autosize": {
+      "type": "none",
+      "resize": false
+    },
+    "padding": {
+      "left": 42.25,
+      "top": 106.7,
+      "right": 15.25,
+      "bottom": 77.90000000000003
+    },
+    "width": 552.5,
+    "height": 286.4,
+    "data": {
+      "values": [
+        {
+          "Year": 2004,
+          "Recorded Cases": 22362,
+          "Solved Cases": 1247
+        },
+        {
+          "Year": 2005,
+          "Recorded Cases": 19497,
+          "Solved Cases": 745
+        },
+        {
+          "Year": 2006,
+          "Recorded Cases": 18775,
+          "Solved Cases": 863
+        },
+        {
+          "Year": 2007,
+          "Recorded Cases": 20246,
+          "Solved Cases": 1032
+        },
+        {
+          "Year": 2008,
+          "Recorded Cases": 23645,
+          "Solved Cases": 1288
+        },
+        {
+          "Year": 2009,
+          "Recorded Cases": 21689,
+          "Solved Cases": 1259
+        },
+        {
+          "Year": 2010,
+          "Recorded Cases": 19942,
+          "Solved Cases": 888
+        },
+        {
+          "Year": 2011,
+          "Recorded Cases": 25988,
+          "Solved Cases": 1059
+        },
+        {
+          "Year": 2012,
+          "Recorded Cases": 26029,
+          "Solved Cases": 1125
+        },
+        {
+          "Year": 2013,
+          "Recorded Cases": 26513,
+          "Solved Cases": 1067
+        },
+        {
+          "Year": 2014,
+          "Recorded Cases": 30758,
+          "Solved Cases": 1238
+        },
+        {
+          "Year": 2015,
+          "Recorded Cases": 32244,
+          "Solved Cases": 1255
+        },
+        {
+          "Year": 2016,
+          "Recorded Cases": 34418,
+          "Solved Cases": 1203
+        },
+        {
+          "Year": 2017,
+          "Recorded Cases": 30325,
+          "Solved Cases": 1175
+        },
+        {
+          "Year": 2018,
+          "Recorded Cases": 30235,
+          "Solved Cases": 1220
+        },
+        {
+          "Year": 2019,
+          "Recorded Cases": 28711,
+          "Solved Cases": 1161
+        },
+        {
+          "Year": 2020,
+          "Recorded Cases": 27588,
+          "Solved Cases": 1285
+        },
+        {
+          "Year": 2021,
+          "Recorded Cases": 25438,
+          "Solved Cases": 1167
+        },
+        {
+          "Year": 2022,
+          "Recorded Cases": 28801,
+          "Solved Cases": 1134
+        },
+        {
+          "Year": 2023,
+          "Recorded Cases": 28754
+        }
+      ]
+    },
+    "encoding": {
+      "x": {
+        "field": "Year",
+        "type": "quantitative",
+        "axis": null,
+        "scale": {
+          "domain": [
+            2004,
+            2023
+          ],
+          "nice": false,
+          "zero": false
+        }
+      },
+      "y": {
+        "field": "Recorded Cases",
+        "type": "quantitative",
+        "axis": null,
+        "stack": null,
+        "scale": {
+          "domain": [
+            0,
+            34418
+          ],
+          "nice": false
+        }
+      }
+    },
+    "layer": [
+      {
+        "data": {
+          "values": [
+            {
+              "year": 2004
+            },
+            {
+              "year": 2006
+            },
+            {
+              "year": 2008
+            },
+            {
+              "year": 2010
+            },
+            {
+              "year": 2012
+            },
+            {
+              "year": 2014
+            },
+            {
+              "year": 2016
+            },
+            {
+              "year": 2018
+            },
+            {
+              "year": 2020
+            },
+            {
+              "year": 2022
+            }
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "align": "center",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 12,
+          "fill": "#747474"
+        },
+        "encoding": {
+          "x": {
+            "field": "year",
+            "type": "quantitative",
+            "axis": null
+          },
+          "y": {
+            "value": 303.8
+          },
+          "text": {
+            "field": "year",
+            "type": "quantitative",
+            "format": "d"
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {
+              "v": 0,
+              "label": "0"
+            },
+            {
+              "v": 5000,
+              "label": "5K"
+            },
+            {
+              "v": 10000,
+              "label": "10K"
+            },
+            {
+              "v": 15000,
+              "label": "15K"
+            },
+            {
+              "v": 20000,
+              "label": "20K"
+            },
+            {
+              "v": 25000,
+              "label": "25K"
+            },
+            {
+              "v": 30000,
+              "label": "30K"
+            }
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "align": "right",
+          "baseline": "alphabetic",
+          "dy": 4.5,
+          "font": "Roboto",
+          "fontSize": 12,
+          "fill": "#a2a2a2"
+        },
+        "encoding": {
+          "y": {
+            "field": "v",
+            "type": "quantitative",
+            "axis": null
+          },
+          "x": {
+            "value": -15.55
+          },
+          "text": {
+            "field": "label",
+            "type": "nominal"
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {
+              "grid": 0
+            },
+            {
+              "grid": 5000
+            },
+            {
+              "grid": 10000
+            },
+            {
+              "grid": 15000
+            },
+            {
+              "grid": 20000
+            },
+            {
+              "grid": 25000
+            },
+            {
+              "grid": 30000
+            }
+          ]
+        },
+        "mark": {
+          "type": "rule",
+          "stroke": "#e7e7e7",
+          "strokeWidth": 1
+        },
+        "encoding": {
+          "y": {
+            "field": "grid",
+            "type": "quantitative",
+            "axis": null
+          },
+          "x": {
+            "value": -10.25
+          },
+          "x2": {
+            "value": 562.25
+          }
+        }
+      },
+      {
+        "transform": [
+          {
+            "calculate": "[datum.Year - 0.5, datum.Year + 0.5]",
+            "as": "step"
+          },
+          {
+            "flatten": [
+              "step"
+            ]
+          }
+        ],
+        "mark": {
+          "type": "area",
+          "fill": "#4e78c3",
+          "fillOpacity": 0.6,
+          "clip": true
+        },
+        "encoding": {
+          "x": {
+            "field": "step",
+            "type": "quantitative",
+            "axis": null
+          }
+        }
+      },
+      {
+        "transform": [
+          {
+            "filter": "isValid(datum['Solved Cases'])"
+          },
+          {
+            "calculate": "[datum.Year - 0.5, datum.Year + 0.5]",
+            "as": "step"
+          },
+          {
+            "flatten": [
+              "step"
+            ]
+          }
+        ],
+        "mark": {
+          "type": "area",
+          "fill": "#002367",
+          "fillOpacity": 0.6,
+          "clip": true
+        },
+        "encoding": {
+          "x": {
+            "field": "step",
+            "type": "quantitative",
+            "axis": null
+          },
+          "y": {
+            "field": "Solved Cases",
+            "type": "quantitative",
+            "axis": null,
+            "stack": null
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {
+              "zero": 0
+            }
+          ]
+        },
+        "mark": {
+          "type": "rule",
+          "stroke": "#181818",
+          "strokeWidth": 1
+        },
+        "encoding": {
+          "y": {
+            "field": "zero",
+            "type": "quantitative",
+            "axis": null
+          },
+          "x": {
+            "value": -10.25
+          },
+          "x2": {
+            "value": 562.25
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {
+              "avg": 29503.1
+            }
+          ]
+        },
+        "mark": {
+          "type": "rule",
+          "stroke": "#002367",
+          "strokeOpacity": 0.7,
+          "strokeWidth": 2,
+          "strokeDash": [
+            2,
+            2
+          ]
+        },
+        "encoding": {
+          "y": {
+            "field": "avg",
+            "type": "quantitative",
+            "axis": null
+          },
+          "x": {
+            "value": -10.25
+          },
+          "x2": {
+            "value": 562.25
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "rect",
+          "fill": "#ffffff"
+        },
+        "encoding": {
+          "x": {
+            "value": 3.25
+          },
+          "y": {
+            "value": 31.8
+          },
+          "x2": {
+            "value": 103.5
+          },
+          "y2": {
+            "value": 49.8
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "10 year average",
+          "align": "left",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 14,
+          "fill": "#002367"
+        },
+        "encoding": {
+          "x": {
+            "value": 5.05
+          },
+          "y": {
+            "value": 45.55
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "In 2022, 80% of the",
+          "align": "center",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 14,
+          "fill": "#002367"
+        },
+        "encoding": {
+          "x": {
+            "value": 449.25
+          },
+          "y": {
+            "value": 191.35
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "suspects had previously",
+          "align": "center",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 14,
+          "fill": "#002367"
+        },
+        "encoding": {
+          "x": {
+            "value": 449.25
+          },
+          "y": {
+            "value": 208.35
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "been reported to the police.",
+          "align": "center",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 14,
+          "fill": "#002367"
+        },
+        "encoding": {
+          "x": {
+            "value": 449.25
+          },
+          "y": {
+            "value": 225.35
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {
+              "g": "shaft",
+              "i": 0,
+              "ax": 2021.2857,
+              "ay": 6453.4
+            },
+            {
+              "g": "shaft",
+              "i": 1,
+              "ax": 2021.4405,
+              "ay": 5708.3
+            },
+            {
+              "g": "shaft",
+              "i": 2,
+              "ax": 2021.578,
+              "ay": 4963.2
+            },
+            {
+              "g": "shaft",
+              "i": 3,
+              "ax": 2021.6881,
+              "ay": 4242.2
+            },
+            {
+              "g": "shaft",
+              "i": 4,
+              "ax": 2021.7775,
+              "ay": 3545.2
+            },
+            {
+              "g": "shaft",
+              "i": 5,
+              "ax": 2021.8738,
+              "ay": 2655.9
+            },
+            {
+              "g": "head0",
+              "i": 0,
+              "ax": 2021.719,
+              "ay": 3328.8
+            },
+            {
+              "g": "head0",
+              "i": 1,
+              "ax": 2021.8806,
+              "ay": 2631.8
+            },
+            {
+              "g": "head1",
+              "i": 0,
+              "ax": 2021.9391,
+              "ay": 3641.3
+            },
+            {
+              "g": "head1",
+              "i": 1,
+              "ax": 2021.8806,
+              "ay": 2631.8
+            }
+          ]
+        },
+        "mark": {
+          "type": "line",
+          "stroke": "#002367",
+          "strokeWidth": 1.5,
+          "strokeCap": "round",
+          "strokeJoin": "round"
+        },
+        "encoding": {
+          "x": {
+            "field": "ax",
+            "type": "quantitative",
+            "axis": null
+          },
+          "y": {
+            "field": "ay",
+            "type": "quantitative",
+            "axis": null
+          },
+          "order": {
+            "field": "i",
+            "type": "quantitative"
+          },
+          "detail": {
+            "field": "g",
+            "type": "nominal"
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "Berlin’s Bike Theft Statistics",
+          "align": "left",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 22,
+          "fill": "#000000",
+          "fontWeight": "bold"
+        },
+        "encoding": {
+          "x": {
+            "value": -36.75
+          },
+          "y": {
+            "value": -81.7
+          }
+        }
+      },
+  
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "Only about 4-5% of Berlin’s",
+          "align": "left",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 14,
+          "fill": "#181818"
+        },
+        "encoding": {
+          "x": {
+            "value": -37.25
+          },
+          "y": {
+            "value": -53.7
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "recorded bike theft cases get",
+          "align": "left",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 14,
+          "fill": "#181818"
+        },
+        "encoding": {
+          "x": {
+            "value": 150
+          },
+          "y": {
+            "value": -53.7
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "solved",
+          "align": "left",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 14,
+          "fill": "#181818"
+        },
+        "encoding": {
+          "x": {
+            "value": 346
+          },
+          "y": {
+            "value": -53.7
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "each year. The Berlin Police",
+          "align": "left",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 14,
+          "fill": "#181818"
+        },
+        "encoding": {
+          "x": {
+            "value": 388
+          },
+          "y": {
+            "value": -53.7
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "Department reports that bicycles are stolen particularly frequently in large parking areas, e.g. at",
+          "align": "left",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 14,
+          "fill": "#181818"
+        },
+        "encoding": {
+          "x": {
+            "value": -37.25
+          },
+          "y": {
+            "value": -36.7
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "train stations, in front of schools, sports and leisure facilities or in front of shopping centers.",
+          "align": "left",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 14,
+          "fill": "#181818"
+        },
+        "encoding": {
+          "x": {
+            "value": -37.25
+          },
+          "y": {
+            "value": -19.7
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "For more information on how to prevent bike thefts visit the website from the Berlin Police Department.",
+          "align": "left",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 12,
+          "fill": "#656565",
+          "fontStyle": "italic"
+        },
+        "encoding": {
+          "x": {
+            "value": -37.25
+          },
+          "y": {
+            "value": 336.8
+          }
+        }
+      },
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "text": "Source: Polizeiliche Kriminalstatistik Berlin • Created with Datawrapper",
+          "align": "left",
+          "baseline": "alphabetic",
+          "font": "Roboto",
+          "fontSize": 11,
+          "fill": "#888888"
+        },
+        "encoding": {
+          "x": {
+            "value": -37.25
+          },
+          "y": {
+            "value": 355.0
+          }
+        }
+      }
+    ],
+    "config": {
+      "font": "Roboto",
+      "view": {
+        "stroke": null
+      }
+    }
+  }
+  

@@ -1,0 +1,42 @@
+# 手工增强副本：继承 data/economist-persona.yaml，保留其令牌和 L1/L2/L3 后增加专属策略。
+extends: economist
+institution:
+  id: economist-editorial
+  name: The Economist Editorial
+  domain: journalism
+  source: economist-persona.yaml + editorial strategy overlay
+
+diagnostics:
+  - id: economist-essential-reading-path
+    problem_type: visual_clutter
+    diagnosis: "先通过删减建立清晰阅读路径；不要用更多装饰补救拥挤。"
+    principle_refs: [p-lessismore, p-wayfinding]
+  - id: economist-deliberate-type
+    problem_type: text_legibility
+    diagnosis: "用节制的字体层级和刻度密度建立阅读顺序，避免任意视觉样式。"
+    principle_refs: [p-typography]
+
+# L2：有视觉 issue 和当前图表条件才触发，不作为脱离图像的无条件风格规则。
+L2_adaptations:
+  - id: economist-dense-time-axis
+    scope: visual-strategy
+    visual_issues: [overlap, crowding]
+    when: { axis_x_dense: true, mark_types: [line, area, bar] }
+    evidence_quote: "Be concise. Make it readily understandable and unobtrusive. Our design language is unburdened by decoration. Focus on the essential through iteration and reduction."
+    philosophy_id: p-lessismore
+    then: { visual_actions: [thin_axis_labels, tighten_axis_titles] }
+    strength: should
+  - id: economist-label-hierarchy
+    scope: visual-strategy
+    visual_issues: [mark_label_overlap, text_mark_collision]
+    evidence_quote: "Create contrast with different weights and letterforms. Use complimentary sizes and leading to ensure legibility. Avoid excessive or arbitrary styles."
+    philosophy_id: p-typography
+    then: { visual_actions: [remove_value_labels, improve_text_legibility] }
+    strength: should
+  - id: economist-restrained-space
+    scope: visual-strategy
+    visual_issues: [whitespace, crowding]
+    evidence_quote: "We strive for visual and conceptual balance. Our grid system supports recognisable patterns through symmetry and proximity. Our colour palette is considered and restrained."
+    philosophy_id: p-harmony
+    then: { visual_actions: [increase_padding] }
+    strength: should

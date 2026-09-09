@@ -1,0 +1,172 @@
+# ==============================================================
+# The Economist Institutional Design Persona
+# Representation theory: McAdams three-level personality model
+#   (McAdams 1995, J. of Personality 63(3); McAdams & Pals 2006, Am. Psychologist 61(3))
+#
+# Layer criteria: same as bbc-persona.yaml
+#   L1 dispositional traits — unconditional tokens and rules
+#   L2 characteristic adaptations — conditional norms keyed on data/task/topic/medium
+#   L3 narrative identity — design philosophy + reason stories + exemplar works
+#
+# Source genres (empirical evidence of knowledge heterogeneity — contrast with
+# BBC's chart-specific guide):
+#   (a) Official design system design-system.economist.com (L1-125):
+#       explicit principle manifesto + precise token tables (product-level, not chart-specific)
+#   (b) Practitioner interview, Economist Education × Elizabeth Lees (L126-141):
+#       chart selection and color craft knowledge entirely absent from the design system
+#   → One institution's knowledge is scattered across genres and must be
+#     normalized into a single persona schema
+#
+# derived: true marks rules operationalized from philosophy/interview (not verbatim)
+# Source: economist.md (141 lines fully covered)
+# ==============================================================
+
+institution: { id: economist, name: The Economist, domain: journalism, source: economist.md }
+
+# ---------- Applicability (source has no "when to use" section, unlike bbc.md L13-16) ----------
+applicability:
+  note: "TODO: neither the design system nor the interview states applicability; can be inferred from L3 philosophy (restraint, wit, economic-analysis contexts). To be completed."
+
+# ---------- L1 dispositional signature (unconditional: tokens + must/never rules) ----------
+L1_signature:
+  tokens:
+    color:
+      brand:
+        economist-red: "#E3120B"       # --ds-color-economist-red (L19)
+        economist-red-60: "#F6423C"    # (L20)
+      primary:                          # dark-blue primary (corroborated by interview L134 "main colour—dark blue")
+        chicago-20: "#141F52"          # (L23)
+        chicago-30: "#1F2E7A"          # (L24)
+      secondary:
+        hong-kong-45: "#1DC9A4"        # (L27)
+        hong-kong-55: "#36E2BD"        # (L28)
+        hong-kong-90: "#D2F9F0"        # (L29)
+        hong-kong-95: "#E9FCF8"        # (L30)
+        tokyo-45: "#C91D42"            # (L31)
+        tokyo-55: "#E2365B"            # (L32)
+        tokyo-90: "#F9D2DB"            # (L33)
+        tokyo-95: "#FCE9ED"            # (L34)
+      greyscale:                        # London series (L37-44)
+        london-5: "#0D0D0D"
+        london-10: "#1A1A1A"
+        london-20: "#333333"
+        london-35: "#595959"
+        london-70: "#B3B3B3"
+        london-85: "#D9D9D9"
+        london-95: "#F2F2F2"
+        london-100: "#FFFFFF"
+      canvas:                           # token-group name implies page/chart background (cream + pale cyan)
+        los-angeles-85: "#E1DFD0"      # (L47)
+        los-angeles-90: "#EBE9E0"      # (L48)
+        los-angeles-95: "#F5F4EF"      # (L49)
+        paris-85: "#D0E1E1"            # (L50)
+        paris-90: "#E0EBEB"            # (L51)
+        paris-95: "#EFF5F5"            # (L52)
+        # TODO: the design system never binds "which background when" → align with published charts later
+    font:
+      family: { serif: "--ds-type-system-serif" }        # serif system face (L68); contrast with BBC's sans-serif Helvetica
+      weight: { regular: 400, medium: 500, bold: 700, italics: available }   # (L68-73)
+      scale:                            # Major Second scale, base 16px (L76-94)
+        ratio: 1.125
+        base: 16px
+        steps: { "-3": 11, "-2": 13, "-1": 14, "0": 16, "1": 18, "2": 20, "3": 23,
+                 "4": 26, "5": 29, "6": 32, "7": 36, "8": 41, "9": 46, "10": 52,
+                 "11": 58, "12": 66, "13": 74 }           # rounded px; precise decimals in the source
+        # TODO: product-level scale, not bound to chart roles (which step for title/subtitle/caption) → align with exemplars
+      leading:                          # line-height multipliers (L100-104)
+        lower: 1.4                      # small sizes (scale ≤2, i.e. ≤20px)
+        upper: 1.2                      # large sizes (scale ≥3, i.e. ≥23px)
+        border-link: 1.125              # non-wrapping link components only (L104)
+        # ⚠ Documented in-guide ambiguity: L101 prose says "≤23px → 1.4" but the
+        #   computed table at L115 uses scale 3 (23px) × 1.2 — self-contradictory at
+        #   exactly 23px. We follow the computed table (L108-125).
+
+  rules:   # Unconditional rules: hold regardless of chart or data
+    - { id: s-palette-blues,   rule: "Primary color is always dark blue (chicago); secondary is a high-contrast light blue",
+        strength: must, check: programmatic, story: n-recognisable, src: L134,
+        alignment: "Interview calls the secondary 'light blue'; nearest design-system tokens are Hong Kong (teal family) — naming mismatch, confirm via exemplar alignment" }
+    - { id: s-color-cap,       rule: "No more than 6 colors in a single chart",
+        strength: never-exceed, check: programmatic, story: n-legibility, src: L136 }
+    - { id: s-color-restraint, rule: "Restrained palette: most cases do not need many colors",
+        strength: should, check: llm, story: n-lessismore, src: L138 }
+    - { id: s-decoration,      rule: "Remove decorative elements that carry no information (focus on the essential through iteration and reduction)",
+        strength: should, check: llm, story: n-lessismore, src: L5, derived: true }
+    - { id: s-type-scale,      rule: "All font sizes must come from the Major Second scale; arbitrary sizes are forbidden",
+        strength: must, check: programmatic, story: n-typography, src: L76 }
+    - { id: s-leading,         rule: "Apply line-height strictly by the multiplier table (1.4 small / 1.2 large)",
+        strength: must, check: programmatic, story: n-typography, src: [L100-102, L108] }
+    - { id: s-type-contrast,   rule: "Create hierarchy through weight and letterform contrast; avoid excessive or arbitrary styles",
+        strength: should, check: llm, story: n-typography, src: L7 }
+    - { id: s-grid-harmony,    rule: "The grid system supports recognisable patterns through symmetry and proximity",
+        strength: should, check: llm, story: n-harmony, src: L9, derived: true }
+    - { id: s-imagery,         rule: "Imagery must be purposeful (adds context and emotion), never pure decoration",
+        strength: should, check: llm, story: n-harmony, src: L9 }
+    - { id: s-wit,             rule: "Restrained wit is allowed (title puns, clever annotation): clear but not dry",
+        strength: may, check: llm, story: n-wit, src: L13, derived: true }
+
+# ---------- L2 characteristic adaptations (conditional norms) ----------
+L2_adaptations:
+  # —— Chart-selection knowledge (all from the interview; absent from the design system.
+  #    The BBC corpus, conversely, lacks this layer entirely) ——
+  - { id: a-chart-bubble,     when: { data_range: "values span orders of magnitude / huge range", intent: "visual engagement" },
+      then: { prefer: chart.type, to: bubble, with: "value labels (the eye struggles to compare circle areas)" },
+      strength: may, check: llm, story: n-engagement, src: L128 }
+  - { id: a-chart-thermometer, when: { comparison: "exactly two categories (e.g. men vs women, two years)" },
+      then: { prefer: chart.type, to: thermometer },
+      strength: may, check: llm, story: n-efficiency, src: L130 }
+  # —— Situational color rules ——
+  - { id: a-color-manyseries, when: { series_count: { gt: 6 } },
+      then: { set: "one strong color for the key series; mute the rest (grey/pale)" },
+      strength: should, check: programmatic, story: n-legibility, src: L136 }
+  - { id: a-color-party,      when: { data_topic: "well-known political parties" },
+      then: { override: color.palette, to: "party-convention colors (red/blue/green public mental mapping)" },
+      overrides: [s-palette-blues, s-color-restraint],   # explicit in-house exception: specific rule beats general (institutional lex specialis)
+      strength: may, check: llm, story: n-convention, src: L138 }
+  - { id: a-emphasis,         when: { intent: "highlight the key message" },
+      then: { any-of: ["bold key text", "tinted color block", "single strong-color highlight"] },
+      strength: should, check: llm, story: n-emphasis, src: L140 }
+  # —— Medium/viewport rules ——
+  - { id: a-grid-narrow,      when: { viewport: { lte: 600px } },
+      then: { set: { grid.gap: 12px, grid.gutter: 24px } },
+      strength: must, check: programmatic, story: n-harmony, src: [L55, L62] }
+  - { id: a-grid-wide,        when: { viewport: { gt: 600px } },
+      then: { set: { grid.gap: 16px, grid.gutter: 32px } },
+      strength: must, check: programmatic, story: n-harmony, src: [L56, L63] }
+  - { id: a-static-rounding,  when: { medium: "static assets (print/image export)" },
+      then: { round: line-height, to: "whole px" },
+      strength: should, check: programmatic, story: n-typography, src: L106 }
+
+# ---------- L3 narrative identity (philosophy + reason stories + exemplars) ----------
+L3_narrative:
+  philosophy:   # six principles stored verbatim
+    - { id: p-lessismore,  title: "Less is more",
+        quote: "Be concise. Make it readily understandable and unobtrusive. Our design language is unburdened by decoration. Focus on the essential through iteration and reduction.", src: L4-5 }
+    - { id: p-typography,  title: "Deliberate typography",
+        quote: "Create contrast with different weights and letterforms. Use complimentary sizes and leading to ensure legibility. Avoid excessive or arbitrary styles. No detail is too small.", src: L6-7 }
+    - { id: p-harmony,     title: "Visual harmony",
+        quote: "We strive for visual and conceptual balance. Our grid system supports recognisable patterns through symmetry and proximity. Our colour palette is considered and restrained. Imagery is purposeful.", src: L8-9 }
+    - { id: p-wayfinding,  title: "Clear wayfinding",
+        quote: "Well-structured paths guide people through our products. Landmarks help them move forward. Keep journeys focused by not including more options than necessary.", src: L10-11,
+        note: "Product-navigation oriented; for charts translate as 'annotations as reading landmarks', use as derived" }
+    - { id: p-wit,         title: "Intelligence and wit",
+        quote: "Our design language is clear but not dry. A bit of provocation can make an experience more rewarding.", src: L12-13 }
+    - { id: p-consistency, title: "Recognisable consistency",
+        quote: "Consistency across our products is vital for providing a reliable customer experience and upholding a strong brand reputation... the same high standard of quality in design as our journalism.", src: L14-15 }
+  stories:   # Reason fragments (mostly from the interview) = label language; referenced by L1/L2 `story`
+    - { id: n-lessismore,   story: "Focus on the essential through iteration and reduction; using colours extensively can detract from the story", src: [L5, L138] }
+    - { id: n-typography,   story: "Strong typography creates contrast; no detail is too small", src: [L7] }
+    - { id: n-harmony,      story: "Recognisable patterns through symmetry and proximity; considered and restrained palette", src: [L9] }
+    - { id: n-recognisable, story: "A limited palette makes it easy for readers to identify your work, keeps a cohesive style, and saves colour decisions", src: [L134-135, L14-15] }
+    - { id: n-legibility,   story: "Beyond six colours, your reader might struggle to see the differences between data points", src: [L136-137] }
+    - { id: n-convention,   story: "A lot of people associate well-known political parties with a certain colour", src: [L138-139] }
+    - { id: n-engagement,   story: "More interesting than a table—the steel data point jumps out immediately", src: [L128-129] }
+    - { id: n-efficiency,   story: "Saves space and makes it easy to see the difference between categories", src: [L130-131] }
+    - { id: n-emphasis,     story: "Very effective and eye-catching highlight of the key message", src: [L140-141] }
+    - { id: n-wit,          story: "A bit of provocation can make an experience more rewarding", src: [L13] }
+  exemplars:
+    - TODO: "Interview-mentioned candidates: steel-datapoint bubble chart (L128), men/women thermometer (L130), strong-color multi-series chart (L136)"
+
+# ---------- Evaluation mapping (one metric per layer, same as bbc-persona) ----------
+# L1 → institutional recognizability experiment ("psychology of the stranger")
+# L2 → situational appropriateness of triggered conditional rules (expert review)
+# L3 → label-reason fidelity (do explanations stay faithful to the institution's self-narrative)

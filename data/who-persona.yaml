@@ -1,0 +1,114 @@
+# ==============================================================
+# WHO Institutional Design Persona
+# Representation theory: McAdams three-layer personality model
+#   (layer criteria documented in the bbc-persona.yaml header note)
+# Source: vizguide/World Health Organization.md (WHO Data Design Language, 131 lines)
+# Genre traits: an international organisation's data design language —
+#   colorblind-safe nameable categorical colors, a size-responsive type
+#   vocabulary, semiotics for uncertainty/projected values, selection-focus rules
+# ==============================================================
+
+institution: { id: who, name: WHO, domain: health, source: vizguide/World Health Organization.md }
+
+# ---------- Applicability (inferred from the L3 philosophy Clear/Open/Robust and palette design requirements) ----------
+applicability:
+  suits:
+    - "Public-health and epidemiological data releases"
+    - "International audiences across languages and cultures"
+    - "Responsive publishing across large/medium/small chart sizes"
+    - "Scientific charts that must express uncertainty, projections and data gaps"
+  promises: ["Colorblind-safe, equally salient categorical colors", "Explicit data provenance and uncertainty display", "Size-adaptive font system"]
+
+# ---------- L1 signature (unconditional: tokens + must/never rules) ----------
+L1_signature:
+  tokens:
+    color:
+      brand-base: "#008dc9"       # WHO brand color (L29-30)
+      brand-stronger: "#0f2d5b"   # high-contrast brand color (L32-33)
+      brand-weaker: "#90d3fb"     # low-contrast brand color (L35-36)
+      cat-0: "#f4a81d"            # categorical 0 (L50-51)
+      cat-1: "#f26829"            # categorical 1 (L53-54)
+      cat-2: "#bd53bd"            # categorical 2 (L56-57)
+      cat-3: "#6363c0"            # categorical 3 (L59-60)
+      cat-4: "#008dc9"            # categorical 4 (L62-63)
+      cat-5: "#40bf73"            # categorical 5 (L65-66)
+      other: "#cccccc"            # reserved for the "Other" aggregate class (L68-70)
+    palette:
+      categorical: [cat-0, cat-1, cat-2, cat-3, cat-4, cat-5]   # colorblind-safe, nameable, equally salient (L43-48)
+      sequential: ["#d7e6f3", "#75b6d6", "#0582bb", "#0f2d5b"]  # L72-76
+    font:
+      family: "Noto Sans"          # Google Noto Sans primary family (multilingual, open source; L92-93)
+
+  rules:   # unconditional rules
+    - { id: s-font-noto, rule: "All text uses Noto Sans (highly readable across languages, open source and free)",
+        strength: must, check: programmatic, story: n-international,
+        then: { set: font.family, to: "Noto Sans" }, src: [L92-93] }
+    - { id: s-house-palette, rule: "Nominal data takes colors in the WHO categorical order (colorblind-safe, nameable, equally salient)",
+        strength: must, check: programmatic, story: n-equalsalient, src: [L40-70] }
+    - { id: s-accessibility, rule: "Colors must pass the most common color-vision checks and keep sufficient contrast on light and dark backgrounds",
+        strength: must, check: programmatic, story: n-colorblind, src: [L43-48] }
+    - { id: s-grid-dotted, rule: "Default gridlines are dotted; the zero baseline gets a heavy, solid line",
+        strength: should, check: programmatic, story: n-orientation,
+        then: { set: grid.style, to: dotted }, src: [L122-123] }
+    - { id: s-source, rule: "The chart container must supply the source for citation purposes (external publishing contexts)",
+        strength: must, check: programmatic, story: n-provenance, src: [L119-120] }
+    - { id: s-axis-ticks, rule: "3-6 ticks per axis maximum; when more values are available than ticks, use round numbers",
+        strength: should, check: llm, story: n-orientation, src: [L122-123] }
+    - { id: s-legend-required, rule: "Charts that encode with color/shape/texture must carry a legend explaining the value mapping",
+        strength: must, check: llm, story: n-mapping, src: [L124-125] }
+    - { id: s-data-labels, rule: "All charts supply explicit, inline value annotation (auto-annotations / inspection labels / locked-in labels)",
+        strength: should, check: programmatic, story: n-inline,
+        then: { set: labels.values, to: on }, src: [L128-129] }
+    - { id: s-uncertainty, rule: "Uncertain values are drawn as a low-opacity band between bounds; in text, use square brackets",
+        strength: should, check: llm, story: n-uncertainty, src: [L107-108] }
+
+# ---------- L2 adaptations ----------
+L2_adaptations:
+  - { id: a-emphasis,        when: { intent: "highlight the selected entity/series" },
+      then: { set: emphasized-mark.color, to: "{color.brand-base}" },
+      strength: should, check: llm, story: n-focus, src: [L126-127] }
+  - { id: a-color-support,   when: { data_role: "non-selected/background series (when selections exceed 2-3)" },
+      then: { set: supporting-mark.color, to: "{color.other}" },
+      strength: should, check: llm, story: n-focus, src: [L127] }
+  - { id: a-color-other,     when: { data_role: "the 'Other' aggregate class" },
+      then: { set: supporting-mark.color, to: "{color.other}" },
+      strength: should, check: llm, story: n-equalsalient, src: [L68-70] }
+  - { id: a-seq-quant,       when: { data_role: "ordered numeric intensity (rate/degree)" },
+      then: { set: color.range, to: "{palette.sequential}" },
+      strength: may, check: llm, story: n-equalsalient, src: [L72-76] }
+  - { id: a-type-small,      when: { viewport: { lte: 480px } },
+      then: { set: font.sizes, to: { title: 28, caption: 12 } },
+      strength: should, check: programmatic, story: n-responsive, src: [L95-96],
+      derived: true }   # the guide gives the small-chart 28px→12px band; the pixel breakpoint is an operationalisation
+  - { id: a-type-medium,     when: { viewport: { gt: 480px } },
+      then: { set: font.sizes, to: { title: 38, caption: 14 } },
+      strength: should, check: programmatic, story: n-responsive, src: [L95-96],
+      derived: true }   # medium charts 38px→14px; large (54px) is mostly hero imagery, kept conservative
+  - { id: a-projected-dashed, when: { data_role: "projected/estimated values" },
+      then: { set: line.style, to: dashed },
+      strength: should, check: llm, story: n-uncertainty, src: [L104-105] }
+
+# ---------- L3 narrative identity ----------
+L3_narrative:
+  philosophy:
+    - { id: p-clear,       title: "Clear",
+        quote: "Data presentations are tailored to information needs, understandable and approachable.", src: [L8-9] }
+    - { id: p-transparent, title: "Transparent",
+        quote: "They reveal uncertainty, precision, provenance, and coverage of the data.", src: [L11-12] }
+    - { id: p-open,        title: "Open",
+        quote: "We create rich data experiences for everyone, through accessible, international, adaptable, and participatory approaches to data visualization.", src: [L14-15] }
+    - { id: p-robust,      title: "Robust",
+        quote: "Data can be consumed in a variety of channels and sizes, through robust and lean technological solutions.", src: [L17-18] }
+  stories:
+    - { id: n-equalsalient,  story: "Category colors are colorblind-safe, nameable, and equally salient, with comparable brightness and saturation", src: [L45-47] }
+    - { id: n-colorblind,    story: "Colorblind-safe, tested for the most common types of color vision; sufficient contrast on both light and dark backgrounds", src: [L45, L48] }
+    - { id: n-focus,         story: "Non-selected items are rendered in a uniform, low contrast color, in order to facilitate focussing on the selected items", src: [L127] }
+    - { id: n-provenance,    story: "The chart container supplies the indicator, geography, time range, unit—and the source for citation purposes", src: [L119-120] }
+    - { id: n-inline,        story: "Explicit, inline value annotation is supplied in all charts (auto-annotations, inspection labels, locked-in labels)", src: [L128-129] }
+    - { id: n-uncertainty,   story: "For values with uncertainty, an area with lower opacity is drawn between upper & lower bound; projected values use hatching and dashed lines", src: [L104-108] }
+    - { id: n-responsive,    story: "Font sizes come in three variants: 54px to 14px on large charts, 38px to 14px on medium, 28px to 12px on small", src: [L95-96] }
+    - { id: n-international, story: "Noto presents highly readable and friendly typefaces for a wide variety of languages, open source and free to use", src: [L93] }
+    - { id: n-orientation,   story: "We supply 3-6 ticks per axis maximum; default gridlines are dotted, the zero baseline has a heavy, solid line style", src: [L122-123] }
+    - { id: n-mapping,       story: "Charts with visual encodings such as color, shape, texture require a legend to explain the value mapping", src: [L124-125] }
+  exemplars:
+    - TODO: "data.who.int indicator chart exemplars (uncertainty bands and dashed projections)"
